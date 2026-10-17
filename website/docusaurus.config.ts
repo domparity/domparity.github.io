@@ -71,6 +71,7 @@ const config: Config = {
           items: [
             { label: 'results.json', href: 'pathname:///data/results.json' },
             { label: 'idl.json', href: 'pathname:///data/idl.json' },
+            { label: 'spec-groups.json', href: 'pathname:///data/spec-groups.json' },
             { label: 'wpt.json', href: 'pathname:///data/wpt.json' },
           ],
         },
