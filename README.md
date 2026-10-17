@@ -77,6 +77,8 @@ Node.js's own global the data marks it `sameAsNode`.
   the engine versions, the @webref/idl and browser-specs versions, and a legend
   of the one-character codes (one character per engine, in `engines` order).
 - `data/spec-groups.json`: the spec groups, with a reason per group.
+- `data/changelog.json`: what changed in each automatic update, newest first
+  (see Automatic updates).
 - `data/wpt.json`: Web Platform Tests pass rates per area for warpdom and jsdom,
   imported from warpdom's published WPT summary with `npm run import-wpt --
   <summary.md>`; the source run (WPT commit, date, engine versions) is recorded
@@ -97,6 +99,50 @@ npm install
 npm run build        # generates the API pages from ../data, then builds website/build
 npx docusaurus serve # serves website/build at http://localhost:3000
 ```
+
+## Automatic updates
+
+`.github/workflows/update.yml` keeps the data current. It runs every Monday at
+06:23 UTC, on demand (`gh workflow run update.yml -R domparity/domparity.github.io`),
+and on a `repository_dispatch` of type `engine-release` (for engine release
+workflows, e.g. warpdom's).
+
+1. `npm ci`, then `node scripts/update.mjs` (`npm run update`): installs the
+   latest warpdom, happy-dom, jsdom, linkedom, @webref/idl, browser-specs and
+   webidl2 (exact versions), runs `npm run probe` and `npm run probe-idl`, and
+   compares the new data with the committed data (`scripts/diff-data.mjs`).
+   When nothing but dates changed, every file is restored and the run ends.
+2. Otherwise it appends an entry to `data/changelog.json` (newest first; the
+   site's What changed page at `/changes` is generated from it) and writes the
+   pull request body: per engine, the version change and every status change
+   (featured APIs and checks between supported, partial, stub and missing; Web
+   IDL interfaces and members now present or missing), the specs, interfaces
+   and members @webref/idl added or removed with their spec group, and every
+   spec not yet in `data/spec-groups.json` under "Needs classification".
+3. `npm test` and the site build run in the same workflow, because a pull
+   request opened with the workflow's `GITHUB_TOKEN` starts no other workflow.
+   Their outcome is in the pull request body. A new, unclassified spec makes
+   `test/spec-groups.test.mjs` fail on purpose: add it to a group on the
+   branch before merging.
+4. The data is committed to `auto/update-YYYY-MM-DD` and a pull request into
+   main is opened, assigned to sonukapoor with a review request from
+   sonukapoor (the body also @mentions sonukapoor, in case the review request
+   is refused). Merging it pushes to main, and `deploy.yml` deploys the site.
+
+The pull request body also says whether an update would be eligible for
+auto-merge: pure version bumps with identical results and every spec
+classified. The workflow does not merge anything itself; every update is
+reviewed.
+
+Requirements: the workflow needs `contents: write` and `pull-requests: write`
+(set in the workflow), and the organization and repository setting **Allow
+GitHub Actions to create and approve pull requests** (Settings > Actions >
+General) must be on, or opening the pull request fails (the branch is still
+pushed and the body is in the run summary).
+
+To see what an update would say without running it: `node scripts/diff-data.mjs
+--base <git ref>` compares the working tree's data with the data at a commit,
+and `--old <dir>` with another checkout's.
 
 ## Site
 

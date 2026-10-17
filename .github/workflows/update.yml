@@ -1,0 +1,112 @@
+name: Update data
+
+# Brings the data up to date with the latest engines (warpdom, happy-dom,
+# jsdom, linkedom) and Web IDL (@webref/idl, browser-specs, webidl2), and opens
+# a pull request when anything changed. See "Automatic updates" in README.md.
+
+on:
+  schedule:
+    - cron: '23 6 * * 1' # Mondays 06:23 UTC
+  workflow_dispatch:
+  repository_dispatch:
+    types: [engine-release]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.3
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            website/package-lock.json
+
+      - run: npm ci
+
+      - run: npm ci
+        working-directory: website
+
+      # Installs the latest packages, runs the featured probes and the Web IDL
+      # existence pass (each engine in its own process), compares with the
+      # committed data and, when something changed, appends data/changelog.json
+      # and writes the pull request body. Outputs: changed, auto_merge, title.
+      - id: update
+        run: node scripts/update.mjs --body "$RUNNER_TEMP/pr-body.md"
+
+      # Pull requests opened with GITHUB_TOKEN start no other workflow, so the
+      # tests and the site build run here, before the pull request is opened.
+      # A failure does not stop the pull request (an unclassified spec fails
+      # test/spec-groups.test.mjs on purpose); it is reported in the body.
+      - id: test
+        if: steps.update.outputs.changed == 'true'
+        continue-on-error: true
+        run: npm test
+
+      - id: build
+        if: steps.update.outputs.changed == 'true'
+        continue-on-error: true
+        run: npm run build
+
+      - name: Nothing to do
+        if: steps.update.outputs.changed != 'true'
+        run: echo "No version or result changed; nothing to commit." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Open the pull request
+        if: steps.update.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: ${{ steps.update.outputs.title }}
+          TEST: ${{ steps.test.outcome }}
+          BUILD: ${{ steps.build.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          MAINTAINER: sonukapoor
+        run: |
+          set -euo pipefail
+          body="$RUNNER_TEMP/pr-body.md"
+          {
+            echo
+            echo "### Checks run in this workflow"
+            echo
+            echo "- \`npm test\`: $TEST"
+            echo "- site build: $BUILD"
+            echo
+            echo "Pull requests opened by GitHub Actions start no other workflow, so these ran in [the update run]($RUN_URL) before the pull request was opened. Merging into main deploys the site (deploy.yml)."
+            echo
+            echo "@$MAINTAINER: this update needs your review."
+          } >> "$body"
+          cat "$body" >> "$GITHUB_STEP_SUMMARY"
+
+          branch="auto/update-$(date -u +%F)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add data package.json package-lock.json
+          git commit -q -m "$TITLE"
+          git push --force origin "$branch"
+
+          pr=$(gh pr list --head "$branch" --state open --json url --jq '.[0].url // empty')
+          if [ -n "$pr" ]; then
+            gh pr edit "$branch" --title "$TITLE" --body-file "$body"
+          elif ! pr=$(gh pr create --base main --head "$branch" --title "$TITLE" --body-file "$body"); then
+            echo "::error::Could not open the pull request. The org/repo setting 'Allow GitHub Actions to create and approve pull requests' must be on (Settings > Actions > General). Branch $branch is pushed; open the pull request from it by hand."
+            exit 1
+          fi
+          echo "Pull request: $pr" >> "$GITHUB_STEP_SUMMARY"
+
+          # Notify the maintainer: assignee and review request; the body's
+          # @mention covers the case where the review request is refused.
+          gh pr edit "$branch" --add-assignee "$MAINTAINER" || echo "::warning::Could not assign $MAINTAINER."
+          gh pr edit "$branch" --add-reviewer "$MAINTAINER" || echo "::warning::Could not request a review from $MAINTAINER; the body mentions @$MAINTAINER."
