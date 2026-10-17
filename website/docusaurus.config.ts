@@ -73,12 +73,14 @@ const config: Config = {
             { label: 'idl.json', href: 'pathname:///data/idl.json' },
             { label: 'spec-groups.json', href: 'pathname:///data/spec-groups.json' },
             { label: 'wpt.json', href: 'pathname:///data/wpt.json' },
+            { label: 'changelog.json', href: 'pathname:///data/changelog.json' },
           ],
         },
         {
           title: 'Project',
           items: [
             { label: 'About and method', to: '/about' },
+            { label: 'What changed', to: '/changes' },
             { label: 'Report a wrong result', href: 'https://github.com/domparity/domparity.github.io/issues/new?template=wrong-result.yml' },
             { label: 'Sponsor the maintainer', href: 'https://github.com/sponsors/sonukapoor' },
           ],

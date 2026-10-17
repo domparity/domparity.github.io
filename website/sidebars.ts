@@ -7,6 +7,7 @@ const sidebars: SidebarsConfig = {
     { type: 'category', label: 'Featured APIs', collapsible: false, items: apis },
     { type: 'link', label: 'Coverage: every API', href: '/coverage' },
     'wpt',
+    'changes',
     'about',
   ],
 };

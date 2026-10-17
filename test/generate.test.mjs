@@ -127,3 +127,43 @@ test('featured pages show Web IDL existence for the interfaces an API is about',
   assert.deepEqual(idlLines(data.apis[1], 'a@1.0.0', idl), []);
   assert.ok(renderApiPage(api, data, idl).includes('interface present; 2 of 4 members present'));
 });
+
+test('the What changed page lists updates newest first, with version moves, status changes and Web IDL changes', async () => {
+  const { renderChanges, dataDate } = await import('../website/scripts/generate.mjs');
+  const changelog = {
+    entries: [
+      {
+        date: '2026-10-19',
+        engines: [{ engine: 'jsdom', from: '30.1.3', version: '30.2.0' }, { engine: 'linkedom', version: '0.18.13' }],
+        packages: [{ package: '@webref/idl', from: '3.85.2', to: '3.86.0' }],
+        featured: [{ engine: 'jsdom', api: 'zeta', title: 'Zeta <x>', from: 'partial', to: 'supported', nowPass: ['c1'], nowFail: [] }],
+        apisAdded: [],
+        apisRemoved: [],
+        idl: [{ engine: 'jsdom', interfaces: 1, nowPresent: 2, nowMissing: 0, examples: { interfaces: [{ name: 'Foo', spec: 'dom', from: '-', to: 'P' }], nowPresent: ['Foo.a', 'Foo.b'], nowMissing: [] } }],
+        specsAdded: [{ id: 'new-spec', title: 'New Spec', group: null }],
+        specsRemoved: [],
+        interfacesAdded: 3,
+        interfacesRemoved: 0,
+        membersAdded: 1,
+        membersRemoved: 0,
+      },
+      { date: '2026-10-17', initial: true, note: 'First data.', engines: [{ engine: 'jsdom', version: '30.1.3' }] },
+    ],
+  };
+  const page = renderChanges(changelog, { apiIds: new Set(['zeta']) });
+  assert.match(page, /slug: \/changes\n/);
+  assert.ok(page.includes(BANNER));
+  assert.ok(page.indexOf('## 2026-10-19') < page.indexOf('## 2026-10-17'));
+  assert.ok(page.includes('jsdom 30.1.3 → **30.2.0**, linkedom 0.18.13.'));
+  assert.ok(page.includes('`@webref/idl` 3.85.2 → 3.86.0'));
+  assert.ok(page.includes('- jsdom: [Zeta \\<x\\>](/apis/zeta): Partial → **Supported** (now passes `c1`)'));
+  assert.ok(page.includes('1 interface changed status, 2 members now present, 0 now missing: `Foo` missing → present, `Foo.a` now present'));
+  assert.ok(page.includes('New in the Web IDL: spec New Spec (not yet in a group); 3 interfaces added; 1 member added.'));
+  assert.ok(page.includes('First data.'));
+  // An API that no longer exists is not linked (the build fails on broken links).
+  assert.ok(!renderChanges(changelog).includes('](/apis/zeta)'));
+  const twice = renderChanges({ entries: [{ ...changelog.entries[1], date: '2026-10-17' }, changelog.entries[1]] });
+  assert.ok(twice.includes('## 2026-10-17 (2)') && twice.includes('## 2026-10-17 (1)'));
+  assert.match(page, /^---\nid: changes\ntitle: What changed\ndescription: "[^"\n]+"\nslug/);
+  assert.equal(dataDate({ date: '2026-10-17T18:13:06Z' }, { date: '2026-10-18T01:00:00Z' }), '2026-10-18');
+});

@@ -1,6 +1,7 @@
 // Generates the data-driven parts of the site from ../data/*.json:
 //   docs/apis/<id>.mdx     one page per API
 //   docs/wpt.mdx           Web Platform Tests pass rates
+//   docs/changes.mdx       What changed, from data/changelog.json
 //   sidebars.generated.json  the API list for the docs sidebar
 //   src/data/*.json        data for the React components
 //   src/data/idl-summary.json  coverage summary (existence pass) for the pages
@@ -242,6 +243,88 @@ export function renderWpt(wpt) {
   return lines.join('\n');
 }
 
+const IFACE_WORD = { P: 'present', N: "Node.js's own global", S: 'stub', '-': 'missing', '?': 'not probed' };
+const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+
+// The "What changed" page: one section per update in data/changelog.json,
+// newest first. Featured APIs link to their page when it still exists.
+export function renderChanges(changelog, { apiIds = new Set(), groups = { groups: [] } } = {}) {
+  const groupTitle = Object.fromEntries((groups.groups ?? []).map((g) => [g.id, g.title]));
+  const lines = [
+    '---',
+    'id: changes',
+    'title: What changed',
+    `description: ${JSON.stringify('Every update of the data, newest first: engine versions, status changes and new web APIs.')}`,
+    'slug: /changes',
+    '---',
+    '',
+    BANNER,
+    '',
+    `The data is brought up to date automatically every week and when an engine releases a new version: the latest warpdom, happy-dom, jsdom and linkedom, and the latest Web IDL from ${link('@webref/idl', 'https://www.npmjs.com/package/@webref/idl')}, go through the same probes. Each update is a pull request in the ${link('repository', 'https://github.com/domparity/domparity.github.io/pulls?q=is%3Apr+author%3Aapp%2Fgithub-actions')}; updates that change a result are reviewed by the maintainer before they are published. Newest first. Data: ${link('changelog.json', 'pathname:///data/changelog.json')}.`,
+    '',
+  ];
+  const seen = {};
+  for (const e of changelog.entries ?? []) {
+    // Several updates on one day get distinct headings (and anchors).
+    seen[e.date] = (seen[e.date] ?? 0) + 1;
+    const sameDay = (changelog.entries ?? []).filter((x) => x.date === e.date).length;
+    lines.push(`## ${e.date}${sameDay > 1 ? ` (${sameDay - seen[e.date] + 1})` : ''}`, '');
+    if (e.note) lines.push(mdxText(e.note), '');
+    const versions = (e.engines ?? []).map((x) =>
+      x.from && x.from !== x.version ? `${mdxText(x.engine)} ${mdxText(x.from)} → **${mdxText(x.version)}**` : `${mdxText(x.engine)} ${mdxText(x.version)}`,
+    );
+    lines.push(`Engines: ${versions.join(', ')}.`, '');
+    if (e.packages?.length) {
+      lines.push(`Packages: ${e.packages.map((p) => `${mdxCode(p.package)} ${mdxText(p.from ?? 'none')} → ${mdxText(p.to ?? 'none')}`).join(', ')}.`, '');
+    }
+    if (e.initial) continue;
+    const featured = e.featured ?? [];
+    lines.push('### Featured checks', '');
+    for (const a of e.apisAdded ?? []) lines.push(`- New API: ${apiIds.has(a.id) ? link(a.title, `/apis/${a.id}`) : mdxText(a.title)}`);
+    for (const a of e.apisRemoved ?? []) lines.push(`- Removed API: ${mdxText(a.title)}`);
+    if (!featured.length && !(e.apisAdded ?? []).length && !(e.apisRemoved ?? []).length) lines.push('No status changed.');
+    for (const c of featured) {
+      const title = apiIds.has(c.api) ? link(c.title, `/apis/${c.api}`) : mdxText(c.title);
+      const move = c.from === c.to ? `still ${mdxText(STATUS_LABEL[c.to] ?? c.to).toLowerCase()}` : `${mdxText(STATUS_LABEL[c.from] ?? c.from)} → **${mdxText(STATUS_LABEL[c.to] ?? c.to)}**`;
+      const parts = [];
+      if (c.nowPass?.length) parts.push(`now passes ${c.nowPass.map(mdxCode).join(', ')}`);
+      if (c.nowFail?.length) parts.push(`now fails ${c.nowFail.map(mdxCode).join(', ')}`);
+      lines.push(`- ${mdxText(c.engine)}: ${title}: ${move}${parts.length ? ` (${parts.join('; ')})` : ''}`);
+    }
+    lines.push('', '### Web IDL existence', '');
+    if (!(e.idl ?? []).length) lines.push('No interface or member changed for any engine.');
+    for (const x of e.idl ?? []) {
+      const examples = [
+        ...x.examples.interfaces.map((i) => `${mdxCode(i.name)} ${mdxText(IFACE_WORD[i.from] ?? i.from)} → ${mdxText(IFACE_WORD[i.to] ?? i.to)}`),
+        ...x.examples.nowPresent.map((m) => `${mdxCode(m)} now present`),
+        ...x.examples.nowMissing.map((m) => `${mdxCode(m)} now missing`),
+      ];
+      const shown = x.interfaces + x.nowPresent + x.nowMissing > examples.length ? ' (examples)' : '';
+      lines.push(
+        `- ${mdxText(x.engine)}: ${plural(x.interfaces, 'interface')} changed status, ${plural(x.nowPresent, 'member')} now present, ${x.nowMissing} now missing${examples.length ? `${shown}: ${examples.join(', ')}` : ''}.`,
+      );
+    }
+    const added = [
+      ...(e.specsAdded ?? []).map((s) => `spec ${mdxText(s.title)} (${s.group ? mdxText(groupTitle[s.group] ?? s.group) : 'not yet in a group'})`),
+      ...(e.specsRemoved ?? []).map((s) => `spec ${mdxCode(s)} removed`),
+    ];
+    const counts = [
+      e.interfacesAdded && `${plural(e.interfacesAdded, 'interface')} added`,
+      e.interfacesRemoved && `${plural(e.interfacesRemoved, 'interface')} removed`,
+      e.membersAdded && `${plural(e.membersAdded, 'member')} added`,
+      e.membersRemoved && `${plural(e.membersRemoved, 'member')} removed`,
+    ].filter(Boolean);
+    if (added.length || counts.length) lines.push('', `New in the Web IDL: ${[...added, ...counts].join('; ')}.`);
+    lines.push('');
+  }
+  return lines.join('\n');
+}
+
+// "Data updated" date: the newer of the two probe runs.
+export function dataDate(results, idl) {
+  return [results?.date, idl?.date].filter(Boolean).sort().pop()?.slice(0, 10) ?? null;
+}
+
 function main() {
   const site = fileURLToPath(new URL('..', import.meta.url));
   const dataDir = join(site, '..', 'data');
@@ -257,6 +340,8 @@ function main() {
   mkdirSync(apiDir, { recursive: true });
   for (const api of data.apis) writeFileSync(join(apiDir, `${api.id}.mdx`), renderApiPage(api, data, idl));
   writeFileSync(join(site, 'docs', 'wpt.mdx'), renderWpt(wpt));
+  const changelogText = readFileSync(join(dataDir, 'changelog.json'), 'utf8');
+  writeFileSync(join(site, 'docs', 'changes.mdx'), renderChanges(JSON.parse(changelogText), { apiIds: new Set(data.apis.map((a) => a.id)), groups }));
   writeFileSync(join(site, 'sidebars.generated.json'), JSON.stringify(renderSidebar(data), null, 2) + '\n');
   for (const dir of [join(site, 'src', 'data'), join(site, 'static', 'data')]) {
     mkdirSync(dir, { recursive: true });
@@ -264,11 +349,12 @@ function main() {
     writeFileSync(join(dir, 'wpt.json'), JSON.stringify(wpt, null, 2) + '\n');
   }
   writeFileSync(join(site, 'src', 'data', 'idl-summary.json'), JSON.stringify(summarize(idl, groups)) + '\n');
-  writeFileSync(join(site, 'src', 'data', 'site.json'), JSON.stringify({ maintainerEngine: MAINTAINER_ENGINE }) + '\n');
+  writeFileSync(join(site, 'src', 'data', 'site.json'), JSON.stringify({ maintainerEngine: MAINTAINER_ENGINE, dataUpdated: dataDate(data, idl) }) + '\n');
+  writeFileSync(join(site, 'static', 'data', 'changelog.json'), changelogText);
   writeFileSync(join(site, 'static', 'data', 'spec-groups.json'), groupsText);
   writeFileSync(join(site, 'static', 'data', 'idl.json'), idlText);
   writeFileSync(join(site, 'static', 'data', 'idl-search.json'), JSON.stringify({ engines: idl.engines.map((e) => e.engine), rows: searchRows(idl) }));
-  console.log(`generated ${data.apis.length} API pages, wpt.mdx, sidebar and data files`);
+  console.log(`generated ${data.apis.length} API pages, wpt.mdx, changes.mdx, sidebar and data files`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) main();

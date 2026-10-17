@@ -5,6 +5,7 @@ import ResultsTable from '../components/ResultsTable';
 import StatusLegend from '../components/StatusLegend';
 import EngineCards from '../components/EngineCards';
 import data from '../data/results.json';
+import site from '../data/site.json';
 
 export default function Home() {
   return (
@@ -27,6 +28,9 @@ export default function Home() {
               </li>
             ))}
           </ul>
+          <p className="hero-dp__updated">
+            Data updated {site.dataUpdated} · <Link to="/changes">What changed</Link>
+          </p>
           <div className="hero-dp__actions">
             <a className="btn-dp btn-dp--primary" href="#featured">
               Featured checks
