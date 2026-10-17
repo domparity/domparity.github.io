@@ -29,6 +29,28 @@ show where each engine, warpdom included, fails or deviates.
   - **missing**: not defined
 - Black box only: no engine's source code is read to write the probes.
 
+On top of these hand-written behavior probes (the "featured" layer), an
+automatic **existence pass** covers the whole platform:
+
+- `npm run probe-idl` (`scripts/probe-idl.mjs`, `src/idl.mjs`) reads the Web IDL
+  of every spec in [@webref/idl](https://www.npmjs.com/package/@webref/idl)
+  (spec titles and links from [browser-specs](https://www.npmjs.com/package/browser-specs))
+  and lists every interface and namespace exposed on Window, with every
+  attribute, operation and constant on it, including partial interfaces and
+  mixins, each attributed to the spec that defines it. Window's own members
+  are looked up on the window itself, constants and static members on the
+  interface object, everything else on the interface prototype (which covers
+  the prototype chain); `[LegacyUnforgeable]` members also on a sample
+  instance. Members of `iterable`, `maplike` and `setlike` declarations are
+  included; members inherited from `Object.prototype` do not count.
+- Each engine runs in its own child process (`scripts/run-idl.mjs`) with a
+  timeout. Interface status: present, present but Node.js's own global (the
+  very same object), stub (calling a constructor that takes no arguments
+  throws or logs "not implemented"; other constructor errors are recorded),
+  or missing. Member status: present or missing.
+- **Existence is not behavior.** A member that is present can still be a no-op
+  or wrong; only the featured checks test behavior.
+
 Results describe the engine's window. Test runners may add Node.js globals
 (structuredClone, TextEncoder, crypto, ...) on top; where the window's value is
 Node.js's own global the data marks it `sameAsNode`.
@@ -41,6 +63,9 @@ Node.js's own global the data marks it `sameAsNode`.
   are keyed `<engine>@<version>`, so several versions of one engine can be
   added (install an alias such as `"jsdom29": "npm:jsdom@29"` and add
   `{ "engine": "jsdom", "package": "jsdom29" }` to `engines.json`).
+- `data/idl.json`: the existence pass, grouped spec → interface → member, with
+  the engine versions, the @webref/idl and browser-specs versions, and a legend
+  of the one-character codes (one character per engine, in `engines` order).
 - `data/wpt.json`: Web Platform Tests pass rates per area for warpdom and jsdom,
   imported from warpdom's published WPT summary with `npm run import-wpt --
   <summary.md>`; the source run (WPT commit, date, engine versions) is recorded
@@ -53,6 +78,7 @@ Node.js >= 22.12.
 ```sh
 npm install
 npm run probe        # writes data/results.json
+npm run probe-idl    # writes data/idl.json
 npm test             # status classification, results format, site generator
 
 cd website
