@@ -14,7 +14,9 @@
     "import-wpt": "node scripts/import-wpt.mjs",
     "build": "npm --prefix website run build",
     "test": "node --test \"test/*.test.mjs\"",
-    "probe-idl": "node scripts/probe-idl.mjs"
+    "probe-idl": "node scripts/probe-idl.mjs",
+    "update": "node scripts/update.mjs",
+    "diff-data": "node scripts/diff-data.mjs"
   },
   "devDependencies": {
     "@webref/idl": "3.85.2",
