@@ -83,7 +83,7 @@ const config: Config = {
         },
       ],
       copyright:
-        'Maintained by Sonu Kapoor, who also writes warpdom. Code: MIT. Data: CC BY 4.0.',
+        'Maintained by <a href="https://sonukapoor.com">Sonu Kapoor</a>, who also writes <a href="https://github.com/sonukapoor/warpdom">warpdom</a>. Code: MIT. Data: CC BY 4.0.',
     },
     prism: { theme: prismThemes.github, darkTheme: prismThemes.dracula },
     // Search: add an Algolia DocSearch config here once the site is public.

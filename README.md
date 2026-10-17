@@ -4,7 +4,7 @@ A "can I use" for test DOMs: which web platform APIs work, and how, in the DOM
 implementations JavaScript unit tests run on: happy-dom, jsdom, linkedom and
 warpdom.
 
-Maintained by Sonu Kapoor, who is also the author of
+Maintained by [Sonu Kapoor](https://sonukapoor.com), who is also the author of
 [warpdom](https://github.com/sonukapoor/warpdom). Because of that, the method
 is the same for every engine, the probes and data are open, and the results
 show where each engine, warpdom included, fails or deviates.
