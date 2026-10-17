@@ -1,0 +1,52 @@
+name: Wrong result
+description: A result on domparity looks wrong, or a check misreads a standard.
+title: "Wrong result: <API> in <engine> <version>"
+labels: [accuracy]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for checking our work. Every API page has a "Report a wrong result" link per engine that fills most of this in.
+        Please include a link to the part of the specification that says what should happen.
+  - type: dropdown
+    id: engine
+    attributes:
+      label: Engine
+      options: [happy-dom, jsdom, linkedom, warpdom, all engines]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Engine version
+      placeholder: e.g. 30.1.3
+    validations:
+      required: true
+  - type: input
+    id: api
+    attributes:
+      label: API or interface member
+      description: The page on domparity, or the interface and member from the Coverage section.
+      placeholder: e.g. https://domparity.github.io/apis/window-scroll-to or Element.scrollIntoView
+    validations:
+      required: true
+  - type: input
+    id: check
+    attributes:
+      label: Check
+      description: The check id from the API page, if it is about a check.
+      placeholder: e.g. scroll-position
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+      description: What the standard says should happen, with a link to the specification section or step.
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed
+      description: What domparity shows, and what the engine actually does if you tried it (a minimal snippet helps).
+    validations:
+      required: true
