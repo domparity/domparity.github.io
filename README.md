@@ -102,16 +102,37 @@ npx docusaurus serve # serves website/build at http://localhost:3000
 
 ## Automatic updates
 
-`.github/workflows/update.yml` keeps the data current. It runs every Monday at
-06:23 UTC, on demand (`gh workflow run update.yml -R domparity/domparity.github.io`),
-and on a `repository_dispatch` of type `engine-release` (for engine release
-workflows, e.g. warpdom's).
+`.github/workflows/update.yml` keeps the data current through a single pull
+request from the branch `auto/update`. It runs:
+
+- **daily at 05:41 UTC: engine check.** `node scripts/update.mjs --check` asks
+  the npm registry for the latest warpdom, happy-dom, jsdom and linkedom and
+  compares them with the versions recorded in `data/results.json`,
+  `data/idl.json` and `package.json` (on the open update branch if there is
+  one, else on main). When none changed, the run ends within seconds with "No
+  new engine version" in the run summary: no install, no probes. Otherwise it
+  runs an **engines-only** update (`--engines-only`): only the engines are
+  installed at their latest version; @webref/idl, browser-specs and webidl2
+  stay as they are, so daily runs do not churn on spec changes.
+- **Mondays at 06:23 UTC: full update**, the engines and @webref/idl,
+  browser-specs and webidl2.
+- on demand: `gh workflow run update.yml -R domparity/domparity.github.io
+  [-f mode=auto|engines|full]` (default `auto`: the engine check, then an
+  engines-only update if an engine changed; `full`: the full update);
+- on a `repository_dispatch` of type `engine-release` (for engine release
+  workflows, e.g. warpdom's): the engine check and an engines-only update.
+
+An update:
 
 1. `npm ci`, then `node scripts/update.mjs` (`npm run update`): installs the
-   latest warpdom, happy-dom, jsdom, linkedom, @webref/idl, browser-specs and
-   webidl2 (exact versions), runs `npm run probe` and `npm run probe-idl`, and
-   compares the new data with the committed data (`scripts/diff-data.mjs`).
-   When nothing but dates changed, every file is restored and the run ends.
+   latest packages (exact versions), runs `npm run probe` and `npm run
+   probe-idl`, and compares the new data with the data on main
+   (`scripts/diff-data.mjs`). If an update pull request is open, the package
+   versions its branch brought in are installed too (`--pending <ref>`, unless
+   main changed them since), so an engines-only run keeps a Web IDL update the
+   branch already has. When nothing but dates changed, every file is restored
+   and the run ends (an open update pull request that main has caught up with
+   is closed).
 2. Otherwise it appends an entry to `data/changelog.json` (newest first; the
    site's What changed page at `/changes` is generated from it) and writes the
    pull request body: per engine, the version change and every status change
@@ -124,10 +145,21 @@ workflows, e.g. warpdom's).
    Their outcome is in the pull request body. A new, unclassified spec makes
    `test/spec-groups.test.mjs` fail on purpose: add it to a group on the
    branch before merging.
-4. The data is committed to `auto/update-YYYY-MM-DD` and a pull request into
-   main is opened, assigned to sonukapoor with a review request from
-   sonukapoor (the body also @mentions sonukapoor, in case the review request
-   is refused). Merging it pushes to main, and `deploy.yml` deploys the site.
+4. The data is committed on top of main to `auto/update` and force-pushed.
+   If the pull request from `auto/update` is open, its title and body are
+   updated (assignee and reviewer stay); otherwise a pull request into main is
+   opened, assigned to sonukapoor with a review request from sonukapoor (the
+   body also @mentions sonukapoor, in case the review request is refused).
+   Merging it pushes to main, and `deploy.yml` deploys the site.
+
+Because the branch is rebuilt from main on every run and compared with main,
+the pull request body always describes the whole difference between main and
+the branch, and the branch carries exactly one changelog entry for the
+cumulative change, however often it was updated before the merge. A spec
+classification added by hand to `data/spec-groups.json` on `auto/update` is
+carried over to the rebuilt branch (unless main changed that file since);
+other commits pushed by hand to `auto/update` are replaced by the next update
+run.
 
 The pull request body also says whether an update would be eligible for
 auto-merge: pure version bumps with identical results and every spec

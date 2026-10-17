@@ -1,13 +1,25 @@
 name: Update data
 
-# Brings the data up to date with the latest engines (warpdom, happy-dom,
-# jsdom, linkedom) and Web IDL (@webref/idl, browser-specs, webidl2), and opens
-# a pull request when anything changed. See "Automatic updates" in README.md.
+# Keeps the data current with the latest engines (warpdom, happy-dom, jsdom,
+# linkedom) and Web IDL (@webref/idl, browser-specs, webidl2) through a single
+# pull request from the branch auto/update. See "Automatic updates" in README.md.
+#
+# - Daily: a check of the npm registry (seconds, no install). Only when an
+#   engine has a new version: an engines-only update (the Web IDL sources stay
+#   as they are, so daily runs do not churn on spec changes).
+# - Mondays: the full update, Web IDL sources included.
 
 on:
   schedule:
-    - cron: '23 6 * * 1' # Mondays 06:23 UTC
+    - cron: '41 5 * * *' # daily 05:41 UTC: engine check
+    - cron: '23 6 * * 1' # Mondays 06:23 UTC: full update
   workflow_dispatch:
+    inputs:
+      mode:
+        description: 'auto: engine check, then engines-only update if an engine changed. engines: same. full: update everything.'
+        type: choice
+        options: [auto, engines, full]
+        default: auto
   repository_dispatch:
     types: [engine-release]
 
@@ -19,32 +31,84 @@ concurrency:
   group: update-data
   cancel-in-progress: false
 
+env:
+  BRANCH: auto/update
+  MAINTAINER: sonukapoor
+
 jobs:
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the merge base with the open update branch
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22.23.3
-          cache: npm
-          cache-dependency-path: |
-            package-lock.json
-            website/package-lock.json
 
-      - run: npm ci
+      # full on the Monday schedule or when asked; engines otherwise
+      # (daily schedule, repository_dispatch engine-release, dispatch auto).
+      # pending: the open update pull request's branch, if any; its data is
+      # what the check compares with, and its versions are carried over.
+      - id: mode
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+          INPUT: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          mode=engines
+          if [ "$EVENT" = schedule ] && [ "$SCHEDULE" = '23 6 * * 1' ]; then mode=full; fi
+          if [ "$EVENT" = workflow_dispatch ] && [ "$INPUT" = full ]; then mode=full; fi
+          pr=$(gh pr list --head "$BRANCH" --base main --state open --json number --jq '.[0].number // empty')
+          pending=
+          if [ -n "$pr" ]; then
+            git fetch -q origin "$BRANCH"
+            pending="origin/$BRANCH"
+          fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "pr=$pr" >> "$GITHUB_OUTPUT"
+          echo "pending=$pending" >> "$GITHUB_OUTPUT"
+          echo "Mode: $mode; open update pull request: ${pr:-none}" >> "$GITHUB_STEP_SUMMARY"
 
-      - run: npm ci
+      # The npm registry's latest engines against the versions in the data (on
+      # the open update branch if there is one, else on main).
+      - id: check
+        if: steps.mode.outputs.mode == 'engines'
+        run: node scripts/update.mjs --check ${{ steps.mode.outputs.pending && format('--ref {0}', steps.mode.outputs.pending) || '' }} | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - id: go
+        run: echo "run=${{ steps.mode.outputs.mode == 'full' || steps.check.outputs.changed == 'true' }}" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache@v4
+        if: steps.go.outputs.run == 'true'
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json', 'website/package-lock.json') }}
+          restore-keys: npm-
+
+      - if: steps.go.outputs.run == 'true'
+        run: npm ci
+
+      - if: steps.go.outputs.run == 'true'
+        run: npm ci
         working-directory: website
 
-      # Installs the latest packages, runs the featured probes and the Web IDL
-      # existence pass (each engine in its own process), compares with the
-      # committed data and, when something changed, appends data/changelog.json
-      # and writes the pull request body. Outputs: changed, auto_merge, title.
+      # Installs the latest packages (engines only, or everything), keeps the
+      # versions the open update branch brought in, runs the featured probes and
+      # the Web IDL existence pass (each engine in its own process), compares
+      # with the data on main and, when something changed, appends
+      # data/changelog.json and writes the pull request body. Outputs: changed,
+      # auto_merge, title.
       - id: update
-        run: node scripts/update.mjs --body "$RUNNER_TEMP/pr-body.md"
+        if: steps.go.outputs.run == 'true'
+        env:
+          ENGINES_ONLY: ${{ steps.mode.outputs.mode == 'engines' && '--engines-only' || '' }}
+          PENDING: ${{ steps.mode.outputs.pending }}
+        run: node scripts/update.mjs --body "$RUNNER_TEMP/pr-body.md" $ENGINES_ONLY ${PENDING:+--pending "$PENDING"}
 
       # Pull requests opened with GITHUB_TOKEN start no other workflow, so the
       # tests and the site build run here, before the pull request is opened.
@@ -62,17 +126,34 @@ jobs:
 
       - name: Nothing to do
         if: steps.update.outputs.changed != 'true'
-        run: echo "No version or result changed; nothing to commit." >> "$GITHUB_STEP_SUMMARY"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ steps.mode.outputs.pr }}
+          RAN: ${{ steps.go.outputs.run }}
+        run: |
+          if [ "$RAN" != true ]; then
+            echo "No new engine version; nothing to do." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No version or result changed against main; nothing to commit." >> "$GITHUB_STEP_SUMMARY"
+            # main already has everything the open update would bring.
+            if [ -n "$PR" ]; then
+              gh pr close "$PR" --delete-branch --comment "Closed by the update run: main already has the latest data. $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+              echo "Closed pull request #$PR." >> "$GITHUB_STEP_SUMMARY"
+            fi
+          fi
 
-      - name: Open the pull request
+      # One update pull request at a time, from $BRANCH. The branch is rebuilt
+      # from main on every run (the data is compared with main's), so the body
+      # always describes the whole difference between main and the branch.
+      - name: Open or update the pull request
         if: steps.update.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           TITLE: ${{ steps.update.outputs.title }}
           TEST: ${{ steps.test.outcome }}
           BUILD: ${{ steps.build.outcome }}
+          MODE: ${{ steps.mode.outputs.mode }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          MAINTAINER: sonukapoor
         run: |
           set -euo pipefail
           body="$RUNNER_TEMP/pr-body.md"
@@ -83,30 +164,32 @@ jobs:
             echo "- \`npm test\`: $TEST"
             echo "- site build: $BUILD"
             echo
-            echo "Pull requests opened by GitHub Actions start no other workflow, so these ran in [the update run]($RUN_URL) before the pull request was opened. Merging into main deploys the site (deploy.yml)."
+            echo "Last updated by [this run]($RUN_URL) ($MODE update). The branch is rebuilt from main on every update run, and this description covers everything between main and the branch. Pull requests opened by GitHub Actions start no other workflow, so these checks ran in the update run. Merging into main deploys the site (deploy.yml)."
             echo
             echo "@$MAINTAINER: this update needs your review."
           } >> "$body"
           cat "$body" >> "$GITHUB_STEP_SUMMARY"
 
-          branch="auto/update-$(date -u +%F)"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git switch -c "$branch"
+          git switch -C "$BRANCH"
           git add data package.json package-lock.json
           git commit -q -m "$TITLE"
-          git push --force origin "$branch"
+          git push --force origin "$BRANCH"
 
-          pr=$(gh pr list --head "$branch" --state open --json url --jq '.[0].url // empty')
+          pr=$(gh pr list --head "$BRANCH" --base main --state open --json url --jq '.[0].url // empty')
           if [ -n "$pr" ]; then
-            gh pr edit "$branch" --title "$TITLE" --body-file "$body"
-          elif ! pr=$(gh pr create --base main --head "$branch" --title "$TITLE" --body-file "$body"); then
-            echo "::error::Could not open the pull request. The org/repo setting 'Allow GitHub Actions to create and approve pull requests' must be on (Settings > Actions > General). Branch $branch is pushed; open the pull request from it by hand."
+            gh pr edit "$pr" --title "$TITLE" --body-file "$body"
+            echo "Updated pull request: $pr" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if ! pr=$(gh pr create --base main --head "$BRANCH" --title "$TITLE" --body-file "$body"); then
+            echo "::error::Could not open the pull request. The org/repo setting 'Allow GitHub Actions to create and approve pull requests' must be on (Settings > Actions > General). Branch $BRANCH is pushed; open the pull request from it by hand."
             exit 1
           fi
           echo "Pull request: $pr" >> "$GITHUB_STEP_SUMMARY"
 
           # Notify the maintainer: assignee and review request; the body's
           # @mention covers the case where the review request is refused.
-          gh pr edit "$branch" --add-assignee "$MAINTAINER" || echo "::warning::Could not assign $MAINTAINER."
-          gh pr edit "$branch" --add-reviewer "$MAINTAINER" || echo "::warning::Could not request a review from $MAINTAINER; the body mentions @$MAINTAINER."
+          gh pr edit "$pr" --add-assignee "$MAINTAINER" || echo "::warning::Could not assign $MAINTAINER."
+          gh pr edit "$pr" --add-reviewer "$MAINTAINER" || echo "::warning::Could not request a review from $MAINTAINER; the body mentions @$MAINTAINER."
