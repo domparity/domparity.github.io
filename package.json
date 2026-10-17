@@ -1,0 +1,24 @@
+{
+  "name": "domparity",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Which web platform APIs work, and how, in the DOM implementations JavaScript unit tests run on.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Sonu Kapoor",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "probe": "node scripts/probe.mjs",
+    "import-wpt": "node scripts/import-wpt.mjs",
+    "build": "npm --prefix website run build",
+    "test": "node --test \"test/*.test.mjs\""
+  },
+  "devDependencies": {
+    "happy-dom": "21.0.3",
+    "jsdom": "30.1.3",
+    "linkedom": "0.18.13",
+    "warpdom": "0.1.3"
+  }
+}
