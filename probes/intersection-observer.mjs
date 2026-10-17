@@ -5,6 +5,7 @@ const SPEC = 'https://w3c.github.io/IntersectionObserver/#intersection-observer-
 export default {
   id: 'intersection-observer',
   title: 'IntersectionObserver',
+  interfaces: ['IntersectionObserver'],
   summary: 'Reports when observed elements enter or leave the viewport or a root element.',
   spec: SPEC,
   exists: (w) => typeof w.IntersectionObserver === 'function',

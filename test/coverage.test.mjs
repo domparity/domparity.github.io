@@ -33,8 +33,23 @@ test('summary: totals per engine; members count in the spec that defines them', 
   const s = summarize(idl);
   assert.deepEqual(s.totals, { specs: 3, interfaces: 3, members: 5, interfacesPresent: [2, 1], membersPresent: [4, 1], nodeGlobals: [0, 1], stubs: [0, 0] });
   const view = s.specs.find((x) => x.id === 'CSSOM-View');
-  assert.deepEqual(view, { id: 'CSSOM-View', slug: 'cssom-view', title: 'CSSOM View', url: null, interfaces: 0, members: 1, interfacesPresent: [0, 0], membersPresent: [1, 0] });
+  assert.deepEqual(view, { id: 'CSSOM-View', slug: 'cssom-view', title: 'CSSOM View', url: null, group: null, interfaces: 0, members: 1, interfacesPresent: [0, 0], membersPresent: [1, 0] });
   assert.equal(s.specs[0].id, 'dom');
+});
+
+test('summary and spec pages by group', () => {
+  const groups = { groups: [
+    { id: 'core', title: 'Core', reason: 'r', specs: ['dom', 'CSSOM-View'] },
+    { id: 'gfx', title: 'Graphics', reason: 'r', specs: ['webgl'] },
+  ] };
+  const s = summarize(idl, groups);
+  assert.deepEqual(s.groups.map((g) => [g.id, g.specs, g.interfaces, g.members, g.membersPresent]), [
+    ['core', 2, 2, 4, [4, 1]],
+    ['gfx', 1, 1, 1, [0, 0]],
+  ]);
+  assert.equal(s.specs.find((x) => x.id === 'webgl').group, 'gfx');
+  assert.equal(specPage(idl, 'webgl', groups).group, 'Graphics');
+  assert.equal(specPage(idl, 'webgl').group, null);
 });
 
 test('spec page: interfaces defined here and partials added to interfaces from elsewhere', () => {

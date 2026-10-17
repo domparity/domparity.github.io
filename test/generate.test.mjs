@@ -102,3 +102,28 @@ test('every engine section links to a prefilled "wrong result" issue', async () 
   const missing = new URL(featuredReport(data.apis[0], data.engines[1], data.results.zeta['b@2.0.0'], data)).searchParams.get('body');
   assert.ok(missing.includes('**Observed:** not defined'));
 });
+
+test('a missing API says which existence test failed', () => {
+  const api = { ...data.apis[0], existsDescription: 'X exists and x has go().' };
+  const page = renderApiPage(api, data);
+  assert.ok(page.includes("Missing: in this engine's window, this does not hold: X exists and x has go()."));
+});
+
+test('featured pages show Web IDL existence for the interfaces an API is about', async () => {
+  const { idlLines } = await import('../website/scripts/generate.mjs');
+  const idl = {
+    engines: [{ key: 'a@1.0.0' }, { key: 'b@2.0.0' }],
+    specs: {
+      html: { interfaces: { HTMLThing: { kind: 'interface', status: 'P-', members: [['open', 'a', '11'], ['show', 'o', '10'], ['close', 'o', '00']] } } },
+      other: { interfaces: { HTMLThing: { members: [['extra', 'o', '00']] } } },
+    },
+  };
+  const api = { ...data.apis[0], interfaces: ['HTMLThing'] };
+  assert.deepEqual(idlLines(api, 'a@1.0.0', idl), [
+    'Web IDL existence ([coverage](/coverage)):', '',
+    '- [HTMLThing](/coverage/interface/HTMLThing): interface present; 2 of 4 members present, missing: `close`, `extra`.', '',
+  ]);
+  assert.equal(idlLines(api, 'b@2.0.0', idl)[2], '- [HTMLThing](/coverage/interface/HTMLThing): interface not defined.');
+  assert.deepEqual(idlLines(data.apis[1], 'a@1.0.0', idl), []);
+  assert.ok(renderApiPage(api, data, idl).includes('interface present; 2 of 4 members present'));
+});

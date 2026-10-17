@@ -8,6 +8,7 @@ const name = (base) => `${base}-${++n}`;
 export default {
   id: 'custom-elements',
   title: 'customElements.define() and lifecycle callbacks',
+  interfaces: ['CustomElementRegistry'],
   summary: 'Autonomous custom elements: registration, upgrade and the connected, disconnected and attributeChanged callbacks.',
   spec: SPEC,
   exists: (w) => !!w.customElements && typeof w.customElements.define === 'function',

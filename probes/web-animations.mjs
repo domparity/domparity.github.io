@@ -5,6 +5,7 @@ const SPEC = 'https://drafts.csswg.org/web-animations-1/#dom-animatable-animate'
 export default {
   id: 'web-animations',
   title: 'element.animate() / getAnimations()',
+  interfaces: ['Animation', 'KeyframeEffect'],
   summary: 'The Web Animations API: run keyframe animations from script and list running animations.',
   spec: SPEC,
   exists: (w) => typeof w.document.createElement('div').animate === 'function',

@@ -1,8 +1,15 @@
 {
   "schema": 1,
-  "date": "2026-10-17T17:34:51.501Z",
+  "date": "2026-10-17T18:13:06.346Z",
   "node": "v22.23.3",
   "engines": [
+    {
+      "key": "warpdom@0.1.3",
+      "engine": "warpdom",
+      "package": "warpdom",
+      "version": "0.1.3",
+      "setup": "createWindow({ url: 'http://localhost/' })"
+    },
     {
       "key": "happy-dom@21.0.3",
       "engine": "happy-dom",
@@ -23,13 +30,6 @@
       "package": "linkedom",
       "version": "0.18.13",
       "setup": "parseHTML(html)"
-    },
-    {
-      "key": "warpdom@0.1.3",
-      "engine": "warpdom",
-      "package": "warpdom",
-      "version": "0.1.3",
-      "setup": "createWindow({ url: 'http://localhost/' })"
     }
   ],
   "apis": [
@@ -41,6 +41,10 @@
       "existsDescription": "typeof window.AbortController is defined.",
       "nodeGlobal": "AbortController",
       "workaround": null,
+      "interfaces": [
+        "AbortController",
+        "AbortSignal"
+      ],
       "checks": [
         {
           "id": "abort-reason",
@@ -67,6 +71,7 @@
       "existsDescription": null,
       "nodeGlobal": null,
       "workaround": null,
+      "interfaces": [],
       "checks": [
         {
           "id": "stylesheet-rule",
@@ -93,6 +98,9 @@
       "existsDescription": "An <input> has checkValidity() and a validity object.",
       "nodeGlobal": null,
       "workaround": null,
+      "interfaces": [
+        "ValidityState"
+      ],
       "checks": [
         {
           "id": "value-missing",
@@ -129,6 +137,9 @@
       "existsDescription": "typeof window.crypto is defined.",
       "nodeGlobal": "crypto",
       "workaround": "Node.js has a Web Crypto global (globalThis.crypto) since 19; a setup file can assign it to the test global.",
+      "interfaces": [
+        "Crypto"
+      ],
       "checks": [
         {
           "id": "get-random-values",
@@ -150,6 +161,7 @@
       "existsDescription": "element.style has setProperty() and getPropertyValue().",
       "nodeGlobal": null,
       "workaround": null,
+      "interfaces": [],
       "checks": [
         {
           "id": "inline-roundtrip",
@@ -176,6 +188,7 @@
       "existsDescription": "document.querySelector(\":has(*)\") does not throw a SyntaxError.",
       "nodeGlobal": null,
       "workaround": null,
+      "interfaces": [],
       "checks": [
         {
           "id": "descendant",
@@ -202,6 +215,9 @@
       "existsDescription": "window.customElements.define is a function.",
       "nodeGlobal": null,
       "workaround": null,
+      "interfaces": [
+        "CustomElementRegistry"
+      ],
       "checks": [
         {
           "id": "connected-disconnected",
@@ -228,6 +244,9 @@
       "existsDescription": "HTMLDialogElement exists and a <dialog> has showModal().",
       "nodeGlobal": null,
       "workaround": null,
+      "interfaces": [
+        "HTMLDialogElement"
+      ],
       "checks": [
         {
           "id": "show-modal-opens",
@@ -254,6 +273,9 @@
       "existsDescription": "typeof window.FormData is defined.",
       "nodeGlobal": "FormData",
       "workaround": null,
+      "interfaces": [
+        "FormData"
+      ],
       "checks": [
         {
           "id": "controls",
@@ -275,6 +297,7 @@
       "existsDescription": "\"innerText\" in element.",
       "nodeGlobal": null,
       "workaround": null,
+      "interfaces": [],
       "checks": [
         {
           "id": "br-newline",
@@ -301,6 +324,9 @@
       "existsDescription": null,
       "nodeGlobal": null,
       "workaround": "Tests usually replace it with a mock class (for example the \"react-intersection-observer/test-utils\" helpers or a hand-written stub).",
+      "interfaces": [
+        "IntersectionObserver"
+      ],
       "checks": [
         {
           "id": "defaults",
@@ -322,6 +348,9 @@
       "existsDescription": null,
       "nodeGlobal": null,
       "workaround": "A common pattern is to define window.matchMedia in a setup file with a function returning { matches: false, media, addEventListener() {}, removeEventListener() {} } (shown in the Jest documentation).",
+      "interfaces": [
+        "MediaQueryList"
+      ],
       "checks": [
         {
           "id": "all-matches",
@@ -343,6 +372,9 @@
       "existsDescription": null,
       "nodeGlobal": null,
       "workaround": null,
+      "interfaces": [
+        "MutationObserver"
+      ],
       "checks": [
         {
           "id": "child-list-async",
@@ -369,6 +401,7 @@
       "existsDescription": null,
       "nodeGlobal": null,
       "workaround": null,
+      "interfaces": [],
       "checks": [
         {
           "id": "callback-timestamp",
@@ -390,6 +423,7 @@
       "existsDescription": "typeof form.requestSubmit === \"function\".",
       "nodeGlobal": null,
       "workaround": null,
+      "interfaces": [],
       "checks": [
         {
           "id": "submit-event-submitter",
@@ -416,6 +450,9 @@
       "existsDescription": null,
       "nodeGlobal": null,
       "workaround": "Tests usually replace it with a stub class or the \"resize-observer-polyfill\" package.",
+      "interfaces": [
+        "ResizeObserver"
+      ],
       "checks": [
         {
           "id": "observe",
@@ -437,6 +474,7 @@
       "existsDescription": "typeof element.scrollIntoView === \"function\".",
       "nodeGlobal": null,
       "workaround": "Tests commonly assign a no-op in a setup file: Element.prototype.scrollIntoView = function () {}.",
+      "interfaces": [],
       "checks": [
         {
           "id": "callable",
@@ -453,6 +491,10 @@
       "existsDescription": "typeof element.attachShadow === \"function\".",
       "nodeGlobal": null,
       "workaround": null,
+      "interfaces": [
+        "ShadowRoot",
+        "HTMLSlotElement"
+      ],
       "checks": [
         {
           "id": "attach-open",
@@ -489,6 +531,7 @@
       "existsDescription": "typeof window.structuredClone is defined.",
       "nodeGlobal": "structuredClone",
       "workaround": "Node.js has structuredClone as a global since 17. Under Jest's jsdom environment it is not copied in; assigning the Node global in a setup file (globalThis.structuredClone ??= ...) is common, or the core-js polyfill.",
+      "interfaces": [],
       "checks": [
         {
           "id": "map-date-cycle",
@@ -510,6 +553,10 @@
       "existsDescription": "typeof window.TextEncoder is defined.",
       "nodeGlobal": "TextEncoder",
       "workaround": "Node.js has TextEncoder and TextDecoder as globals (also in the \"util\" module); a setup file can assign them to the test global.",
+      "interfaces": [
+        "TextEncoder",
+        "TextDecoder"
+      ],
       "checks": [
         {
           "id": "encode-utf8",
@@ -531,6 +578,10 @@
       "existsDescription": "typeof element.animate === \"function\".",
       "nodeGlobal": null,
       "workaround": null,
+      "interfaces": [
+        "Animation",
+        "KeyframeEffect"
+      ],
       "checks": [
         {
           "id": "animate-returns-animation",
@@ -552,6 +603,7 @@
       "existsDescription": null,
       "nodeGlobal": null,
       "workaround": "Tests commonly assign a no-op or a mock: window.scrollTo = () => {} (or vi.fn() / jest.fn()).",
+      "interfaces": [],
       "checks": [
         {
           "id": "callable",
@@ -568,6 +620,17 @@
   ],
   "results": {
     "abort-signal": {
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "abort-reason",
+          "timeout",
+          "any"
+        ],
+        "failed": [],
+        "error": null
+      },
       "happy-dom@21.0.3": {
         "status": "supported",
         "exists": true,
@@ -601,20 +664,20 @@
         ],
         "failed": [],
         "error": null
-      },
+      }
+    },
+    "computed-style": {
       "warpdom@0.1.3": {
         "status": "supported",
         "exists": true,
         "passed": [
-          "abort-reason",
-          "timeout",
-          "any"
+          "stylesheet-rule",
+          "inherited",
+          "initial-and-default"
         ],
         "failed": [],
         "error": null
-      }
-    },
-    "computed-style": {
+      },
       "happy-dom@21.0.3": {
         "status": "partial",
         "exists": true,
@@ -650,20 +713,22 @@
         "passed": [],
         "failed": [],
         "error": null
-      },
+      }
+    },
+    "constraint-validation": {
       "warpdom@0.1.3": {
         "status": "supported",
         "exists": true,
         "passed": [
-          "stylesheet-rule",
-          "inherited",
-          "initial-and-default"
+          "value-missing",
+          "type-mismatch",
+          "custom-validity",
+          "pattern-mismatch",
+          "too-short-script-value"
         ],
         "failed": [],
         "error": null
-      }
-    },
-    "constraint-validation": {
+      },
       "happy-dom@21.0.3": {
         "status": "partial",
         "exists": true,
@@ -700,22 +765,16 @@
         "passed": [],
         "failed": [],
         "error": null
-      },
-      "warpdom@0.1.3": {
-        "status": "supported",
-        "exists": true,
-        "passed": [
-          "value-missing",
-          "type-mismatch",
-          "custom-validity",
-          "pattern-mismatch",
-          "too-short-script-value"
-        ],
-        "failed": [],
-        "error": null
       }
     },
     "crypto": {
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
       "happy-dom@21.0.3": {
         "status": "supported",
         "exists": true,
@@ -747,16 +806,24 @@
         ],
         "failed": [],
         "error": null
-      },
-      "warpdom@0.1.3": {
-        "status": "missing",
-        "exists": false,
-        "passed": [],
-        "failed": [],
-        "error": null
       }
     },
     "css-custom-properties": {
+      "warpdom@0.1.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "inline-roundtrip",
+          "computed-inherited"
+        ],
+        "failed": [
+          {
+            "id": "var-substitution",
+            "error": "computed color: expected \"rgb(255, 0, 0)\", got \"var(--c)\""
+          }
+        ],
+        "error": null
+      },
       "happy-dom@21.0.3": {
         "status": "partial",
         "exists": true,
@@ -807,24 +874,20 @@
           }
         ],
         "error": null
-      },
-      "warpdom@0.1.3": {
-        "status": "partial",
-        "exists": true,
-        "passed": [
-          "inline-roundtrip",
-          "computed-inherited"
-        ],
-        "failed": [
-          {
-            "id": "var-substitution",
-            "error": "computed color: expected \"rgb(255, 0, 0)\", got \"var(--c)\""
-          }
-        ],
-        "error": null
       }
     },
     "css-has": {
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "descendant",
+          "child-combinator",
+          "matches-closest"
+        ],
+        "failed": [],
+        "error": null
+      },
       "happy-dom@21.0.3": {
         "status": "supported",
         "exists": true,
@@ -848,17 +911,6 @@
         "error": null
       },
       "linkedom@0.18.13": {
-        "status": "supported",
-        "exists": true,
-        "passed": [
-          "descendant",
-          "child-combinator",
-          "matches-closest"
-        ],
-        "failed": [],
-        "error": null
-      },
-      "warpdom@0.1.3": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -871,6 +923,17 @@
       }
     },
     "custom-elements": {
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "connected-disconnected",
+          "attribute-changed",
+          "upgrade"
+        ],
+        "failed": [],
+        "error": null
+      },
       "happy-dom@21.0.3": {
         "status": "supported",
         "exists": true,
@@ -903,20 +966,16 @@
         ],
         "failed": [],
         "error": null
-      },
-      "warpdom@0.1.3": {
-        "status": "supported",
-        "exists": true,
-        "passed": [
-          "connected-disconnected",
-          "attribute-changed",
-          "upgrade"
-        ],
-        "failed": [],
-        "error": null
       }
     },
     "dialog": {
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
       "happy-dom@21.0.3": {
         "status": "partial",
         "exists": true,
@@ -945,16 +1004,19 @@
         "passed": [],
         "failed": [],
         "error": null
-      },
-      "warpdom@0.1.3": {
-        "status": "missing",
-        "exists": false,
-        "passed": [],
-        "failed": [],
-        "error": null
       }
     },
     "form-data": {
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "controls",
+          "submitter"
+        ],
+        "failed": [],
+        "error": null
+      },
       "happy-dom@21.0.3": {
         "status": "partial",
         "exists": true,
@@ -995,19 +1057,20 @@
           }
         ],
         "error": null
-      },
+      }
+    },
+    "inner-text": {
       "warpdom@0.1.3": {
         "status": "supported",
         "exists": true,
         "passed": [
-          "controls",
-          "submitter"
+          "br-newline",
+          "display-none-skipped",
+          "setter-br"
         ],
         "failed": [],
         "error": null
-      }
-    },
-    "inner-text": {
+      },
       "happy-dom@21.0.3": {
         "status": "partial",
         "exists": true,
@@ -1047,20 +1110,16 @@
           }
         ],
         "error": null
-      },
-      "warpdom@0.1.3": {
-        "status": "supported",
-        "exists": true,
-        "passed": [
-          "br-newline",
-          "display-none-skipped",
-          "setter-br"
-        ],
-        "failed": [],
-        "error": null
       }
     },
     "intersection-observer": {
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
       "happy-dom@21.0.3": {
         "status": "stub",
         "exists": true,
@@ -1090,16 +1149,16 @@
         "passed": [],
         "failed": [],
         "error": null
-      },
+      }
+    },
+    "match-media": {
       "warpdom@0.1.3": {
         "status": "missing",
         "exists": false,
         "passed": [],
         "failed": [],
         "error": null
-      }
-    },
-    "match-media": {
+      },
       "happy-dom@21.0.3": {
         "status": "supported",
         "exists": true,
@@ -1123,16 +1182,20 @@
         "passed": [],
         "failed": [],
         "error": null
-      },
-      "warpdom@0.1.3": {
-        "status": "missing",
-        "exists": false,
-        "passed": [],
-        "failed": [],
-        "error": null
       }
     },
     "mutation-observer": {
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "child-list-async",
+          "attribute-old-value",
+          "take-records"
+        ],
+        "failed": [],
+        "error": null
+      },
       "happy-dom@21.0.3": {
         "status": "supported",
         "exists": true,
@@ -1169,20 +1232,19 @@
           }
         ],
         "error": null
-      },
+      }
+    },
+    "request-animation-frame": {
       "warpdom@0.1.3": {
         "status": "supported",
         "exists": true,
         "passed": [
-          "child-list-async",
-          "attribute-old-value",
-          "take-records"
+          "callback-timestamp",
+          "cancel"
         ],
         "failed": [],
         "error": null
-      }
-    },
-    "request-animation-frame": {
+      },
       "happy-dom@21.0.3": {
         "status": "partial",
         "exists": true,
@@ -1213,19 +1275,20 @@
         "passed": [],
         "failed": [],
         "error": null
-      },
+      }
+    },
+    "request-submit": {
       "warpdom@0.1.3": {
         "status": "supported",
         "exists": true,
         "passed": [
-          "callback-timestamp",
-          "cancel"
+          "submit-event-submitter",
+          "validation-blocks",
+          "non-submit-button-throws"
         ],
         "failed": [],
         "error": null
-      }
-    },
-    "request-submit": {
+      },
       "happy-dom@21.0.3": {
         "status": "supported",
         "exists": true,
@@ -1254,20 +1317,16 @@
         "passed": [],
         "failed": [],
         "error": null
-      },
-      "warpdom@0.1.3": {
-        "status": "supported",
-        "exists": true,
-        "passed": [
-          "submit-event-submitter",
-          "validation-blocks",
-          "non-submit-button-throws"
-        ],
-        "failed": [],
-        "error": null
       }
     },
     "resize-observer": {
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
       "happy-dom@21.0.3": {
         "status": "partial",
         "exists": true,
@@ -1295,16 +1354,16 @@
         "passed": [],
         "failed": [],
         "error": null
-      },
+      }
+    },
+    "scroll-into-view": {
       "warpdom@0.1.3": {
         "status": "missing",
         "exists": false,
         "passed": [],
         "failed": [],
         "error": null
-      }
-    },
-    "scroll-into-view": {
+      },
       "happy-dom@21.0.3": {
         "status": "supported",
         "exists": true,
@@ -1327,16 +1386,22 @@
         "passed": [],
         "failed": [],
         "error": null
-      },
-      "warpdom@0.1.3": {
-        "status": "missing",
-        "exists": false,
-        "passed": [],
-        "failed": [],
-        "error": null
       }
     },
     "shadow-dom": {
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "attach-open",
+          "mode-closed",
+          "slot-assignment",
+          "encapsulation-and-retarget",
+          "slotchange"
+        ],
+        "failed": [],
+        "error": null
+      },
       "happy-dom@21.0.3": {
         "status": "partial",
         "exists": true,
@@ -1395,22 +1460,16 @@
           }
         ],
         "error": null
-      },
-      "warpdom@0.1.3": {
-        "status": "supported",
-        "exists": true,
-        "passed": [
-          "attach-open",
-          "mode-closed",
-          "slot-assignment",
-          "encapsulation-and-retarget",
-          "slotchange"
-        ],
-        "failed": [],
-        "error": null
       }
     },
     "structured-clone": {
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
       "happy-dom@21.0.3": {
         "status": "missing",
         "exists": false,
@@ -1435,16 +1494,16 @@
         ],
         "failed": [],
         "error": null
-      },
+      }
+    },
+    "text-encoder": {
       "warpdom@0.1.3": {
         "status": "missing",
         "exists": false,
         "passed": [],
         "failed": [],
         "error": null
-      }
-    },
-    "text-encoder": {
+      },
       "happy-dom@21.0.3": {
         "status": "supported",
         "exists": true,
@@ -1476,16 +1535,16 @@
         ],
         "failed": [],
         "error": null
-      },
+      }
+    },
+    "web-animations": {
       "warpdom@0.1.3": {
         "status": "missing",
         "exists": false,
         "passed": [],
         "failed": [],
         "error": null
-      }
-    },
-    "web-animations": {
+      },
       "happy-dom@21.0.3": {
         "status": "supported",
         "exists": true,
@@ -1509,16 +1568,33 @@
         "passed": [],
         "failed": [],
         "error": null
-      },
-      "warpdom@0.1.3": {
-        "status": "missing",
-        "exists": false,
-        "passed": [],
-        "failed": [],
-        "error": null
       }
     },
     "window-scroll-to": {
+      "warpdom@0.1.3": {
+        "status": "stub",
+        "exists": true,
+        "passed": [],
+        "failed": [
+          {
+            "id": "callable",
+            "error": "passed, but the engine reported \"not implemented\"",
+            "notImplemented": true,
+            "logged": [
+              "Not implemented: Window's scrollTo() method"
+            ]
+          },
+          {
+            "id": "scroll-position",
+            "error": "passed, but the engine reported \"not implemented\"",
+            "notImplemented": true,
+            "logged": [
+              "Not implemented: Window's scrollTo() method"
+            ]
+          }
+        ],
+        "error": null
+      },
       "happy-dom@21.0.3": {
         "status": "partial",
         "exists": true,
@@ -1562,30 +1638,6 @@
         "exists": false,
         "passed": [],
         "failed": [],
-        "error": null
-      },
-      "warpdom@0.1.3": {
-        "status": "stub",
-        "exists": true,
-        "passed": [],
-        "failed": [
-          {
-            "id": "callable",
-            "error": "passed, but the engine reported \"not implemented\"",
-            "notImplemented": true,
-            "logged": [
-              "Not implemented: Window's scrollTo() method"
-            ]
-          },
-          {
-            "id": "scroll-position",
-            "error": "passed, but the engine reported \"not implemented\"",
-            "notImplemented": true,
-            "logged": [
-              "Not implemented: Window's scrollTo() method"
-            ]
-          }
-        ],
         "error": null
       }
     }

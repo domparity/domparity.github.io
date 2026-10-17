@@ -10,15 +10,16 @@ import StatusLegend from '@site/src/components/StatusLegend';
 
 DOMParity is a reference for one question: does this web platform API work in the DOM my tests run on, and how?
 JavaScript unit and component tests usually run in a DOM implemented in JavaScript rather than in a browser. This
-site compares four of them, with the same method for every engine: jsdom, happy-dom, linkedom and warpdom. It has two
+site compares four of them, with the same method for every engine: warpdom, happy-dom, jsdom and linkedom. It has two
 layers: **featured** APIs, each with behavior checks, and **coverage**, an automatic existence check of every web API.
 
-## Maintainer
+## Maintainer {#maintainer}
 
 DOMParity is maintained by [Sonu Kapoor](https://sonukapoor.com), who is also the author of [warpdom](https://github.com/sonukapoor/warpdom), one of
 the engines compared here. To keep that from shaping the results, every engine goes through the same probes, the
 probes and the raw data are public, and the results show where warpdom fails or deviates as plainly as for the
-others. If a result looks wrong for any engine, please report it (see below).
+others. Tables, cards and data files list warpdom first and mark it "maintainer's engine", so the connection is visible
+wherever its results are. If a result looks wrong for any engine, please report it (see below).
 
 ## How the probes work
 
@@ -37,6 +38,9 @@ description and a link to the relevant part of the specification.
   the call returns normally.
 - Only the engines' public, documented APIs are used. The probes are black box: no engine's source code was read to
   write them.
+- Engine order: every table, list, card and data file puts the maintainer's engine (warpdom) first and is otherwise
+  alphabetical (happy-dom, jsdom, linkedom). The order is the only difference: the probes, checks and statuses are the
+  same for every engine.
 
 ## Statuses
 
@@ -64,8 +68,22 @@ is checked for each of them, in its own process:
   inherited only from `Object.prototype` do not count.
 
 **Existence is not behavior.** A member that is present may do nothing or the wrong thing; only the featured checks test
-behavior. Web IDL also lists everything browsers expose, WebGL, WebGPU, WebRTC and Bluetooth included, which no test DOM
-aims to implement, so low overall percentages are expected; the per-spec view is the useful one.
+behavior.
+
+Web IDL also lists everything browsers expose, WebGL, WebGPU, WebRTC and Bluetooth included, which no test DOM aims to
+implement. So every spec is put in one group, by what it matters for in unit tests
+([spec-groups.json](pathname:///data/spec-groups.json) lists every spec and the reason for each group):
+
+- **Test DOM core** (shown by default): DOM, all of HTML, CSSOM and CSSOM View, UI, pointer, touch, input and clipboard
+  events, SVG, the observers, URL, Encoding, Fetch, XHR, File API, Streams, Web Crypto, timing and a few more.
+- **Rendering and graphics**, **Media and devices**, **Platform and app** and **Other**.
+
+Every coverage percentage says which group it is out of; the Coverage page also shows all web APIs together. Specs are
+grouped whole: HTML is core, so its canvas and media element members count there too.
+
+An interface can be present while some of its members are missing: each interface page lists the missing members per
+engine, and a featured API page shows the same for the interfaces it is about. A featured API is "missing" when its
+existence test fails, which can be one missing method on an interface that is defined.
 
 Where the window's value is the very same object as Node.js's own global (for example `structuredClone`), the table
 says "Node.js global": the API works because Node.js provides it, not because the engine implements it.

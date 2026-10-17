@@ -5,6 +5,7 @@ const SPEC = 'https://drafts.csswg.org/cssom-view/#dom-window-matchmedia';
 export default {
   id: 'match-media',
   title: 'window.matchMedia()',
+  interfaces: ['MediaQueryList'],
   summary: 'Evaluates a media query and returns a MediaQueryList that reports changes.',
   spec: SPEC,
   exists: (w) => typeof w.matchMedia === 'function',

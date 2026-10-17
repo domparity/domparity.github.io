@@ -5,6 +5,7 @@ import { useLocation } from '@docusaurus/router';
 import { InterfaceChip, Bar } from './Chip';
 import MemberTable, { type Member } from './MemberTable';
 import ReportLink from '../ReportLink';
+import EngineName from '../EngineName';
 import { IDL_INTERFACE } from '../status';
 
 type Engine = { key: string; engine: string; version: string | null };
@@ -49,8 +50,10 @@ export default function InterfacePage({ bucket }: { bucket: Record<string, Page>
   const { engines } = page;
   const all = page.groups.flatMap((g) => g.members);
   const present = engines.map((_, i) => all.filter((m) => m[2][i] === '1').length);
+  const missing = engines.map((_, i) => all.filter((m) => m[2][i] === '0').map((m) => m[0]));
+  const shown = (name: string) => (name.startsWith('@@') ? `[Symbol.${name.slice(2)}]` : name);
   return (
-    <Layout title={`${page.name}: coverage`} description={`Is ${page.name} and each of its members defined in happy-dom, jsdom, linkedom and warpdom?`}>
+    <Layout title={`${page.name}: coverage`} description={`Is ${page.name} and each of its members defined in warpdom, happy-dom, jsdom and linkedom?`}>
       <main className="dp-page">
         <p className="dp-crumbs">
           <Link to="/coverage">Coverage</Link> / <Link to={`/coverage/spec/${page.spec.id.toLowerCase()}`}>{page.spec.id}</Link> / {page.name}
@@ -96,7 +99,7 @@ export default function InterfacePage({ bucket }: { bucket: Record<string, Page>
                 {engines.map((e, i) => (
                   <tr key={e.key}>
                     <th scope="row">
-                      {e.engine} <span className="results__version">{e.version}</span>
+                      <EngineName engine={e.engine} version={e.version} />
                     </th>
                     <td>
                       <InterfaceChip code={page.status[i]} />
@@ -108,6 +111,24 @@ export default function InterfacePage({ bucket }: { bucket: Record<string, Page>
                     </td>
                     <td>
                       <Bar value={present[i]} total={all.length} label={e.engine} />
+                      {page.status[i] === '-' || page.status[i] === '?' ? (
+                        <span className="missing-list">{page.status[i] === '-' ? `${page.kind === 'namespace' ? 'Namespace' : 'Interface'} not defined.` : 'Not probed.'}</span>
+                      ) : missing[i].length === 0 ? (
+                        <span className="missing-list">None missing.</span>
+                      ) : (
+                        <span className="missing-list">
+                          Missing{missing[i].length === all.length ? ' (all)' : ''}:{' '}
+                          {missing[i].slice(0, 15).map((m, j) => (
+                            <span key={m}>
+                              {j ? ', ' : ''}
+                              <a href={`#m-${m.replace(/[^A-Za-z0-9_-]/g, '_')}`}>
+                                <code>{shown(m)}</code>
+                              </a>
+                            </span>
+                          ))}
+                          {missing[i].length > 15 ? ` and ${missing[i].length - 15} more` : ''}
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -116,7 +137,8 @@ export default function InterfacePage({ bucket }: { bucket: Record<string, Page>
           </div>
         </div>
         <p className="dp-note">
-          Existence only: “present” means the name is defined where Web IDL puts it (the prototype, the interface object for
+          An interface can be present while some of its members are missing; the table lists them per engine. Existence only:
+          “present” means the name is defined where Web IDL puts it (the prototype, the interface object for
           constants and static members, or the window itself for Window), not that it behaves as the standard says.
         </p>
 

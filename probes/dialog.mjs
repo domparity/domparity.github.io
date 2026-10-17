@@ -5,6 +5,7 @@ const SPEC = 'https://html.spec.whatwg.org/multipage/interactive-elements.html#t
 export default {
   id: 'dialog',
   title: '<dialog> showModal() / close()',
+  interfaces: ['HTMLDialogElement'],
   summary: 'The dialog element and its methods for opening it as a modal and closing it with a return value.',
   spec: SPEC,
   exists: (w) => typeof w.HTMLDialogElement === 'function' && typeof w.document.createElement('dialog').showModal === 'function',

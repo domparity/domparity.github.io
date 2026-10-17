@@ -22,28 +22,63 @@ const memberCodes = (iface) => (iface.members ?? []).map((m) => m[2]);
 const ifacePresent = (c) => PRESENT.has(c);
 const memberPresent = (c) => c === '1';
 
-// Overall and per-spec counts. Members are counted in the spec that defines
-// them; an interface is counted in the spec that defines it (not its partials).
-export function summarize(idl) {
+// Spec shortname -> group id, from data/spec-groups.json.
+export function groupIndex(groups) {
+  const index = {};
+  for (const g of groups?.groups ?? []) for (const id of g.specs) index[id] = g.id;
+  return index;
+}
+
+// Specs in data/idl.json without a group, and grouped specs that are not in
+// it (or are in two groups). Both lists are empty when the file is complete.
+export function checkGroups(idl, groups) {
+  const seen = new Map();
+  for (const g of groups.groups) for (const id of g.specs) seen.set(id, [...(seen.get(id) ?? []), g.id]);
+  return {
+    ungrouped: Object.keys(idl.specs).filter((id) => !seen.has(id)),
+    unknown: [...seen.keys()].filter((id) => !(id in idl.specs)),
+    duplicated: [...seen].filter(([, g]) => g.length > 1).map(([id]) => id),
+  };
+}
+
+function tally(specs, n) {
+  let ifaces = [];
+  let members = [];
+  for (const spec of specs) {
+    const list = Object.values(spec.interfaces);
+    ifaces = ifaces.concat(list.filter((i) => i.status).map((i) => i.status));
+    members = members.concat(list.flatMap(memberCodes));
+  }
+  return {
+    specs: specs.length,
+    interfaces: ifaces.length,
+    members: members.length,
+    interfacesPresent: count(ifaces, n, ifacePresent),
+    membersPresent: count(members, n, memberPresent),
+    nodeGlobals: count(ifaces, n, (c) => c === 'N'),
+    stubs: count(ifaces, n, (c) => c === 'S'),
+  };
+}
+
+// Overall, per-group and per-spec counts. Members are counted in the spec that
+// defines them; an interface is counted in the spec that defines it (not its
+// partials). `groups` is data/spec-groups.json.
+export function summarize(idl, groups = { groups: [] }) {
   const n = idl.engines.length;
+  const groupOf = groupIndex(groups);
   const specs = [];
-  let allIfaces = [];
-  let allMembers = [];
   for (const [id, spec] of Object.entries(idl.specs)) {
-    const ifaces = Object.values(spec.interfaces);
-    const statuses = ifaces.filter((i) => i.status).map((i) => i.status);
-    const members = ifaces.flatMap(memberCodes);
-    allIfaces = allIfaces.concat(statuses);
-    allMembers = allMembers.concat(members);
+    const t = tally([spec], n);
     specs.push({
       id,
       slug: specSlug(id),
       title: spec.title,
       url: spec.url,
-      interfaces: statuses.length,
-      members: members.length,
-      interfacesPresent: count(statuses, n, ifacePresent),
-      membersPresent: count(members, n, memberPresent),
+      group: groupOf[id] ?? null,
+      interfaces: t.interfaces,
+      members: t.members,
+      interfacesPresent: t.interfacesPresent,
+      membersPresent: t.membersPresent,
     });
   }
   specs.sort((a, b) => b.members - a.members || a.title.localeCompare(b.title));
@@ -53,15 +88,13 @@ export function summarize(idl) {
     webref: idl.webref,
     browserSpecs: idl.browserSpecs,
     engines: engineList(idl),
-    totals: {
-      specs: specs.length,
-      interfaces: allIfaces.length,
-      members: allMembers.length,
-      interfacesPresent: count(allIfaces, n, ifacePresent),
-      membersPresent: count(allMembers, n, memberPresent),
-      nodeGlobals: count(allIfaces, n, (c) => c === 'N'),
-      stubs: count(allIfaces, n, (c) => c === 'S'),
-    },
+    totals: tally(Object.values(idl.specs), n),
+    groups: groups.groups.map((g) => ({
+      id: g.id,
+      title: g.title,
+      reason: g.reason,
+      ...tally(g.specs.filter((id) => id in idl.specs).map((id) => idl.specs[id]), n),
+    })),
     specs,
   };
 }
@@ -75,7 +108,7 @@ export function interfaceIndex(idl) {
   return index;
 }
 
-export function specPage(idl, id) {
+export function specPage(idl, id, groups = { groups: [] }) {
   const spec = idl.specs[id];
   const n = idl.engines.length;
   const index = interfaceIndex(idl);
@@ -96,6 +129,7 @@ export function specPage(idl, id) {
     engines: engineList(idl),
     date: idl.date,
     spec: { id, title: spec.title, url: spec.url },
+    group: groups.groups.find((g) => g.specs.includes(id))?.title ?? null,
     totals: {
       interfaces: interfaces.filter((i) => i.definedHere).length,
       members: members.length,

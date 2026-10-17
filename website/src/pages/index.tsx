@@ -8,7 +8,7 @@ import data from '../data/results.json';
 
 export default function Home() {
   return (
-    <Layout title="Which web APIs work in your test DOM?" description="Which web platform APIs work, and how, in happy-dom, jsdom, linkedom and warpdom.">
+    <Layout title="Which web APIs work in your test DOM?" description="Which web platform APIs work, and how, in warpdom, happy-dom, jsdom and linkedom.">
       <header className="hero-dp">
         <div className="hero-dp__inner">
           <span className="hero-dp__eyebrow">DOMParity</span>
@@ -45,7 +45,8 @@ export default function Home() {
           <h2>Engines at a glance</h2>
           <p className="meta">
             Featured: {data.apis.length} APIs tests use a lot, each with behavior checks. Web IDL: does every interface and member
-            exist at all (<Link to="/coverage">coverage</Link>; existence is not behavior).
+            of the Test DOM core group exist at all (existence is not behavior); other groups and all web APIs are on the{' '}
+            <Link to="/coverage">Coverage</Link> page.
           </p>
           <EngineCards />
         </section>

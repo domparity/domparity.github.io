@@ -5,6 +5,7 @@ const SPEC = 'https://dom.spec.whatwg.org/#dom-element-attachshadow';
 export default {
   id: 'shadow-dom',
   title: 'attachShadow() and <slot>',
+  interfaces: ['ShadowRoot', 'HTMLSlotElement'],
   summary: 'Shadow trees and slot-based distribution of light-DOM children.',
   spec: SPEC,
   exists: (w) => typeof w.document.createElement('div').attachShadow === 'function',

@@ -1,6 +1,7 @@
 import React from 'react';
 import { MemberChip } from './Chip';
 import { MEMBER_KIND } from '../status';
+import EngineName from '../EngineName';
 
 type Engine = { key: string; engine: string; version: string | null };
 export type Member = [string, string, string];
@@ -18,7 +19,7 @@ export default function MemberTable({ members, engines, anchors = false, caption
             <th scope="col">Member</th>
             {engines.map((e) => (
               <th scope="col" key={e.key}>
-                {e.engine}
+                <EngineName engine={e.engine} />
               </th>
             ))}
           </tr>

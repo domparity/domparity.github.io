@@ -17,6 +17,8 @@
 // object itself: constants, static members, namespace members) or "global"
 // (the window itself, for Window's own members).
 
+import { orderEngines } from './order.mjs';
+
 export function extAttr(node, name) {
   return node.extAttrs?.find((a) => a.name === name) ?? null;
 }
@@ -308,7 +310,8 @@ export function formatIdlData(data) {
 //     members: [[name, kind, "1101"], ...]   (one member code per engine)
 //   } } }
 // "?" in a code string means the engine was not probed (it crashed).
-export function buildIdlData({ plan, raw, date, node, webref, browserSpecs }) {
+export function buildIdlData({ plan, raw: unordered, date, node, webref, browserSpecs }) {
+  const raw = orderEngines(unordered); // the site's engine order (src/order.mjs)
   const engines = raw.map((r) => ({
     key: `${r.engine}@${r.version ?? 'unknown'}`,
     engine: r.engine,

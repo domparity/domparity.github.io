@@ -9,6 +9,7 @@ function entries(fd) {
 export default {
   id: 'form-data',
   title: 'new FormData(form)',
+  interfaces: ['FormData'],
   summary: 'Builds the form data set of a form the way submission would.',
   spec: SPEC,
   global: 'FormData',

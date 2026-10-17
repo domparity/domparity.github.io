@@ -5,6 +5,7 @@ const SPEC = 'https://dom.spec.whatwg.org/#interface-mutationobserver';
 export default {
   id: 'mutation-observer',
   title: 'MutationObserver',
+  interfaces: ['MutationObserver'],
   summary: 'Reports changes to the DOM tree (children, attributes, text) as batched records.',
   spec: SPEC,
   exists: (w) => typeof w.MutationObserver === 'function',

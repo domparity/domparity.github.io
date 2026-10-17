@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import Link from '@docusaurus/Link';
 import StatusBadge from './StatusBadge';
+import EngineName from './EngineName';
 import { STATUS, type Status } from './status';
 import data from '../data/results.json';
 
@@ -56,8 +57,7 @@ export default function ResultsTable() {
               <th scope="col">API</th>
               {data.engines.map((e) => (
                 <th scope="col" key={e.key}>
-                  {e.engine}
-                  <span className="results__version">{e.version}</span>
+                  <EngineName engine={e.engine} version={e.version} />
                 </th>
               ))}
             </tr>

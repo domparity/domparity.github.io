@@ -5,6 +5,7 @@ const SPEC = 'https://html.spec.whatwg.org/multipage/form-control-infrastructure
 export default {
   id: 'constraint-validation',
   title: 'checkValidity() / validity',
+  interfaces: ['ValidityState'],
   summary: 'Form constraint validation: the ValidityState flags, checkValidity() and custom messages.',
   spec: SPEC,
   exists: (w) => {

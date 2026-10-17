@@ -3,6 +3,7 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import { Bar, InterfaceChip } from './Chip';
 import MemberTable, { type Member } from './MemberTable';
+import EngineName from '../EngineName';
 
 type Engine = { key: string; engine: string; version: string | null };
 type Iface = {
@@ -19,6 +20,7 @@ type Page = {
   engines: Engine[];
   date: string;
   spec: { id: string; title: string; url: string | null };
+  group: string | null;
   totals: { interfaces: number; members: number; interfacesPresent: number[]; membersPresent: number[] };
   interfaces: Iface[];
 };
@@ -71,7 +73,7 @@ export default function SpecPage({ page }: { page: Page }) {
   const setAll = (value: boolean) => setOpen(Object.fromEntries(shown.map((i) => [i.name, value])));
 
   return (
-    <Layout title={`${spec.title}: coverage`} description={`Which ${spec.title} interfaces and members exist in happy-dom, jsdom, linkedom and warpdom.`}>
+    <Layout title={`${spec.title}: coverage`} description={`Which ${spec.title} interfaces and members exist in warpdom, happy-dom, jsdom and linkedom.`}>
       <main className="dp-page">
         <p className="dp-crumbs">
           <Link to="/coverage">Coverage</Link> / {spec.id}
@@ -84,6 +86,7 @@ export default function SpecPage({ page }: { page: Page }) {
             </>
           ) : null}
           {totals.interfaces} interface{totals.interfaces === 1 ? '' : 's'} defined here, {totals.members} members exposed on Window (Web IDL).
+          {page.group ? <> Group: {page.group}.</> : null}
         </p>
         <p className="dp-note">
           Existence only: “present” means the name is defined where Web IDL puts it, not that it behaves as the standard says.
@@ -105,7 +108,7 @@ export default function SpecPage({ page }: { page: Page }) {
                 {engines.map((e, i) => (
                   <tr key={e.key}>
                     <th scope="row">
-                      {e.engine} <span className="results__version">{e.version}</span>
+                      <EngineName engine={e.engine} version={e.version} />
                     </th>
                     <td>
                       <Bar value={totals.membersPresent[i]} total={totals.members} label={e.engine} />

@@ -11,12 +11,13 @@ export default function coveragePlugin(context) {
   return {
     name: 'domparity-coverage',
     async loadContent() {
-      return JSON.parse(readFileSync(join(context.siteDir, '..', 'data', 'idl.json'), 'utf8'));
+      const read = (f) => JSON.parse(readFileSync(join(context.siteDir, '..', 'data', f), 'utf8'));
+      return { idl: read('idl.json'), groups: read('spec-groups.json') };
     },
-    async contentLoaded({ content: idl, actions }) {
+    async contentLoaded({ content: { idl, groups }, actions }) {
       const { createData, addRoute } = actions;
       for (const id of Object.keys(idl.specs)) {
-        const data = await createData(`spec-${id}.json`, JSON.stringify(specPage(idl, id)));
+        const data = await createData(`spec-${id}.json`, JSON.stringify(specPage(idl, id, groups)));
         addRoute({ path: specPath(id), component: '@site/src/components/coverage/SpecPage', modules: { page: data }, exact: true });
       }
       // Interface pages share data modules (BUCKET interfaces each): one module

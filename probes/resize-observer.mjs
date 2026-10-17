@@ -5,6 +5,7 @@ const SPEC = 'https://drafts.csswg.org/resize-observer/#resize-observer-interfac
 export default {
   id: 'resize-observer',
   title: 'ResizeObserver',
+  interfaces: ['ResizeObserver'],
   summary: 'Reports changes to the size of observed elements.',
   spec: SPEC,
   exists: (w) => typeof w.ResizeObserver === 'function',

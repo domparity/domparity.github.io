@@ -5,6 +5,7 @@ const SPEC = 'https://encoding.spec.whatwg.org/#interface-textencoder';
 export default {
   id: 'text-encoder',
   title: 'TextEncoder / TextDecoder',
+  interfaces: ['TextEncoder', 'TextDecoder'],
   summary: 'Encodes strings to UTF-8 bytes and decodes bytes back to strings.',
   spec: SPEC,
   global: 'TextEncoder',

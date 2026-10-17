@@ -1,8 +1,8 @@
 # domparity
 
 A "can I use" for test DOMs: which web platform APIs work, and how, in the DOM
-implementations JavaScript unit tests run on: happy-dom, jsdom, linkedom and
-warpdom.
+implementations JavaScript unit tests run on: warpdom, happy-dom, jsdom and
+linkedom.
 
 Maintained by [Sonu Kapoor](https://sonukapoor.com), who is also the author of
 [warpdom](https://github.com/sonukapoor/warpdom). Because of that, the method
@@ -28,6 +28,10 @@ show where each engine, warpdom included, fails or deviates.
     "not implemented" while it runs
   - **missing**: not defined
 - Black box only: no engine's source code is read to write the probes.
+- Engine order (`src/order.mjs`): the maintainer's engine (warpdom) first, then
+  the others alphabetically, in every table, card, list and data file. Next to
+  warpdom's name, tables and cards say "maintainer's engine" with a link to the
+  About page. Nothing else differs between engines.
 
 On top of these hand-written behavior probes (the "featured" layer), an
 automatic **existence pass** covers the whole platform:
@@ -50,6 +54,12 @@ automatic **existence pass** covers the whole platform:
   or missing. Member status: present or missing.
 - **Existence is not behavior.** A member that is present can still be a no-op
   or wrong; only the featured checks test behavior.
+- Spec groups (`data/spec-groups.json`): every spec is in one group, by what it
+  matters for in unit tests: Test DOM core, Rendering and graphics, Media and
+  devices, Platform and app, Other. Coverage numbers default to Test DOM core
+  and say which group they are out of; `test/spec-groups.test.mjs` fails when a
+  spec in `data/idl.json` has no group. When `npm run probe-idl` brings in a new
+  spec, add it to a group.
 
 Results describe the engine's window. Test runners may add Node.js globals
 (structuredClone, TextEncoder, crypto, ...) on top; where the window's value is
@@ -66,6 +76,7 @@ Node.js's own global the data marks it `sameAsNode`.
 - `data/idl.json`: the existence pass, grouped spec → interface → member, with
   the engine versions, the @webref/idl and browser-specs versions, and a legend
   of the one-character codes (one character per engine, in `engines` order).
+- `data/spec-groups.json`: the spec groups, with a reason per group.
 - `data/wpt.json`: Web Platform Tests pass rates per area for warpdom and jsdom,
   imported from warpdom's published WPT summary with `npm run import-wpt --
   <summary.md>`; the source run (WPT commit, date, engine versions) is recorded
@@ -105,7 +116,9 @@ CSS variables at the top of `website/src/css/custom.css`.
 
 1. Add `probes/<id>.mjs` exporting `{ id, title, summary, spec, exists(window),
    checks: [{ id, description, spec, run(window) }] }`, plus optionally
-   `existsDescription`, `global` (the name of a global Node.js also defines) and
+   `existsDescription`, `interfaces` (the Web IDL interfaces the API is about;
+   the API page then shows which of their members each engine defines),
+   `global` (the name of a global Node.js also defines) and
    `workaround` (only when a common, neutral workaround exists). A check passes
    when `run` returns or resolves; helpers are in `src/assert.mjs`.
 2. Use only the window passed in (`window.document`, `new window.Event()`, ...),

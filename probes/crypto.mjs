@@ -5,6 +5,7 @@ const SPEC = 'https://w3c.github.io/webcrypto/#Crypto-method-getRandomValues';
 export default {
   id: 'crypto',
   title: 'crypto.getRandomValues() / randomUUID()',
+  interfaces: ['Crypto'],
   summary: 'Cryptographically strong random bytes and random version 4 UUIDs.',
   spec: SPEC,
   global: 'crypto',

@@ -108,6 +108,12 @@
         }
       ]
     },
+    "happy-dom": {
+      "version": null,
+      "measured": false,
+      "areas": null,
+      "note": "not measured"
+    },
     "jsdom": {
       "version": "30.1.2",
       "measured": true,
@@ -197,12 +203,6 @@
           "passed": 107200
         }
       ]
-    },
-    "happy-dom": {
-      "version": null,
-      "measured": false,
-      "areas": null,
-      "note": "not measured"
     },
     "linkedom": {
       "version": null,

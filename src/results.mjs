@@ -1,11 +1,14 @@
 import { classify, works } from './classify.mjs';
+import { orderEngines } from './order.mjs';
 
 export const SCHEMA_VERSION = 1;
 
 // Combines probe metadata and the raw per-engine outcomes into the published
 // data format (data/results.json). Engines are keyed "<engine>@<version>" so
-// several versions of one engine can sit side by side.
-export function buildResults({ probes, raw, setups, date, node }) {
+// several versions of one engine can sit side by side. Engines are in the
+// site's order (src/order.mjs) whatever order they were probed in.
+export function buildResults({ probes, raw: unordered, setups, date, node }) {
+  const raw = orderEngines(unordered);
   const engines = raw.map((r) => ({
     key: `${r.engine}@${r.version ?? 'unknown'}`,
     engine: r.engine,
@@ -23,6 +26,7 @@ export function buildResults({ probes, raw, setups, date, node }) {
     existsDescription: p.existsDescription ?? (p.global ? `typeof window.${p.global} is defined.` : null),
     nodeGlobal: p.global ?? null,
     workaround: p.workaround ?? null,
+    interfaces: p.interfaces ?? [],
     checks: p.checks.map((c) => ({ id: c.id, description: c.description, spec: c.spec })),
   }));
 

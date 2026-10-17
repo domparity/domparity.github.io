@@ -22,10 +22,11 @@ const SOURCE = {
     'Subtests that the runner cannot run outside a browser (testdriver, tentative tests) are skipped for every engine alike. "Pass rate" is passed subtests / subtests; "score" averages the per-file pass fraction, so large files weigh less. Subtest counts can differ slightly between engines when a test file stops early in one of them.',
 };
 
+// In the site's engine order (src/order.mjs).
 const ENGINES = {
   warpdom: { version: 'commit 8630317 (2026-10-13, before the 0.1.0 release)', measured: true },
-  jsdom: { version: '30.1.2', measured: true },
   'happy-dom': { version: null, measured: false },
+  jsdom: { version: '30.1.2', measured: true },
   linkedom: { version: null, measured: false },
 };
 

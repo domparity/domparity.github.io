@@ -218,7 +218,7 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 .card-dp__label { font-size: 0.88rem; color: var(--dp-muted); margin: 0.35rem 0 0.6rem; }
 .card-dp__row { margin-top: 0.9rem; }
 .card-dp__row-head { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.85rem; margin-bottom: 0.3rem; color: var(--dp-muted); }
-.card-dp__row-head strong { color: var(--dp-ink); }
+.card-dp__row-head strong { color: var(--dp-ink); white-space: nowrap; }
 
 /* Stacked status bar */
 .stack { display: flex; height: 0.7rem; border-radius: 999px; overflow: hidden; background: var(--dp-bar-track); }
@@ -369,3 +369,26 @@ details.group > .group__body { border-top: 1px solid var(--dp-border); }
   .filters label { width: 100%; }
   details.group > summary .group__chips { margin-left: 0; }
 }
+
+/* "maintainer's engine" note next to warpdom's name: plain muted text, the
+   same weight for every theme, so it discloses without promoting. */
+.maintainer-note {
+  display: block; width: fit-content; font-size: 0.72rem; font-weight: 400; color: var(--dp-muted);
+  text-decoration: underline dotted; text-underline-offset: 2px; white-space: nowrap;
+}
+.maintainer-note:hover { color: var(--dp-text); }
+.maintainer-note--inline { display: inline; font-size: inherit; }
+
+/* Group tabs on the Coverage page */
+.tabs-dp { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0 0.75rem; }
+.tabs-dp button {
+  font: inherit; font-size: 0.85rem; padding: 0.4rem 0.8rem; border-radius: 999px;
+  border: 1px solid var(--dp-border); background: var(--dp-surface); color: var(--dp-text); cursor: pointer;
+}
+.tabs-dp button:hover { border-color: var(--dp-primary); }
+.tabs-dp button[aria-selected='true'] { background: var(--dp-primary-soft); border-color: var(--dp-primary); color: var(--dp-primary-strong); font-weight: 600; }
+.tabs-dp button small { font-weight: 400; color: var(--dp-muted); margin-left: 0.3rem; }
+.scope-dp { font-size: 0.8rem; color: var(--dp-muted); margin-top: 0.25rem; }
+.missing-list { display: block; font-size: 0.78rem; color: var(--dp-muted); margin-top: 0.2rem; max-width: 28rem; }
+.missing-list code { font-size: 0.75rem; white-space: normal; }
+
