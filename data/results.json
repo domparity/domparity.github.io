@@ -1,0 +1,1575 @@
+{
+  "schema": 1,
+  "date": "2026-10-17T17:17:44.205Z",
+  "node": "v22.23.3",
+  "engines": [
+    {
+      "key": "happy-dom@21.0.3",
+      "engine": "happy-dom",
+      "package": "happy-dom",
+      "version": "21.0.3",
+      "setup": "new Window({ url: 'http://localhost/' })"
+    },
+    {
+      "key": "jsdom@30.1.3",
+      "engine": "jsdom",
+      "package": "jsdom",
+      "version": "30.1.3",
+      "setup": "new JSDOM(html, { url: 'http://localhost/', pretendToBeVisual: true })"
+    },
+    {
+      "key": "linkedom@0.18.13",
+      "engine": "linkedom",
+      "package": "linkedom",
+      "version": "0.18.13",
+      "setup": "parseHTML(html)"
+    },
+    {
+      "key": "warpdom@0.1.3",
+      "engine": "warpdom",
+      "package": "warpdom",
+      "version": "0.1.3",
+      "setup": "createWindow({ url: 'http://localhost/' })"
+    }
+  ],
+  "apis": [
+    {
+      "id": "abort-signal",
+      "title": "AbortController / AbortSignal.timeout()",
+      "summary": "Cancels asynchronous work through a signal; AbortSignal.timeout() and any() create signals that abort on their own.",
+      "spec": "https://dom.spec.whatwg.org/#interface-abortcontroller",
+      "existsDescription": "typeof window.AbortController is defined.",
+      "nodeGlobal": "AbortController",
+      "workaround": null,
+      "checks": [
+        {
+          "id": "abort-reason",
+          "description": "abort() fires \"abort\" and sets signal.reason to an \"AbortError\" DOMException.",
+          "spec": "https://dom.spec.whatwg.org/#dom-abortcontroller-abort"
+        },
+        {
+          "id": "timeout",
+          "description": "AbortSignal.timeout(10) aborts with a \"TimeoutError\" DOMException.",
+          "spec": "https://dom.spec.whatwg.org/#dom-abortsignal-timeout"
+        },
+        {
+          "id": "any",
+          "description": "AbortSignal.any([a, b]) aborts when one of its inputs aborts, with that reason.",
+          "spec": "https://dom.spec.whatwg.org/#dom-abortsignal-any"
+        }
+      ]
+    },
+    {
+      "id": "computed-style",
+      "title": "getComputedStyle()",
+      "summary": "Returns the computed values of all CSS properties of an element after the cascade and inheritance.",
+      "spec": "https://drafts.csswg.org/cssom/#dom-window-getcomputedstyle",
+      "existsDescription": null,
+      "nodeGlobal": null,
+      "workaround": null,
+      "checks": [
+        {
+          "id": "stylesheet-rule",
+          "description": "A rule from a <style> element applies: .hidden { display: none } gives display \"none\".",
+          "spec": "https://drafts.csswg.org/css-cascade/#cascade"
+        },
+        {
+          "id": "inherited",
+          "description": "An inherited property set on the parent (color: red) computes to \"rgb(255, 0, 0)\" on the child.",
+          "spec": "https://drafts.csswg.org/css-cascade/#inheriting"
+        },
+        {
+          "id": "initial-and-default",
+          "description": "Values not set by the page use the initial or user-agent value: a <div> has display \"block\", a <span> has visibility \"visible\".",
+          "spec": "https://drafts.csswg.org/css-cascade/#initial-value"
+        }
+      ]
+    },
+    {
+      "id": "constraint-validation",
+      "title": "checkValidity() / validity",
+      "summary": "Form constraint validation: the ValidityState flags, checkValidity() and custom messages.",
+      "spec": "https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#the-constraint-validation-api",
+      "existsDescription": "An <input> has checkValidity() and a validity object.",
+      "nodeGlobal": null,
+      "workaround": null,
+      "checks": [
+        {
+          "id": "value-missing",
+          "description": "An empty required input has validity.valueMissing true; checkValidity() returns false and fires \"invalid\".",
+          "spec": "https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#dom-cva-checkvalidity"
+        },
+        {
+          "id": "type-mismatch",
+          "description": "An email input with value \"x\" has validity.typeMismatch true.",
+          "spec": "https://html.spec.whatwg.org/multipage/input.html#email-state-(type=email)"
+        },
+        {
+          "id": "custom-validity",
+          "description": "setCustomValidity(\"Bad\") sets validity.customError and validationMessage \"Bad\".",
+          "spec": "https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#dom-cva-setcustomvalidity"
+        },
+        {
+          "id": "pattern-and-length",
+          "description": "pattern=\"[0-9]+\" with value \"a1\" gives patternMismatch; minLength does not apply to a value set by script (tooShort stays false).",
+          "spec": "https://html.spec.whatwg.org/multipage/input.html#the-pattern-attribute"
+        }
+      ]
+    },
+    {
+      "id": "crypto",
+      "title": "crypto.getRandomValues() / randomUUID()",
+      "summary": "Cryptographically strong random bytes and random version 4 UUIDs.",
+      "spec": "https://w3c.github.io/webcrypto/#Crypto-method-getRandomValues",
+      "existsDescription": "typeof window.crypto is defined.",
+      "nodeGlobal": "crypto",
+      "workaround": "Node.js has a Web Crypto global (globalThis.crypto) since 19; a setup file can assign it to the test global.",
+      "checks": [
+        {
+          "id": "get-random-values",
+          "description": "getRandomValues(array) fills the array and returns the same array.",
+          "spec": "https://w3c.github.io/webcrypto/#Crypto-method-getRandomValues"
+        },
+        {
+          "id": "random-uuid",
+          "description": "randomUUID() returns a lowercase version 4 UUID string.",
+          "spec": "https://w3c.github.io/webcrypto/#Crypto-method-randomUUID"
+        }
+      ]
+    },
+    {
+      "id": "css-custom-properties",
+      "title": "CSS custom properties (--*) and var()",
+      "summary": "Author-defined properties that inherit and are substituted with var().",
+      "spec": "https://drafts.csswg.org/css-variables/#defining-variables",
+      "existsDescription": "element.style has setProperty() and getPropertyValue().",
+      "nodeGlobal": null,
+      "workaround": null,
+      "checks": [
+        {
+          "id": "inline-roundtrip",
+          "description": "style.setProperty(\"--gap\", \"10px\") is read back by style.getPropertyValue(\"--gap\").",
+          "spec": "https://drafts.csswg.org/cssom/#dom-cssstyledeclaration-setproperty"
+        },
+        {
+          "id": "computed-inherited",
+          "description": "A custom property from a stylesheet rule on the parent is inherited: getComputedStyle(child).getPropertyValue(\"--gap\") is \"10px\".",
+          "spec": "https://drafts.csswg.org/css-variables/#defining-variables"
+        },
+        {
+          "id": "var-substitution",
+          "description": "color: var(--c) with --c: red computes to \"rgb(255, 0, 0)\".",
+          "spec": "https://drafts.csswg.org/css-variables/#using-variables"
+        }
+      ]
+    },
+    {
+      "id": "css-has",
+      "title": "CSS :has() in selectors",
+      "summary": "The relational pseudo-class: matches an element when a relative selector matches something around it.",
+      "spec": "https://drafts.csswg.org/selectors-4/#relational",
+      "existsDescription": "document.querySelector(\":has(*)\") does not throw a SyntaxError.",
+      "nodeGlobal": null,
+      "workaround": null,
+      "checks": [
+        {
+          "id": "descendant",
+          "description": "querySelectorAll(\"div:has(.x)\") matches both divs that contain a .x descendant.",
+          "spec": "https://drafts.csswg.org/selectors-4/#relational"
+        },
+        {
+          "id": "child-combinator",
+          "description": "querySelectorAll(\"div:has(> .x)\") matches only the div with a .x child.",
+          "spec": "https://drafts.csswg.org/selectors-4/#relational"
+        },
+        {
+          "id": "matches-closest",
+          "description": "element.matches(\":has(.x)\") and element.closest(\":has(> p)\") use :has() as well.",
+          "spec": "https://dom.spec.whatwg.org/#dom-element-closest"
+        }
+      ]
+    },
+    {
+      "id": "custom-elements",
+      "title": "customElements.define() and lifecycle callbacks",
+      "summary": "Autonomous custom elements: registration, upgrade and the connected, disconnected and attributeChanged callbacks.",
+      "spec": "https://html.spec.whatwg.org/multipage/custom-elements.html",
+      "existsDescription": "window.customElements.define is a function.",
+      "nodeGlobal": null,
+      "workaround": null,
+      "checks": [
+        {
+          "id": "connected-disconnected",
+          "description": "connectedCallback runs on insertion into the document and disconnectedCallback on removal.",
+          "spec": "https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element-reactions"
+        },
+        {
+          "id": "attribute-changed",
+          "description": "attributeChangedCallback(name, old, new) runs for attributes listed in observedAttributes only.",
+          "spec": "https://html.spec.whatwg.org/multipage/custom-elements.html#concept-custom-element-definition-observed-attributes"
+        },
+        {
+          "id": "upgrade",
+          "description": "An element parsed before define() is upgraded when its definition arrives; whenDefined() and get() see it.",
+          "spec": "https://html.spec.whatwg.org/multipage/custom-elements.html#upgrades"
+        }
+      ]
+    },
+    {
+      "id": "dialog",
+      "title": "<dialog> showModal() / close()",
+      "summary": "The dialog element and its methods for opening it as a modal and closing it with a return value.",
+      "spec": "https://html.spec.whatwg.org/multipage/interactive-elements.html#the-dialog-element",
+      "existsDescription": "HTMLDialogElement exists and a <dialog> has showModal().",
+      "nodeGlobal": null,
+      "workaround": null,
+      "checks": [
+        {
+          "id": "show-modal-opens",
+          "description": "showModal() on a connected dialog sets .open to true and adds the open attribute.",
+          "spec": "https://html.spec.whatwg.org/multipage/interactive-elements.html#dom-dialog-showmodal"
+        },
+        {
+          "id": "close-return-value",
+          "description": "close(\"done\") clears open, sets returnValue to \"done\" and fires a \"close\" event.",
+          "spec": "https://html.spec.whatwg.org/multipage/interactive-elements.html#close-the-dialog"
+        },
+        {
+          "id": "disconnected-throws",
+          "description": "showModal() on a dialog that is not in a document throws an \"InvalidStateError\" DOMException.",
+          "spec": "https://html.spec.whatwg.org/multipage/interactive-elements.html#dom-dialog-showmodal"
+        }
+      ]
+    },
+    {
+      "id": "form-data",
+      "title": "new FormData(form)",
+      "summary": "Builds the form data set of a form the way submission would.",
+      "spec": "https://xhr.spec.whatwg.org/#dom-formdata",
+      "existsDescription": "typeof window.FormData is defined.",
+      "nodeGlobal": "FormData",
+      "workaround": null,
+      "checks": [
+        {
+          "id": "controls",
+          "description": "Includes text inputs, checked checkboxes and selected options; skips unchecked, disabled and unnamed controls.",
+          "spec": "https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#constructing-the-form-data-set"
+        },
+        {
+          "id": "submitter",
+          "description": "new FormData(form, submitter) includes the submitter button's name and value.",
+          "spec": "https://xhr.spec.whatwg.org/#dom-formdata"
+        }
+      ]
+    },
+    {
+      "id": "inner-text",
+      "title": "element.innerText",
+      "summary": "The rendered text of an element (line breaks, hidden content left out) and a setter that turns newlines into <br>.",
+      "spec": "https://html.spec.whatwg.org/multipage/dom.html#the-innertext-idl-attribute",
+      "existsDescription": "\"innerText\" in element.",
+      "nodeGlobal": null,
+      "workaround": null,
+      "checks": [
+        {
+          "id": "br-newline",
+          "description": "For a connected <p>a<br>b</p>, innerText is \"a\\nb\".",
+          "spec": "https://html.spec.whatwg.org/multipage/dom.html#the-innertext-idl-attribute"
+        },
+        {
+          "id": "display-none-skipped",
+          "description": "Text inside a display: none child is left out: <div>a<span style=\"display:none\">b</span></div> gives \"a\".",
+          "spec": "https://html.spec.whatwg.org/multipage/dom.html#rendered-text-collection-steps"
+        },
+        {
+          "id": "setter-br",
+          "description": "Setting innerText = \"a\\nb\" produces the children a, <br>, b.",
+          "spec": "https://html.spec.whatwg.org/multipage/dom.html#set-the-inner-text-steps"
+        }
+      ]
+    },
+    {
+      "id": "intersection-observer",
+      "title": "IntersectionObserver",
+      "summary": "Reports when observed elements enter or leave the viewport or a root element.",
+      "spec": "https://w3c.github.io/IntersectionObserver/#intersection-observer-interface",
+      "existsDescription": null,
+      "nodeGlobal": null,
+      "workaround": "Tests usually replace it with a mock class (for example the \"react-intersection-observer/test-utils\" helpers or a hand-written stub).",
+      "checks": [
+        {
+          "id": "defaults",
+          "description": "A new observer has root null, rootMargin \"0px 0px 0px 0px\" and thresholds [0].",
+          "spec": "https://w3c.github.io/IntersectionObserver/#dom-intersectionobserver-intersectionobserver"
+        },
+        {
+          "id": "initial-notification",
+          "description": "Observing a connected element delivers an initial entry for it with an isIntersecting boolean.",
+          "spec": "https://w3c.github.io/IntersectionObserver/#dom-intersectionobserver-observe"
+        }
+      ]
+    },
+    {
+      "id": "match-media",
+      "title": "window.matchMedia()",
+      "summary": "Evaluates a media query and returns a MediaQueryList that reports changes.",
+      "spec": "https://drafts.csswg.org/cssom-view/#dom-window-matchmedia",
+      "existsDescription": null,
+      "nodeGlobal": null,
+      "workaround": "A common pattern is to define window.matchMedia in a setup file with a function returning { matches: false, media, addEventListener() {}, removeEventListener() {} } (shown in the Jest documentation).",
+      "checks": [
+        {
+          "id": "all-matches",
+          "description": "matchMedia(\"all\").matches is true and matchMedia(\"not all\").matches is false.",
+          "spec": "https://drafts.csswg.org/cssom-view/#dom-mediaquerylist-matches"
+        },
+        {
+          "id": "media-query-list",
+          "description": "The result has a serialized .media and supports addEventListener(\"change\", ...).",
+          "spec": "https://drafts.csswg.org/cssom-view/#mediaquerylist"
+        }
+      ]
+    },
+    {
+      "id": "mutation-observer",
+      "title": "MutationObserver",
+      "summary": "Reports changes to the DOM tree (children, attributes, text) as batched records.",
+      "spec": "https://dom.spec.whatwg.org/#interface-mutationobserver",
+      "existsDescription": null,
+      "nodeGlobal": null,
+      "workaround": null,
+      "checks": [
+        {
+          "id": "child-list-async",
+          "description": "An appendChild() is reported asynchronously (not during the call) as one \"childList\" record.",
+          "spec": "https://dom.spec.whatwg.org/#queue-a-mutation-observer-compound-microtask"
+        },
+        {
+          "id": "attribute-old-value",
+          "description": "With attributeOldValue, an attribute change record carries attributeName and oldValue.",
+          "spec": "https://dom.spec.whatwg.org/#dom-mutationobserverinit-attributeoldvalue"
+        },
+        {
+          "id": "take-records",
+          "description": "takeRecords() returns pending records synchronously and empties the queue.",
+          "spec": "https://dom.spec.whatwg.org/#dom-mutationobserver-takerecords"
+        }
+      ]
+    },
+    {
+      "id": "request-animation-frame",
+      "title": "requestAnimationFrame()",
+      "summary": "Schedules a callback before the next repaint.",
+      "spec": "https://html.spec.whatwg.org/multipage/imagebitmap-and-animations.html#animation-frames",
+      "existsDescription": null,
+      "nodeGlobal": null,
+      "workaround": null,
+      "checks": [
+        {
+          "id": "callback-timestamp",
+          "description": "The callback runs (asynchronously) with a numeric timestamp.",
+          "spec": "https://html.spec.whatwg.org/multipage/imagebitmap-and-animations.html#dom-animationframeprovider-requestanimationframe"
+        },
+        {
+          "id": "cancel",
+          "description": "cancelAnimationFrame(handle) stops a scheduled callback from running.",
+          "spec": "https://html.spec.whatwg.org/multipage/imagebitmap-and-animations.html#dom-animationframeprovider-cancelanimationframe"
+        }
+      ]
+    },
+    {
+      "id": "request-submit",
+      "title": "form.requestSubmit()",
+      "summary": "Submits a form as if a submit button were clicked: validation runs and a cancelable \"submit\" event fires.",
+      "spec": "https://html.spec.whatwg.org/multipage/forms.html#dom-form-requestsubmit",
+      "existsDescription": "typeof form.requestSubmit === \"function\".",
+      "nodeGlobal": null,
+      "workaround": null,
+      "checks": [
+        {
+          "id": "submit-event-submitter",
+          "description": "requestSubmit(button) fires a cancelable \"submit\" event whose submitter is that button.",
+          "spec": "https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-submission-algorithm"
+        },
+        {
+          "id": "validation-blocks",
+          "description": "With an empty required field, requestSubmit() fires \"invalid\" on it and no \"submit\" event.",
+          "spec": "https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#interactively-validate-the-constraints"
+        },
+        {
+          "id": "non-submit-button-throws",
+          "description": "requestSubmit(el) with an element that is not a submit button throws a TypeError.",
+          "spec": "https://html.spec.whatwg.org/multipage/forms.html#dom-form-requestsubmit"
+        }
+      ]
+    },
+    {
+      "id": "resize-observer",
+      "title": "ResizeObserver",
+      "summary": "Reports changes to the size of observed elements.",
+      "spec": "https://drafts.csswg.org/resize-observer/#resize-observer-interface",
+      "existsDescription": null,
+      "nodeGlobal": null,
+      "workaround": "Tests usually replace it with a stub class or the \"resize-observer-polyfill\" package.",
+      "checks": [
+        {
+          "id": "observe",
+          "description": "new ResizeObserver(cb).observe(el) and disconnect() do not throw.",
+          "spec": "https://drafts.csswg.org/resize-observer/#dom-resizeobserver-observe"
+        },
+        {
+          "id": "initial-notification",
+          "description": "Observing a connected element delivers an initial entry for it (browsers do this at the next rendering update).",
+          "spec": "https://drafts.csswg.org/resize-observer/#intro"
+        }
+      ]
+    },
+    {
+      "id": "scroll-into-view",
+      "title": "element.scrollIntoView()",
+      "summary": "Scrolls the element's ancestors so the element becomes visible.",
+      "spec": "https://drafts.csswg.org/cssom-view/#dom-element-scrollintoview",
+      "existsDescription": "typeof element.scrollIntoView === \"function\".",
+      "nodeGlobal": null,
+      "workaround": "Tests commonly assign a no-op in a setup file: Element.prototype.scrollIntoView = function () {}.",
+      "checks": [
+        {
+          "id": "callable",
+          "description": "scrollIntoView(), scrollIntoView(false) and scrollIntoView({ block: \"center\", behavior: \"smooth\" }) return without error.",
+          "spec": "https://drafts.csswg.org/cssom-view/#dom-element-scrollintoview"
+        }
+      ]
+    },
+    {
+      "id": "shadow-dom",
+      "title": "attachShadow() and <slot>",
+      "summary": "Shadow trees and slot-based distribution of light-DOM children.",
+      "spec": "https://dom.spec.whatwg.org/#dom-element-attachshadow",
+      "existsDescription": "typeof element.attachShadow === \"function\".",
+      "nodeGlobal": null,
+      "workaround": null,
+      "checks": [
+        {
+          "id": "open-closed",
+          "description": "attachShadow({ mode: \"open\" }) is exposed as element.shadowRoot; mode \"closed\" gives shadowRoot null.",
+          "spec": "https://dom.spec.whatwg.org/#dom-element-attachshadow"
+        },
+        {
+          "id": "slot-assignment",
+          "description": "Named and default slots: assignedNodes() returns the matching light-DOM children and assignedSlot points back.",
+          "spec": "https://dom.spec.whatwg.org/#find-slotables"
+        },
+        {
+          "id": "encapsulation-and-retarget",
+          "description": "document.querySelector does not see into the shadow tree, and an event from inside is retargeted to the host.",
+          "spec": "https://dom.spec.whatwg.org/#retarget"
+        },
+        {
+          "id": "slotchange",
+          "description": "Adding a child that gets assigned to a slot fires \"slotchange\" on the slot.",
+          "spec": "https://dom.spec.whatwg.org/#signal-a-slot-change"
+        }
+      ]
+    },
+    {
+      "id": "structured-clone",
+      "title": "structuredClone()",
+      "summary": "Deep-copies a value with the structured clone algorithm (Maps, Dates, cycles, typed arrays).",
+      "spec": "https://html.spec.whatwg.org/multipage/structured-data.html#dom-structuredclone",
+      "existsDescription": "typeof window.structuredClone is defined.",
+      "nodeGlobal": "structuredClone",
+      "workaround": "Node.js has structuredClone as a global since 17. Under Jest's jsdom environment it is not copied in; assigning the Node global in a setup file (globalThis.structuredClone ??= ...) is common, or the core-js polyfill.",
+      "checks": [
+        {
+          "id": "map-date-cycle",
+          "description": "Clones a Map, a Date and a circular reference into new objects with the same contents.",
+          "spec": "https://html.spec.whatwg.org/multipage/structured-data.html#dom-structuredclone"
+        },
+        {
+          "id": "function-throws",
+          "description": "Cloning a function throws a \"DataCloneError\" DOMException.",
+          "spec": "https://html.spec.whatwg.org/multipage/structured-data.html#structuredserializeinternal"
+        }
+      ]
+    },
+    {
+      "id": "text-encoder",
+      "title": "TextEncoder / TextDecoder",
+      "summary": "Encodes strings to UTF-8 bytes and decodes bytes back to strings.",
+      "spec": "https://encoding.spec.whatwg.org/#interface-textencoder",
+      "existsDescription": "typeof window.TextEncoder is defined.",
+      "nodeGlobal": "TextEncoder",
+      "workaround": "Node.js has TextEncoder and TextDecoder as globals (also in the \"util\" module); a setup file can assign them to the test global.",
+      "checks": [
+        {
+          "id": "encode-utf8",
+          "description": "new TextEncoder().encode(\"é\") returns the UTF-8 bytes [195, 169].",
+          "spec": "https://encoding.spec.whatwg.org/#dom-textencoder-encode"
+        },
+        {
+          "id": "decode-utf8",
+          "description": "new TextDecoder().decode() turns [195, 169] back into \"é\".",
+          "spec": "https://encoding.spec.whatwg.org/#dom-textdecoder-decode"
+        }
+      ]
+    },
+    {
+      "id": "web-animations",
+      "title": "element.animate() / getAnimations()",
+      "summary": "The Web Animations API: run keyframe animations from script and list running animations.",
+      "spec": "https://drafts.csswg.org/web-animations-1/#dom-animatable-animate",
+      "existsDescription": "typeof element.animate === \"function\".",
+      "nodeGlobal": null,
+      "workaround": null,
+      "checks": [
+        {
+          "id": "animate-returns-animation",
+          "description": "animate(keyframes, 1000) returns an Animation whose playState is \"running\" and whose finished is a promise.",
+          "spec": "https://drafts.csswg.org/web-animations-1/#dom-animatable-animate"
+        },
+        {
+          "id": "get-animations",
+          "description": "element.getAnimations() includes the animation just started.",
+          "spec": "https://drafts.csswg.org/web-animations-1/#dom-animatable-getanimations"
+        }
+      ]
+    },
+    {
+      "id": "window-scroll-to",
+      "title": "window.scrollTo()",
+      "summary": "Scrolls the viewport to a position.",
+      "spec": "https://drafts.csswg.org/cssom-view/#dom-window-scrollto",
+      "existsDescription": null,
+      "nodeGlobal": null,
+      "workaround": "Tests commonly assign a no-op or a mock: window.scrollTo = () => {} (or vi.fn() / jest.fn()).",
+      "checks": [
+        {
+          "id": "callable",
+          "description": "scrollTo(0, 0) and scrollTo({ top: 0, behavior: \"instant\" }) return without error.",
+          "spec": "https://drafts.csswg.org/cssom-view/#dom-window-scrollto"
+        },
+        {
+          "id": "scroll-position",
+          "description": "With nothing to scroll, the position stays at 0: scrollX and scrollY are 0 after scrollTo(0, 50).",
+          "spec": "https://drafts.csswg.org/cssom-view/#dom-window-scrolly"
+        }
+      ]
+    }
+  ],
+  "results": {
+    "abort-signal": {
+      "happy-dom@21.0.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "abort-reason",
+          "timeout",
+          "any"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "abort-reason",
+          "timeout",
+          "any"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "supported",
+        "exists": true,
+        "sameAsNode": true,
+        "passed": [
+          "abort-reason",
+          "timeout",
+          "any"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "abort-reason",
+          "timeout",
+          "any"
+        ],
+        "failed": [],
+        "error": null
+      }
+    },
+    "computed-style": {
+      "happy-dom@21.0.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "stylesheet-rule"
+        ],
+        "failed": [
+          {
+            "id": "inherited",
+            "error": "child color: expected \"rgb(255, 0, 0)\", got \"red\""
+          },
+          {
+            "id": "initial-and-default",
+            "error": "span visibility: expected \"visible\", got \"\""
+          }
+        ],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "stylesheet-rule",
+          "inherited",
+          "initial-and-default"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "stylesheet-rule",
+          "inherited",
+          "initial-and-default"
+        ],
+        "failed": [],
+        "error": null
+      }
+    },
+    "constraint-validation": {
+      "happy-dom@21.0.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "value-missing",
+          "type-mismatch",
+          "custom-validity"
+        ],
+        "failed": [
+          {
+            "id": "pattern-and-length",
+            "error": "validity.tooShort: expected false, got true"
+          }
+        ],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "value-missing",
+          "type-mismatch",
+          "custom-validity",
+          "pattern-and-length"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "value-missing",
+          "type-mismatch",
+          "custom-validity",
+          "pattern-and-length"
+        ],
+        "failed": [],
+        "error": null
+      }
+    },
+    "crypto": {
+      "happy-dom@21.0.3": {
+        "status": "supported",
+        "exists": true,
+        "sameAsNode": true,
+        "passed": [
+          "get-random-values",
+          "random-uuid"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "get-random-values",
+          "random-uuid"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "supported",
+        "exists": true,
+        "sameAsNode": true,
+        "passed": [
+          "get-random-values",
+          "random-uuid"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      }
+    },
+    "css-custom-properties": {
+      "happy-dom@21.0.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "inline-roundtrip"
+        ],
+        "failed": [
+          {
+            "id": "computed-inherited",
+            "error": "computed --gap: expected \"10px\", got \"\""
+          },
+          {
+            "id": "var-substitution",
+            "error": "computed color: expected \"rgb(255, 0, 0)\", got \"red\""
+          }
+        ],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "inline-roundtrip",
+          "computed-inherited"
+        ],
+        "failed": [
+          {
+            "id": "var-substitution",
+            "error": "computed color: expected \"rgb(255, 0, 0)\", got \"var(--c)\""
+          }
+        ],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "inline-roundtrip"
+        ],
+        "failed": [
+          {
+            "id": "computed-inherited",
+            "error": "TypeError: w.getComputedStyle is not a function"
+          },
+          {
+            "id": "var-substitution",
+            "error": "TypeError: w.getComputedStyle is not a function"
+          }
+        ],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "inline-roundtrip",
+          "computed-inherited"
+        ],
+        "failed": [
+          {
+            "id": "var-substitution",
+            "error": "computed color: expected \"rgb(255, 0, 0)\", got \"var(--c)\""
+          }
+        ],
+        "error": null
+      }
+    },
+    "css-has": {
+      "happy-dom@21.0.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "descendant",
+          "child-combinator",
+          "matches-closest"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "descendant",
+          "child-combinator",
+          "matches-closest"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "descendant",
+          "child-combinator",
+          "matches-closest"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "descendant",
+          "child-combinator",
+          "matches-closest"
+        ],
+        "failed": [],
+        "error": null
+      }
+    },
+    "custom-elements": {
+      "happy-dom@21.0.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "connected-disconnected",
+          "attribute-changed",
+          "upgrade"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "connected-disconnected",
+          "attribute-changed",
+          "upgrade"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "connected-disconnected",
+          "attribute-changed",
+          "upgrade"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "connected-disconnected",
+          "attribute-changed",
+          "upgrade"
+        ],
+        "failed": [],
+        "error": null
+      }
+    },
+    "dialog": {
+      "happy-dom@21.0.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "show-modal-opens",
+          "close-return-value"
+        ],
+        "failed": [
+          {
+            "id": "disconnected-throws",
+            "error": "showModal() on a disconnected dialog: expected InvalidStateError, nothing was thrown"
+          }
+        ],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      }
+    },
+    "form-data": {
+      "happy-dom@21.0.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "submitter"
+        ],
+        "failed": [
+          {
+            "id": "controls",
+            "error": "entries: expected \"a=1&b=on1&s=p&s=r\", got \"a=1&b=on1&s=p\""
+          }
+        ],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "controls",
+          "submitter"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "partial",
+        "exists": true,
+        "sameAsNode": true,
+        "passed": [],
+        "failed": [
+          {
+            "id": "controls",
+            "error": "TypeError: FormData constructor: Argument 1 could not be converted to: undefined."
+          },
+          {
+            "id": "submitter",
+            "error": "TypeError: FormData constructor: Argument 1 could not be converted to: undefined."
+          }
+        ],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "controls",
+          "submitter"
+        ],
+        "failed": [],
+        "error": null
+      }
+    },
+    "inner-text": {
+      "happy-dom@21.0.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "display-none-skipped",
+          "setter-br"
+        ],
+        "failed": [
+          {
+            "id": "br-newline",
+            "error": "innerText: expected \"a\\nb\", got \"ab\""
+          }
+        ],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "br-newline"
+        ],
+        "failed": [
+          {
+            "id": "display-none-skipped",
+            "error": "innerText: expected \"a\", got \"ab\""
+          },
+          {
+            "id": "setter-br",
+            "error": "TypeError: Cannot set property innerText of [object Object] which has only a getter"
+          }
+        ],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "br-newline",
+          "display-none-skipped",
+          "setter-br"
+        ],
+        "failed": [],
+        "error": null
+      }
+    },
+    "intersection-observer": {
+      "happy-dom@21.0.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [],
+        "failed": [
+          {
+            "id": "defaults",
+            "error": "root: expected null, got undefined"
+          },
+          {
+            "id": "initial-notification",
+            "error": "no entry delivered (waited 500 ms)"
+          }
+        ],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      }
+    },
+    "match-media": {
+      "happy-dom@21.0.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "all-matches",
+          "media-query-list"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      }
+    },
+    "mutation-observer": {
+      "happy-dom@21.0.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "child-list-async",
+          "attribute-old-value",
+          "take-records"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "child-list-async",
+          "attribute-old-value",
+          "take-records"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "child-list-async",
+          "attribute-old-value"
+        ],
+        "failed": [
+          {
+            "id": "take-records",
+            "error": "callback calls after takeRecords(): expected 0, got 1"
+          }
+        ],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "child-list-async",
+          "attribute-old-value",
+          "take-records"
+        ],
+        "failed": [],
+        "error": null
+      }
+    },
+    "request-animation-frame": {
+      "happy-dom@21.0.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "cancel"
+        ],
+        "failed": [
+          {
+            "id": "callback-timestamp",
+            "error": "handle is not a positive number: [object Object]"
+          }
+        ],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "callback-timestamp",
+          "cancel"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "callback-timestamp",
+          "cancel"
+        ],
+        "failed": [],
+        "error": null
+      }
+    },
+    "request-submit": {
+      "happy-dom@21.0.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "submit-event-submitter",
+          "validation-blocks",
+          "non-submit-button-throws"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "submit-event-submitter",
+          "validation-blocks",
+          "non-submit-button-throws"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "submit-event-submitter",
+          "validation-blocks",
+          "non-submit-button-throws"
+        ],
+        "failed": [],
+        "error": null
+      }
+    },
+    "resize-observer": {
+      "happy-dom@21.0.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "observe"
+        ],
+        "failed": [
+          {
+            "id": "initial-notification",
+            "error": "no entry delivered (waited 500 ms)"
+          }
+        ],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      }
+    },
+    "scroll-into-view": {
+      "happy-dom@21.0.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "callable"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      }
+    },
+    "shadow-dom": {
+      "happy-dom@21.0.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "open-closed",
+          "slotchange"
+        ],
+        "failed": [
+          {
+            "id": "slot-assignment",
+            "error": "p.assignedSlot is not the default slot"
+          },
+          {
+            "id": "encapsulation-and-retarget",
+            "error": "event.target seen by body is not the host"
+          }
+        ],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "open-closed",
+          "slot-assignment",
+          "encapsulation-and-retarget",
+          "slotchange"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "partial",
+        "exists": true,
+        "passed": [],
+        "failed": [
+          {
+            "id": "open-closed",
+            "error": "root.mode: expected \"open\", got undefined"
+          },
+          {
+            "id": "slot-assignment",
+            "error": "p.assignedSlot is not the default slot"
+          },
+          {
+            "id": "encapsulation-and-retarget",
+            "error": "event.target seen by body is not the host"
+          },
+          {
+            "id": "slotchange",
+            "error": "\"slotchange\" did not fire (waited 500 ms)"
+          }
+        ],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "open-closed",
+          "slot-assignment",
+          "encapsulation-and-retarget",
+          "slotchange"
+        ],
+        "failed": [],
+        "error": null
+      }
+    },
+    "structured-clone": {
+      "happy-dom@21.0.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "supported",
+        "exists": true,
+        "sameAsNode": true,
+        "passed": [
+          "map-date-cycle",
+          "function-throws"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      }
+    },
+    "text-encoder": {
+      "happy-dom@21.0.3": {
+        "status": "supported",
+        "exists": true,
+        "sameAsNode": true,
+        "passed": [
+          "encode-utf8",
+          "decode-utf8"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "encode-utf8",
+          "decode-utf8"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "supported",
+        "exists": true,
+        "sameAsNode": true,
+        "passed": [
+          "encode-utf8",
+          "decode-utf8"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      }
+    },
+    "web-animations": {
+      "happy-dom@21.0.3": {
+        "status": "supported",
+        "exists": true,
+        "passed": [
+          "animate-returns-animation",
+          "get-animations"
+        ],
+        "failed": [],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      }
+    },
+    "window-scroll-to": {
+      "happy-dom@21.0.3": {
+        "status": "partial",
+        "exists": true,
+        "passed": [
+          "callable"
+        ],
+        "failed": [
+          {
+            "id": "scroll-position",
+            "error": "scrollY: expected 0, got 50"
+          }
+        ],
+        "error": null
+      },
+      "jsdom@30.1.3": {
+        "status": "stub",
+        "exists": true,
+        "passed": [],
+        "failed": [
+          {
+            "id": "callable",
+            "error": "passed, but the engine reported \"not implemented\"",
+            "notImplemented": true,
+            "logged": [
+              "Not implemented: Window's scrollTo() method"
+            ]
+          },
+          {
+            "id": "scroll-position",
+            "error": "passed, but the engine reported \"not implemented\"",
+            "notImplemented": true,
+            "logged": [
+              "Not implemented: Window's scrollTo() method"
+            ]
+          }
+        ],
+        "error": null
+      },
+      "linkedom@0.18.13": {
+        "status": "missing",
+        "exists": false,
+        "passed": [],
+        "failed": [],
+        "error": null
+      },
+      "warpdom@0.1.3": {
+        "status": "stub",
+        "exists": true,
+        "passed": [],
+        "failed": [
+          {
+            "id": "callable",
+            "error": "passed, but the engine reported \"not implemented\"",
+            "notImplemented": true,
+            "logged": [
+              "Not implemented: Window's scrollTo() method"
+            ]
+          },
+          {
+            "id": "scroll-position",
+            "error": "passed, but the engine reported \"not implemented\"",
+            "notImplemented": true,
+            "logged": [
+              "Not implemented: Window's scrollTo() method"
+            ]
+          }
+        ],
+        "error": null
+      }
+    }
+  }
+}

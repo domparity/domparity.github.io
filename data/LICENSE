@@ -1,0 +1,7 @@
+The data in this directory (results.json, wpt.json) is licensed under the
+Creative Commons Attribution 4.0 International License (CC BY 4.0):
+https://creativecommons.org/licenses/by/4.0/
+
+Attribution: "domparity, Sonu Kapoor". wpt.json summarizes Web Platform Tests
+results published in the warpdom repository (see its "source" field); the Web
+Platform Tests themselves are under the 3-Clause BSD License.

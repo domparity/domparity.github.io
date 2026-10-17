@@ -1,0 +1,214 @@
+{
+  "license": "CC BY 4.0",
+  "source": {
+    "description": "Web Platform Tests run by warpdom's WPT workflow (wpt.yml) on GitHub-hosted runners; the four area jobs' results merged with the workflow's own merge and summary scripts.",
+    "repository": "https://github.com/sonukapoor/warpdom",
+    "file": "docs/research/data/wpt/ci-2026-10-13-208ad49/summary.md",
+    "githubRun": "38427179332",
+    "wptCommit": "87b5d13099c8bc2f9047ce1d29c963a3e0a246f6",
+    "wptCommitUrl": "https://github.com/web-platform-tests/wpt/tree/87b5d13099c8bc2f9047ce1d29c963a3e0a246f6",
+    "date": "2026-10-13",
+    "areas": [
+      "css/cssom",
+      "dom",
+      "domparsing",
+      "html/dom"
+    ],
+    "node": "v22.23.3",
+    "notes": "Subtests that the runner cannot run outside a browser (testdriver, tentative tests) are skipped for every engine alike. \"Pass rate\" is passed subtests / subtests; \"score\" averages the per-file pass fraction, so large files weigh less. Subtest counts can differ slightly between engines when a test file stops early in one of them."
+  },
+  "engines": {
+    "warpdom": {
+      "version": "commit 8630317 (2026-10-13, before the 0.1.0 release)",
+      "measured": true,
+      "areas": [
+        {
+          "area": "css/cssom",
+          "files": 250,
+          "filesAllPass": 128,
+          "subtests": 4333,
+          "passed": 2880
+        },
+        {
+          "area": "dom",
+          "files": 10,
+          "filesAllPass": 8,
+          "subtests": 2102,
+          "passed": 1998
+        },
+        {
+          "area": "dom/abort",
+          "files": 6,
+          "filesAllPass": 6,
+          "subtests": 37,
+          "passed": 37
+        },
+        {
+          "area": "dom/collections",
+          "files": 11,
+          "filesAllPass": 11,
+          "subtests": 55,
+          "passed": 55
+        },
+        {
+          "area": "dom/events",
+          "files": 91,
+          "filesAllPass": 66,
+          "subtests": 715,
+          "passed": 600
+        },
+        {
+          "area": "dom/lists",
+          "files": 5,
+          "filesAllPass": 4,
+          "subtests": 189,
+          "passed": 187
+        },
+        {
+          "area": "dom/nodes",
+          "files": 348,
+          "filesAllPass": 249,
+          "subtests": 9924,
+          "passed": 7210
+        },
+        {
+          "area": "dom/ranges",
+          "files": 46,
+          "filesAllPass": 41,
+          "subtests": 44494,
+          "passed": 40318
+        },
+        {
+          "area": "dom/traversal",
+          "files": 17,
+          "filesAllPass": 15,
+          "subtests": 1607,
+          "passed": 1595
+        },
+        {
+          "area": "domparsing",
+          "files": 36,
+          "filesAllPass": 24,
+          "subtests": 498,
+          "passed": 334
+        },
+        {
+          "area": "html/dom",
+          "files": 143,
+          "filesAllPass": 103,
+          "subtests": 69294,
+          "passed": 61196
+        },
+        {
+          "area": "total",
+          "files": 963,
+          "filesAllPass": 655,
+          "subtests": 133248,
+          "passed": 116410
+        }
+      ]
+    },
+    "jsdom": {
+      "version": "30.1.2",
+      "measured": true,
+      "areas": [
+        {
+          "area": "css/cssom",
+          "files": 250,
+          "filesAllPass": 133,
+          "subtests": 4320,
+          "passed": 2878
+        },
+        {
+          "area": "dom",
+          "files": 10,
+          "filesAllPass": 8,
+          "subtests": 2041,
+          "passed": 1337
+        },
+        {
+          "area": "dom/abort",
+          "files": 6,
+          "filesAllPass": 6,
+          "subtests": 37,
+          "passed": 37
+        },
+        {
+          "area": "dom/collections",
+          "files": 11,
+          "filesAllPass": 11,
+          "subtests": 55,
+          "passed": 55
+        },
+        {
+          "area": "dom/events",
+          "files": 91,
+          "filesAllPass": 67,
+          "subtests": 715,
+          "passed": 481
+        },
+        {
+          "area": "dom/lists",
+          "files": 5,
+          "filesAllPass": 4,
+          "subtests": 189,
+          "passed": 185
+        },
+        {
+          "area": "dom/nodes",
+          "files": 348,
+          "filesAllPass": 227,
+          "subtests": 9924,
+          "passed": 7133
+        },
+        {
+          "area": "dom/ranges",
+          "files": 46,
+          "filesAllPass": 40,
+          "subtests": 44494,
+          "passed": 40317
+        },
+        {
+          "area": "dom/traversal",
+          "files": 17,
+          "filesAllPass": 15,
+          "subtests": 1607,
+          "passed": 1583
+        },
+        {
+          "area": "domparsing",
+          "files": 36,
+          "filesAllPass": 25,
+          "subtests": 498,
+          "passed": 335
+        },
+        {
+          "area": "html/dom",
+          "files": 143,
+          "filesAllPass": 77,
+          "subtests": 69278,
+          "passed": 52859
+        },
+        {
+          "area": "total",
+          "files": 963,
+          "filesAllPass": 613,
+          "subtests": 133158,
+          "passed": 107200
+        }
+      ]
+    },
+    "happy-dom": {
+      "version": null,
+      "measured": false,
+      "areas": null,
+      "note": "not measured"
+    },
+    "linkedom": {
+      "version": null,
+      "measured": false,
+      "areas": null,
+      "note": "not measured"
+    }
+  }
+}
