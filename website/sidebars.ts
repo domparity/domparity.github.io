@@ -4,7 +4,8 @@ import apis from './sidebars.generated.json';
 
 const sidebars: SidebarsConfig = {
   apis: [
-    { type: 'category', label: 'APIs', collapsible: false, items: apis },
+    { type: 'category', label: 'Featured APIs', collapsible: false, items: apis },
+    { type: 'link', label: 'Coverage: every API', href: '/coverage' },
     'wpt',
     'about',
   ],

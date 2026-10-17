@@ -84,3 +84,21 @@ test('WPT summary tables are parsed and rendered with the source and unmeasured 
   assert.ok(page.includes('- linkedom: not measured'));
   assert.ok(page.includes('87b5d13099'));
 });
+
+test('every engine section links to a prefilled "wrong result" issue', async () => {
+  const { featuredReport, ISSUES_NEW } = await import('../website/scripts/generate.mjs');
+  const page = renderApiPage(data.apis[0], data);
+  assert.equal((page.match(/<ReportLink href=/g) ?? []).length, 2);
+  assert.ok(page.includes("import ReportLink from '@site/src/components/ReportLink';"));
+  const url = new URL(featuredReport(data.apis[0], { ...data.engines[0], setup: 'new A()' }, data.results.zeta['a@1.0.0'], data));
+  assert.equal(`${url.origin}${url.pathname}`, ISSUES_NEW);
+  assert.equal(url.searchParams.get('title'), 'Wrong result: Zeta <x> in a 1.0.0');
+  const body = url.searchParams.get('body');
+  assert.ok(body.includes('**Engine:** a 1.0.0 (window created with `new A()`)'));
+  assert.ok(body.includes('### Check `c1`'));
+  assert.ok(body.includes('**Expected (per the spec):** Returns <b>{}</b>.'));
+  assert.ok(body.includes("**Observed:** `got '{x}' <y>`"));
+  assert.ok(body.includes('**Logged by the engine:** `Not implemented: zeta`'));
+  const missing = new URL(featuredReport(data.apis[0], data.engines[1], data.results.zeta['b@2.0.0'], data)).searchParams.get('body');
+  assert.ok(missing.includes('**Observed:** not defined'));
+});

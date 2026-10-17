@@ -47,7 +47,8 @@ export default function ResultsTable() {
       <p className="filters__count" aria-live="polite">
         {rows.length} of {data.apis.length} APIs
       </p>
-      <div className="results-wrap">
+      <div className="panel">
+      <div className="dp-scroll">
         <table className="results">
           <caption className="sr-only">Status of each API in each engine</caption>
           <thead>
@@ -82,6 +83,7 @@ export default function ResultsTable() {
             ))}
           </tbody>
         </table>
+      </div>
       </div>
     </div>
   );

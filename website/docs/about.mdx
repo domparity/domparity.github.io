@@ -8,13 +8,14 @@ slug: /about
 import EngineSetups from '@site/src/components/EngineSetups';
 import StatusLegend from '@site/src/components/StatusLegend';
 
-domparity is a reference for one question: does this web platform API work in the DOM my tests run on, and how?
+DomParity is a reference for one question: does this web platform API work in the DOM my tests run on, and how?
 JavaScript unit and component tests usually run in a DOM implemented in JavaScript rather than in a browser. This
-site compares four of them, with the same method for every engine: jsdom, happy-dom, linkedom and warpdom.
+site compares four of them, with the same method for every engine: jsdom, happy-dom, linkedom and warpdom. It has two
+layers: **featured** APIs, each with behavior checks, and **coverage**, an automatic existence check of every web API.
 
 ## Maintainer
 
-domparity is maintained by Sonu Kapoor, who is also the author of [warpdom](https://github.com/sonukapoor/warpdom), one of
+DomParity is maintained by Sonu Kapoor, who is also the author of [warpdom](https://github.com/sonukapoor/warpdom), one of
 the engines compared here. To keep that from shaping the results, every engine goes through the same probes, the
 probes and the raw data are public, and the results show where warpdom fails or deviates as plainly as for the
 others. If a result looks wrong for any engine, please report it (see below).
@@ -42,7 +43,29 @@ description and a link to the relevant part of the specification.
 <StatusLegend />
 
 "Partial" covers both an API that misses one edge of the standard and one that fails most checks; the API page lists
-which checks fail and what the engine returned.
+which checks fail and what the engine returned. "Stub" means that none of the checks works: the API is defined but does
+none of what was asked, whether or not the engine says so (an observer that never delivers an entry is a stub even if it
+reports nothing).
+
+Each check's description names the section of the standard, and for the less obvious ones quotes the step, it relies on.
+
+## Coverage: every web API, existence only
+
+The [Coverage](/coverage) section lists every interface and namespace that the Web IDL of the web platform exposes on
+Window (from [@webref/idl](https://www.npmjs.com/package/@webref/idl), which collects the IDL of all browser specs), with
+every attribute, method and constant, including those added by partial interfaces and mixins in other specs. Each engine
+is checked for each of them, in its own process:
+
+- Interfaces: **present**, **Node.js** (present, but the window's value is Node.js's own global), **stub** (present, but
+  calling a constructor that takes no arguments reports "not implemented"; other constructor errors are shown on the
+  interface page) or **missing**.
+- Members: **present** or **missing**, looked up on the interface prototype (which covers its prototype chain), on the
+  interface object for constants and static members, and on the window itself for Window's own members. Members
+  inherited only from `Object.prototype` do not count.
+
+**Existence is not behavior.** A member that is present may do nothing or the wrong thing; only the featured checks test
+behavior. Web IDL also lists everything browsers expose, WebGL, WebGPU, WebRTC and Bluetooth included, which no test DOM
+aims to implement, so low overall percentages are expected; the per-spec view is the useful one.
 
 Where the window's value is the very same object as Node.js's own global (for example `structuredClone`), the table
 says "Node.js global": the API works because Node.js provides it, not because the engine implements it.
@@ -62,12 +85,15 @@ says "Node.js global": the API works because Node.js provides it, not because th
 
 ## Reporting a wrong result
 
-If a result is wrong, or a check misreads a standard, please open an issue in the GitHub repository (the address
-will be added here once it is public). Include the API, the engine and version, and what you expected with a link
-to the specification.
+Every API page has a "Report a wrong result" link for each engine, which opens a
+[GitHub issue](https://github.com/domparity/domparity.github.io/issues) with the engine, version, API, check, expected
+and observed result filled in; coverage pages have one too. You can also use the
+[wrong result form](https://github.com/domparity/domparity.github.io/issues/new?template=wrong-result.yml). Please add a
+link to the part of the specification that says what should happen.
 
 ## Data and license
 
-The raw data is [results.json](pathname:///data/results.json) (probe results) and [wpt.json](pathname:///data/wpt.json)
-(Web Platform Tests pass rates and their source). Code is under the MIT license; data under
+The raw data is [results.json](pathname:///data/results.json) (featured probe results),
+[idl.json](pathname:///data/idl.json) (coverage) and [wpt.json](pathname:///data/wpt.json) (Web Platform Tests pass
+rates and their source). Code is under the MIT license; data under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

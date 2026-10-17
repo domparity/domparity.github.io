@@ -3,7 +3,7 @@ import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'domparity',
+  title: 'DomParity',
   tagline: 'Which web platform APIs work, and how, in the DOMs that JavaScript unit tests run on.',
   favicon: 'img/favicon.svg',
 
@@ -18,6 +18,17 @@ const config: Config = {
   markdown: { hooks: { onBrokenMarkdownLinks: 'throw' } },
 
   i18n: { defaultLocale: 'en', locales: ['en'] },
+
+  headTags: [
+    { tagName: 'link', attributes: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
+    { tagName: 'link', attributes: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' } },
+  ],
+  stylesheets: [
+    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Montserrat:wght@400;700&display=swap',
+  ],
+
+  // Per-spec and per-interface Coverage pages, from ../data/idl.json.
+  plugins: ['./plugins/coverage.mjs'],
 
   presets: [
     [
@@ -40,12 +51,16 @@ const config: Config = {
   themeConfig: {
     colorMode: { defaultMode: 'light', disableSwitch: false, respectPrefersColorScheme: true },
     navbar: {
-      title: 'domparity',
+      // Placeholder text wordmark. When the logo files are in static/img/, replace
+      // this item with: logo: { alt: 'DomParity', src: 'img/logo.svg', srcDark: 'img/logo-dark.svg' }.
       items: [
-        { to: '/', label: 'Table', position: 'left', activeBaseRegex: '^/$' },
+        { type: 'html', position: 'left', className: 'navbar__item--brand', value: '<a class="wordmark" href="/" aria-label="DomParity home">Dom<b>Parity</b></a>' },
+        { to: '/', label: 'Featured', position: 'left', activeBaseRegex: '^/$' },
+        { to: '/coverage', label: 'Coverage', position: 'left', activeBaseRegex: '^/coverage' },
         { type: 'docSidebar', sidebarId: 'apis', label: 'APIs', position: 'left' },
         { to: '/wpt', label: 'WPT', position: 'left' },
-        { to: '/about', label: 'About and method', position: 'left' },
+        { to: '/about', label: 'About', position: 'left' },
+        { href: 'https://github.com/domparity/domparity.github.io', label: 'GitHub', position: 'right' },
       ],
     },
     footer: {
@@ -55,12 +70,16 @@ const config: Config = {
           title: 'Data',
           items: [
             { label: 'results.json', href: 'pathname:///data/results.json' },
+            { label: 'idl.json', href: 'pathname:///data/idl.json' },
             { label: 'wpt.json', href: 'pathname:///data/wpt.json' },
           ],
         },
         {
           title: 'Project',
-          items: [{ label: 'About and method', to: '/about' }],
+          items: [
+            { label: 'About and method', to: '/about' },
+            { label: 'Report a wrong result', href: 'https://github.com/domparity/domparity.github.io/issues/new?template=wrong-result.yml' },
+          ],
         },
       ],
       copyright:
