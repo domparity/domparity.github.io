@@ -3,7 +3,7 @@ import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'DomParity',
+  title: 'DOMParity',
   tagline: 'Which web platform APIs work, and how, in the DOMs that JavaScript unit tests run on.',
   favicon: 'img/favicon.svg',
 
@@ -22,6 +22,7 @@ const config: Config = {
   headTags: [
     { tagName: 'link', attributes: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
     { tagName: 'link', attributes: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' } },
+    { tagName: 'link', attributes: { rel: 'apple-touch-icon', href: '/img/apple-touch-icon.png' } },
   ],
   stylesheets: [
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Montserrat:wght@400;700&display=swap',
@@ -49,12 +50,11 @@ const config: Config = {
   ],
 
   themeConfig: {
+    image: 'img/social-card.png',
     colorMode: { defaultMode: 'light', disableSwitch: false, respectPrefersColorScheme: true },
     navbar: {
-      // Placeholder text wordmark. When the logo files are in static/img/, replace
-      // this item with: logo: { alt: 'DomParity', src: 'img/logo.svg', srcDark: 'img/logo-dark.svg' }.
+      logo: { alt: 'DOMParity', src: 'img/logo.svg', srcDark: 'img/logo-dark.svg', height: 36 },
       items: [
-        { type: 'html', position: 'left', className: 'navbar__item--brand', value: '<a class="wordmark" href="/" aria-label="DomParity home">Dom<b>Parity</b></a>' },
         { to: '/', label: 'Featured', position: 'left', activeBaseRegex: '^/$' },
         { to: '/coverage', label: 'Coverage', position: 'left', activeBaseRegex: '^/coverage' },
         { type: 'docSidebar', sidebarId: 'apis', label: 'APIs', position: 'left' },

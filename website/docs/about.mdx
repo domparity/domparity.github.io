@@ -8,14 +8,14 @@ slug: /about
 import EngineSetups from '@site/src/components/EngineSetups';
 import StatusLegend from '@site/src/components/StatusLegend';
 
-DomParity is a reference for one question: does this web platform API work in the DOM my tests run on, and how?
+DOMParity is a reference for one question: does this web platform API work in the DOM my tests run on, and how?
 JavaScript unit and component tests usually run in a DOM implemented in JavaScript rather than in a browser. This
 site compares four of them, with the same method for every engine: jsdom, happy-dom, linkedom and warpdom. It has two
 layers: **featured** APIs, each with behavior checks, and **coverage**, an automatic existence check of every web API.
 
 ## Maintainer
 
-DomParity is maintained by Sonu Kapoor, who is also the author of [warpdom](https://github.com/sonukapoor/warpdom), one of
+DOMParity is maintained by Sonu Kapoor, who is also the author of [warpdom](https://github.com/sonukapoor/warpdom), one of
 the engines compared here. To keep that from shaping the results, every engine goes through the same probes, the
 probes and the raw data are public, and the results show where warpdom fails or deviates as plainly as for the
 others. If a result looks wrong for any engine, please report it (see below).

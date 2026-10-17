@@ -11,12 +11,12 @@ export default function Home() {
     <Layout title="Which web APIs work in your test DOM?" description="Which web platform APIs work, and how, in happy-dom, jsdom, linkedom and warpdom.">
       <header className="hero-dp">
         <div className="hero-dp__inner">
-          <span className="hero-dp__eyebrow">DomParity</span>
+          <span className="hero-dp__eyebrow">DOMParity</span>
           <h1>
             Which web APIs work in <em>your test DOM?</em>
           </h1>
           <p>
-            Unit tests run on a DOM written in JavaScript, not a browser. DomParity probes four of them the same way, against
+            Unit tests run on a DOM written in JavaScript, not a browser. DOMParity probes four of them the same way, against
             what the web standards say.
           </p>
           <ul className="engine-pills" aria-label="Engines compared">
