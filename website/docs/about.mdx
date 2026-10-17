@@ -1,0 +1,73 @@
+---
+id: about
+title: About and method
+description: How the probes work, what the statuses mean, the limits, and who maintains this.
+slug: /about
+---
+
+import EngineSetups from '@site/src/components/EngineSetups';
+import StatusLegend from '@site/src/components/StatusLegend';
+
+domparity is a reference for one question: does this web platform API work in the DOM my tests run on, and how?
+JavaScript unit and component tests usually run in a DOM implemented in JavaScript rather than in a browser. This
+site compares four of them, with the same method for every engine: jsdom, happy-dom, linkedom and warpdom.
+
+## Maintainer
+
+domparity is maintained by Sonu Kapoor, who is also the author of [warpdom](https://github.com/sonukapoor/warpdom), one of
+the engines compared here. To keep that from shaping the results, every engine goes through the same probes, the
+probes and the raw data are public, and the results show where warpdom fails or deviates as plainly as for the
+others. If a result looks wrong for any engine, please report it (see below).
+
+## How the probes work
+
+Each API has a probe: a small module that says how to tell whether the API **exists**, and one to four **checks**.
+A check is a tiny behavioral test of what the HTML, DOM, CSSOM or other standard says a browser does, with a one-line
+description and a link to the relevant part of the specification.
+
+- Each engine creates a window in the way its own documentation describes, with no polyfills:
+
+<EngineSetups />
+
+- Every engine runs in its own Node.js child process with a timeout, so one engine cannot affect another.
+- Every check gets a fresh window, so checks cannot affect each other. Each check has a time limit of 3 seconds.
+- Thrown errors become the failure text. Console output during a check is captured: an engine that logs
+  "not implemented" (jsdom does this for some methods, through its virtual console) is recorded as such even when
+  the call returns normally.
+- Only the engines' public, documented APIs are used. The probes are black box: no engine's source code was read to
+  write them.
+
+## Statuses
+
+<StatusLegend />
+
+"Partial" covers both an API that misses one edge of the standard and one that fails most checks; the API page lists
+which checks fail and what the engine returned.
+
+Where the window's value is the very same object as Node.js's own global (for example `structuredClone`), the table
+says "Node.js global": the API works because Node.js provides it, not because the engine implements it.
+
+## Limits
+
+- **Browser behavior per the standards, not every edge case.** A handful of checks per API cannot cover an API's full
+  behavior. A "supported" here means the checks pass, not that the implementation is complete.
+- **The window, not the test runner.** Results describe the engine's window. Test environments such as Vitest's and
+  Jest's copy the window's properties onto the test global, and some of them also keep Node.js's globals; so a test
+  can see an API (for example `structuredClone`, `TextEncoder`, `crypto`) that the engine's window lacks, or the
+  other way round.
+- **No layout.** None of these engines computes layout. Checks avoid asserting sizes and positions, except where the
+  standard's answer does not depend on layout.
+- **One version per engine** for now. The data format keys results by engine and version so more versions can be added.
+- The [Web Platform Tests](/wpt) pass rates come from a separate run (cited on that page) and cover only some areas.
+
+## Reporting a wrong result
+
+If a result is wrong, or a check misreads a standard, please open an issue in the GitHub repository (the address
+will be added here once it is public). Include the API, the engine and version, and what you expected with a link
+to the specification.
+
+## Data and license
+
+The raw data is [results.json](pathname:///data/results.json) (probe results) and [wpt.json](pathname:///data/wpt.json)
+(Web Platform Tests pass rates and their source). Code is under the MIT license; data under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
