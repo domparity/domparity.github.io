@@ -94,6 +94,10 @@ npx docusaurus serve # serves website/build at http://localhost:3000
 `sidebars.generated.json` and copies of the data into `src/data/` and
 `static/data/`. These generated files are git-ignored and must not be edited by
 hand. The home page table is a React component (`src/components/ResultsTable.tsx`).
+The Coverage pages (one per spec and one per interface, about 1,300) are added
+at build time by `website/plugins/coverage.mjs` from `data/idl.json`, using the
+page models in `website/scripts/coverage.mjs`. The palette is defined once, as
+CSS variables at the top of `website/src/css/custom.css`.
 `.github/workflows/deploy.yml` builds and deploys it to GitHub Pages
 (https://domparity.github.io) on push to main.
 
