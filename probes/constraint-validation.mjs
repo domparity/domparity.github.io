@@ -51,15 +51,27 @@ export default {
       },
     },
     {
-      id: 'pattern-and-length',
-      description: 'pattern="[0-9]+" with value "a1" gives patternMismatch; minLength does not apply to a value set by script (tooShort stays false).',
+      id: 'pattern-mismatch',
+      description:
+        'pattern="[0-9]+" with value "a1" (set by script) gives validity.patternMismatch true. HTML §4.10.5.3.6 (the pattern attribute): "If the element\'s value is not the empty string, … and the element has a compiled pattern regular expression but that regular expression does not match the element\'s value, then the element is suffering from a pattern mismatch"; the pattern is anchored as ^(?:[0-9]+)$, and nothing here depends on how the value was set.',
       spec: 'https://html.spec.whatwg.org/multipage/input.html#the-pattern-attribute',
       run(w) {
         const i = w.document.createElement('input');
         i.pattern = '[0-9]+';
-        i.minLength = 5;
         i.value = 'a1';
         equal(i.validity.patternMismatch, true, 'validity.patternMismatch');
+        equal(i.validity.valid, false, 'validity.valid');
+      },
+    },
+    {
+      id: 'too-short-script-value',
+      description:
+        'minLength does not apply to a value set by script: minLength 5 and value "a1" set by script leave validity.tooShort false. HTML §4.10.19.4 (the minlength attribute): an element is suffering from being too short only if "its dirty value flag is true, its value was last changed by a user edit (as opposed to a change made by a script), its value is not the empty string, and the length of the element\'s API value is less than the element\'s minimum allowed value length".',
+      spec: 'https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#setting-minimum-input-length-requirements:-the-minlength-attribute',
+      run(w) {
+        const i = w.document.createElement('input');
+        i.minLength = 5;
+        i.value = 'a1';
         equal(i.validity.tooShort, false, 'validity.tooShort');
       },
     },

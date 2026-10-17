@@ -11,14 +11,23 @@ export default {
   existsDescription: 'typeof element.attachShadow === "function".',
   checks: [
     {
-      id: 'open-closed',
-      description: 'attachShadow({ mode: "open" }) is exposed as element.shadowRoot; mode "closed" gives shadowRoot null.',
+      id: 'attach-open',
+      description: 'attachShadow({ mode: "open" }) returns a shadow root whose host is the element, and element.shadowRoot returns it.',
       spec: SPEC,
       run(w) {
         const a = w.document.createElement('div');
         const root = a.attachShadow({ mode: 'open' });
-        ok(a.shadowRoot === root, 'open: shadowRoot is not the returned root');
-        equal(root.mode, 'open', 'root.mode');
+        ok(a.shadowRoot === root, 'shadowRoot is not the returned root');
+        ok(root.host === a, 'root.host is not the element');
+      },
+    },
+    {
+      id: 'mode-closed',
+      description: 'The root\'s mode reflects the option: "open" for an open root; for mode "closed", element.shadowRoot is null.',
+      spec: 'https://dom.spec.whatwg.org/#dom-element-shadowroot',
+      run(w) {
+        const a = w.document.createElement('div');
+        equal(a.attachShadow({ mode: 'open' }).mode, 'open', 'root.mode');
         const b = w.document.createElement('div');
         b.attachShadow({ mode: 'closed' });
         equal(b.shadowRoot, null, 'closed: shadowRoot');

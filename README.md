@@ -22,8 +22,10 @@ show where each engine, warpdom included, fails or deviates.
   reports (thrown or logged) are recorded.
 - Status per engine (`src/classify.mjs`):
   - **supported**: exists and every check passes
-  - **partial**: exists, at least one check fails (the data says which)
-  - **stub**: exists, no check works, and the engine reports "not implemented"
+  - **partial**: exists, at least one check works and at least one fails (the
+    data says which)
+  - **stub**: exists, but no check works: each fails, or the engine reports
+    "not implemented" while it runs
   - **missing**: not defined
 - Black box only: no engine's source code is read to write the probes.
 

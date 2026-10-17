@@ -18,8 +18,13 @@ test('partial when some checks fail', () => {
   assert.equal(classify({ exists: true, checks: [pass('a'), fail('b')] }), 'partial');
 });
 
-test('partial, not stub, when every check fails without a "not implemented" report', () => {
-  assert.equal(classify({ exists: true, checks: [fail('a'), fail('b')] }), 'partial');
+test('stub when every check fails, even without a "not implemented" report', () => {
+  assert.equal(classify({ exists: true, checks: [fail('a'), fail('b')] }), 'stub');
+  assert.equal(classify({ exists: true, checks: [fail('a')] }), 'stub');
+});
+
+test('partial, not stub, as soon as one check works', () => {
+  assert.equal(classify({ exists: true, checks: [pass('a'), fail('b'), fail('c')] }), 'partial');
 });
 
 test('stub when every check fails and the engine throws "not implemented"', () => {

@@ -11,7 +11,8 @@ export default {
   checks: [
     {
       id: 'observe',
-      description: 'new ResizeObserver(cb).observe(el) and disconnect() do not throw.',
+      description:
+        'new ResizeObserver(cb).observe(el) and disconnect() do not throw. Resize Observer §2.1: the constructor, observe(target, options) and disconnect() steps have no step that throws.',
       spec: 'https://drafts.csswg.org/resize-observer/#dom-resizeobserver-observe',
       run(w) {
         const el = w.document.body.appendChild(w.document.createElement('div'));
@@ -22,8 +23,9 @@ export default {
     },
     {
       id: 'initial-notification',
-      description: 'Observing a connected element delivers an initial entry for it (browsers do this at the next rendering update).',
-      spec: 'https://drafts.csswg.org/resize-observer/#intro',
+      description:
+        'Observing a connected element delivers an initial entry for it, whatever its size. Resize Observer §3.1: new ResizeObservation sets lastReportedSizes to [(-1,-1)], and isActive() is true when the current size differs from it, which any size (0×0 included) does; §3.4.1 gathers active observations and §3.4.5 invokes the callback with their entries. HTML runs these in the event loop\'s "update the rendering" steps ("gather active resize observations", "broadcast active resize observations"). The intro sums it up: "Observation will fire when observation starts."',
+      spec: 'https://drafts.csswg.org/resize-observer/#resize-observation-interface',
       async run(w) {
         const el = w.document.body.appendChild(w.document.createElement('div'));
         const entries = [];
