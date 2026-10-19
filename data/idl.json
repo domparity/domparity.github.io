@@ -1,7 +1,7 @@
 {
  "schema": 1,
  "license": "CC BY 4.0",
- "date": "2026-10-17T18:45:11.038Z",
+ "date": "2026-10-19T01:47:33.758Z",
  "node": "v22.23.3",
  "webref": {
   "package": "@webref/idl",
@@ -13,9 +13,9 @@
  },
  "engines": [
   {
-   "key": "warpdom@0.1.4",
+   "key": "warpdom@0.1.5",
    "engine": "warpdom",
-   "version": "0.1.4"
+   "version": "0.1.5"
   },
   {
    "key": "happy-dom@21.0.3",
@@ -90,25 +90,25 @@
    "interfaces": {
     "Blob": {
      "kind": "interface",
-     "status": "-PPN",
+     "status": "PPPN",
      "members": [
-      ["size", "a", "0111"],
-      ["type", "a", "0011"],
-      ["slice", "o", "0111"],
+      ["size", "a", "1111"],
+      ["type", "a", "1011"],
+      ["slice", "o", "1111"],
       ["stream", "o", "0101"],
-      ["text", "o", "0111"],
-      ["arrayBuffer", "o", "0111"],
+      ["text", "o", "1111"],
+      ["arrayBuffer", "o", "1111"],
       ["textStream", "o", "0000"],
-      ["bytes", "o", "0011"]
+      ["bytes", "o", "1011"]
      ]
     },
     "File": {
      "kind": "interface",
      "inherits": "Blob",
-     "status": "-PPN",
+     "status": "PPPN",
      "members": [
-      ["name", "a", "0011"],
-      ["lastModified", "a", "0011"]
+      ["name", "a", "1011"],
+      ["lastModified", "a", "1011"]
      ]
     },
     "FileList": {
@@ -5174,12 +5174,12 @@
    "interfaces": {
     "TextDecoder": {
      "kind": "interface",
-     "status": "-NPN",
+     "status": "PNPN",
      "members": [
-      ["decode", "o", "0111"],
-      ["encoding", "a", "0111"],
-      ["fatal", "a", "0111"],
-      ["ignoreBOM", "a", "0111"]
+      ["decode", "o", "1111"],
+      ["encoding", "a", "1111"],
+      ["fatal", "a", "1111"],
+      ["ignoreBOM", "a", "1111"]
      ]
     },
     "TextDecoderStream": {
@@ -5193,11 +5193,11 @@
     },
     "TextEncoder": {
      "kind": "interface",
-     "status": "-NPN",
+     "status": "PNPN",
      "members": [
-      ["encode", "o", "0111"],
-      ["encodeInto", "o", "0111"],
-      ["encoding", "a", "0111"]
+      ["encode", "o", "1111"],
+      ["encodeInto", "o", "1111"],
+      ["encoding", "a", "1111"]
      ]
     },
     "TextEncoderStream": {
@@ -6758,16 +6758,16 @@
     "Performance": {
      "kind": "interface",
      "inherits": "EventTarget",
-     "status": "--PN",
+     "status": "P-PN",
      "members": [
-      ["now", "o", "0011"],
-      ["timeOrigin", "a", "0011"],
-      ["toJSON", "o", "0011"]
+      ["now", "o", "1011"],
+      ["timeOrigin", "a", "1011"],
+      ["toJSON", "o", "1011"]
      ]
     },
     "Window": {
      "members": [
-      ["performance", "a", "0111"]
+      ["performance", "a", "1111"]
      ]
     }
    }
@@ -6955,7 +6955,7 @@
      "kind": "interface",
      "status": "PPP-",
      "ctor": {
-      "warpdom@0.1.4": "TypeError: Illegal constructor",
+      "warpdom@0.1.5": "TypeError: Illegal constructor",
       "happy-dom@21.0.3": "TypeError: Illegal constructor",
       "jsdom@30.1.3": "TypeError: Illegal constructor"
      },
@@ -15058,11 +15058,11 @@
    "interfaces": {
     "Crypto": {
      "kind": "interface",
-     "status": "--PN",
+     "status": "P-PN",
      "members": [
       ["subtle", "a", "0001"],
-      ["getRandomValues", "o", "0011"],
-      ["randomUUID", "o", "0011"]
+      ["getRandomValues", "o", "1011"],
+      ["randomUUID", "o", "1011"]
      ]
     },
     "CryptoKey": {
@@ -15095,7 +15095,7 @@
     },
     "Window": {
      "members": [
-      ["crypto", "a", "0111"]
+      ["crypto", "a", "1111"]
      ]
     }
    }
