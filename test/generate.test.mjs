@@ -83,6 +83,12 @@ test('WPT summary tables are parsed and rendered with the source and unmeasured 
   assert.ok(page.includes('| **Total** | 37 | 37 | 100.0% |'));
   assert.ok(page.includes('- linkedom: not measured'));
   assert.ok(page.includes('87b5d13099'));
+  assert.ok(!page.includes('tuned'));
+  const withCaveat = renderWpt({
+    source: { wptCommit: '87b5d13099c8', wptCommitUrl: 'https://x/', date: '2026-10-13', node: 'v22', file: 'f.md', repository: 'https://r', githubRun: '1', areas: ['dom'], notes: 'n', caveat: 'warpdom was tuned on dom.' },
+    engines: { warpdom: { measured: true, version: 'c1', areas: tables.warpdom } },
+  });
+  assert.ok(withCaveat.includes('\nwarpdom was tuned on dom.\n'));
 });
 
 test('every engine section links to a prefilled "wrong result" issue', async () => {

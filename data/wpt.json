@@ -1,40 +1,201 @@
 {
   "license": "CC BY 4.0",
   "source": {
-    "description": "Web Platform Tests run by warpdom's WPT workflow (wpt.yml) on GitHub-hosted runners; the four area jobs' results merged with the workflow's own merge and summary scripts.",
+    "description": "Web Platform Tests run by warpdom's WPT workflow (wpt.yml) on GitHub-hosted runners at the newest WPT commit: the 17 areas a test DOM is expected to cover (21 jobs, encoding split in six), merged with the workflow's own merge and summary scripts.",
     "repository": "https://github.com/sonukapoor/warpdom",
-    "file": "docs/research/data/wpt/ci-2026-10-13-208ad49/summary.md",
-    "githubRun": "38427179332",
-    "wptCommit": "87b5d13099c8bc2f9047ce1d29c963a3e0a246f6",
-    "wptCommitUrl": "https://github.com/web-platform-tests/wpt/tree/87b5d13099c8bc2f9047ce1d29c963a3e0a246f6",
-    "date": "2026-10-13",
+    "file": "docs/research/data/wpt/ci-2026-10-19-9d1498b/summary.md",
+    "githubRun": "39189276229",
+    "wptCommit": "6cd3f1c39e2aec3d58f140aa0ff2991d79eb9991",
+    "wptCommitUrl": "https://github.com/web-platform-tests/wpt/tree/6cd3f1c39e2aec3d58f140aa0ff2991d79eb9991",
+    "date": "2026-10-19",
     "areas": [
-      "css/cssom",
       "dom",
       "domparsing",
-      "html/dom"
+      "html/dom",
+      "css/cssom",
+      "css/cssom-view",
+      "html/semantics/forms",
+      "html/semantics/interactive-elements",
+      "url",
+      "encoding",
+      "encoding/streams",
+      "FileAPI",
+      "WebCryptoAPI",
+      "hr-time",
+      "user-timing",
+      "resize-observer",
+      "intersection-observer",
+      "web-animations/interfaces"
     ],
     "node": "v22.23.3",
-    "notes": "Subtests that the runner cannot run outside a browser (testdriver, tentative tests) are skipped for every engine alike. \"Pass rate\" is passed subtests / subtests; \"score\" averages the per-file pass fraction, so large files weigh less. Subtest counts can differ slightly between engines when a test file stops early in one of them."
+    "caveat": "warpdom was worked on against the first four areas (dom, domparsing, html/dom and css/cssom; 87.4% vs jsdom 80.5% there in the 2026-10-13 run, GitHub Actions run 38427179332), so those are not an independent check of it. Neither engine implements WebCrypto's subtle, the resize and intersection observers or Web Animations, which keeps both totals low. The versions run here can be older than the probed versions on the other pages.",
+    "notes": "Subtests that the runner cannot run outside a browser (testdriver, tentative tests) are skipped for every engine alike. \"Pass rate\" is passed subtests / subtests; \"score\" averages the per-file pass fraction, so large files weigh less. Subtest counts can differ between engines when a test file stops early in one of them: the Subtests column is warpdom's, and each engine's rate is over its own count (jsdom stops early in several WebCryptoAPI files, so it has 176,171 subtests in total to warpdom's 186,857)."
   },
   "engines": {
     "warpdom": {
-      "version": "commit 8630317 (2026-10-13, before the 0.1.0 release)",
+      "version": "commit 9d1498b (main, 2026-10-18, one commit after the 0.1.5 release)",
       "measured": true,
       "areas": [
         {
+          "area": "FileAPI",
+          "files": 6,
+          "filesAllPass": 2,
+          "subtests": 204,
+          "passed": 180
+        },
+        {
+          "area": "FileAPI/BlobURL",
+          "files": 5,
+          "filesAllPass": 0,
+          "subtests": 18,
+          "passed": 0
+        },
+        {
+          "area": "FileAPI/FileReader",
+          "files": 2,
+          "filesAllPass": 1,
+          "subtests": 2,
+          "passed": 1
+        },
+        {
+          "area": "FileAPI/blob",
+          "files": 14,
+          "filesAllPass": 8,
+          "subtests": 325,
+          "passed": 304
+        },
+        {
+          "area": "FileAPI/file",
+          "files": 15,
+          "filesAllPass": 4,
+          "subtests": 207,
+          "passed": 97
+        },
+        {
+          "area": "FileAPI/filelist-section",
+          "files": 1,
+          "filesAllPass": 1,
+          "subtests": 7,
+          "passed": 7
+        },
+        {
+          "area": "FileAPI/reading-data-section",
+          "files": 14,
+          "filesAllPass": 12,
+          "subtests": 51,
+          "passed": 48
+        },
+        {
+          "area": "FileAPI/url",
+          "files": 12,
+          "filesAllPass": 0,
+          "subtests": 41,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI",
+          "files": 9,
+          "filesAllPass": 1,
+          "subtests": 160,
+          "passed": 95
+        },
+        {
+          "area": "WebCryptoAPI/derive_bits_keys",
+          "files": 19,
+          "filesAllPass": 0,
+          "subtests": 76,
+          "passed": 2
+        },
+        {
+          "area": "WebCryptoAPI/digest",
+          "files": 1,
+          "filesAllPass": 0,
+          "subtests": 116,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI/encrypt_decrypt",
+          "files": 5,
+          "filesAllPass": 0,
+          "subtests": 5,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI/generateKey",
+          "files": 46,
+          "filesAllPass": 0,
+          "subtests": 5781,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI/import_export",
+          "files": 11,
+          "filesAllPass": 0,
+          "subtests": 5318,
+          "passed": 34
+        },
+        {
+          "area": "WebCryptoAPI/modern-algos",
+          "files": 41,
+          "filesAllPass": 0,
+          "subtests": 6799,
+          "passed": 7
+        },
+        {
+          "area": "WebCryptoAPI/secure-curves",
+          "files": 14,
+          "filesAllPass": 1,
+          "subtests": 1852,
+          "passed": 20
+        },
+        {
+          "area": "WebCryptoAPI/secure_context",
+          "files": 1,
+          "filesAllPass": 0,
+          "subtests": 2,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI/serialization",
+          "files": 12,
+          "filesAllPass": 0,
+          "subtests": 36,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI/sign_verify",
+          "files": 6,
+          "filesAllPass": 0,
+          "subtests": 570,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI/wrapKey_unwrapKey",
+          "files": 2,
+          "filesAllPass": 0,
+          "subtests": 4,
+          "passed": 0
+        },
+        {
+          "area": "css/cssom-view",
+          "files": 221,
+          "filesAllPass": 32,
+          "subtests": 2464,
+          "passed": 606
+        },
+        {
           "area": "css/cssom",
-          "files": 250,
+          "files": 252,
           "filesAllPass": 128,
-          "subtests": 4333,
-          "passed": 2880
+          "subtests": 4339,
+          "passed": 2882
         },
         {
           "area": "dom",
-          "files": 10,
+          "files": 11,
           "filesAllPass": 8,
-          "subtests": 2102,
-          "passed": 1998
+          "subtests": 2119,
+          "passed": 2006
         },
         {
           "area": "dom/abort",
@@ -45,17 +206,17 @@
         },
         {
           "area": "dom/collections",
-          "files": 11,
-          "filesAllPass": 11,
-          "subtests": 55,
-          "passed": 55
+          "files": 12,
+          "filesAllPass": 12,
+          "subtests": 60,
+          "passed": 60
         },
         {
           "area": "dom/events",
           "files": 91,
-          "filesAllPass": 66,
+          "filesAllPass": 68,
           "subtests": 715,
-          "passed": 600
+          "passed": 602
         },
         {
           "area": "dom/lists",
@@ -66,10 +227,10 @@
         },
         {
           "area": "dom/nodes",
-          "files": 348,
-          "filesAllPass": 249,
-          "subtests": 9924,
-          "passed": 7210
+          "files": 355,
+          "filesAllPass": 253,
+          "subtests": 9956,
+          "passed": 7222
         },
         {
           "area": "dom/ranges",
@@ -87,24 +248,122 @@
         },
         {
           "area": "domparsing",
-          "files": 36,
+          "files": 45,
           "filesAllPass": 24,
-          "subtests": 498,
-          "passed": 334
+          "subtests": 1127,
+          "passed": 341
+        },
+        {
+          "area": "encoding",
+          "files": 46,
+          "filesAllPass": 31,
+          "subtests": 12061,
+          "passed": 11622
+        },
+        {
+          "area": "encoding/legacy-mb-japanese",
+          "files": 482,
+          "filesAllPass": 0,
+          "subtests": 482,
+          "passed": 0
+        },
+        {
+          "area": "encoding/legacy-mb-korean",
+          "files": 435,
+          "filesAllPass": 0,
+          "subtests": 435,
+          "passed": 0
+        },
+        {
+          "area": "encoding/legacy-mb-schinese",
+          "files": 4,
+          "filesAllPass": 2,
+          "subtests": 660,
+          "passed": 359
+        },
+        {
+          "area": "encoding/legacy-mb-tchinese",
+          "files": 283,
+          "filesAllPass": 1,
+          "subtests": 405,
+          "passed": 123
+        },
+        {
+          "area": "encoding/streams",
+          "files": 13,
+          "filesAllPass": 11,
+          "subtests": 119,
+          "passed": 114
+        },
+        {
+          "area": "hr-time",
+          "files": 13,
+          "filesAllPass": 2,
+          "subtests": 48,
+          "passed": 36
         },
         {
           "area": "html/dom",
           "files": 143,
           "filesAllPass": 103,
-          "subtests": 69294,
-          "passed": 61196
+          "subtests": 69364,
+          "passed": 61202
+        },
+        {
+          "area": "html/semantics",
+          "files": 424,
+          "filesAllPass": 210,
+          "subtests": 4954,
+          "passed": 3498
+        },
+        {
+          "area": "intersection-observer",
+          "files": 112,
+          "filesAllPass": 0,
+          "subtests": 197,
+          "passed": 5
+        },
+        {
+          "area": "intersection-observer/v2",
+          "files": 38,
+          "filesAllPass": 0,
+          "subtests": 40,
+          "passed": 0
+        },
+        {
+          "area": "resize-observer",
+          "files": 34,
+          "filesAllPass": 0,
+          "subtests": 82,
+          "passed": 5
+        },
+        {
+          "area": "url",
+          "files": 44,
+          "filesAllPass": 29,
+          "subtests": 8784,
+          "passed": 7138
+        },
+        {
+          "area": "user-timing",
+          "files": 36,
+          "filesAllPass": 2,
+          "subtests": 177,
+          "passed": 39
+        },
+        {
+          "area": "web-animations/interfaces",
+          "files": 43,
+          "filesAllPass": 0,
+          "subtests": 368,
+          "passed": 5
         },
         {
           "area": "total",
-          "files": 963,
-          "filesAllPass": 655,
-          "subtests": 133248,
-          "passed": 116410
+          "files": 3447,
+          "filesAllPass": 1012,
+          "subtests": 186857,
+          "passed": 140797
         }
       ]
     },
@@ -119,18 +378,165 @@
       "measured": true,
       "areas": [
         {
+          "area": "FileAPI",
+          "files": 6,
+          "filesAllPass": 2,
+          "subtests": 201,
+          "passed": 129
+        },
+        {
+          "area": "FileAPI/BlobURL",
+          "files": 5,
+          "filesAllPass": 0,
+          "subtests": 18,
+          "passed": 0
+        },
+        {
+          "area": "FileAPI/FileReader",
+          "files": 2,
+          "filesAllPass": 1,
+          "subtests": 2,
+          "passed": 1
+        },
+        {
+          "area": "FileAPI/blob",
+          "files": 14,
+          "filesAllPass": 8,
+          "subtests": 325,
+          "passed": 300
+        },
+        {
+          "area": "FileAPI/file",
+          "files": 15,
+          "filesAllPass": 4,
+          "subtests": 207,
+          "passed": 97
+        },
+        {
+          "area": "FileAPI/filelist-section",
+          "files": 1,
+          "filesAllPass": 0,
+          "subtests": 7,
+          "passed": 6
+        },
+        {
+          "area": "FileAPI/reading-data-section",
+          "files": 14,
+          "filesAllPass": 11,
+          "subtests": 51,
+          "passed": 45
+        },
+        {
+          "area": "FileAPI/url",
+          "files": 12,
+          "filesAllPass": 0,
+          "subtests": 41,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI",
+          "files": 9,
+          "filesAllPass": 2,
+          "subtests": 159,
+          "passed": 63
+        },
+        {
+          "area": "WebCryptoAPI/derive_bits_keys",
+          "files": 19,
+          "filesAllPass": 0,
+          "subtests": 76,
+          "passed": 2
+        },
+        {
+          "area": "WebCryptoAPI/digest",
+          "files": 1,
+          "filesAllPass": 0,
+          "subtests": 116,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI/encrypt_decrypt",
+          "files": 5,
+          "filesAllPass": 0,
+          "subtests": 5,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI/generateKey",
+          "files": 46,
+          "filesAllPass": 0,
+          "subtests": 405,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI/import_export",
+          "files": 11,
+          "filesAllPass": 0,
+          "subtests": 5318,
+          "passed": 34
+        },
+        {
+          "area": "WebCryptoAPI/modern-algos",
+          "files": 41,
+          "filesAllPass": 0,
+          "subtests": 2249,
+          "passed": 7
+        },
+        {
+          "area": "WebCryptoAPI/secure-curves",
+          "files": 14,
+          "filesAllPass": 1,
+          "subtests": 1600,
+          "passed": 20
+        },
+        {
+          "area": "WebCryptoAPI/secure_context",
+          "files": 1,
+          "filesAllPass": 0,
+          "subtests": 2,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI/serialization",
+          "files": 12,
+          "filesAllPass": 0,
+          "subtests": 36,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI/sign_verify",
+          "files": 6,
+          "filesAllPass": 0,
+          "subtests": 247,
+          "passed": 0
+        },
+        {
+          "area": "WebCryptoAPI/wrapKey_unwrapKey",
+          "files": 2,
+          "filesAllPass": 0,
+          "subtests": 4,
+          "passed": 0
+        },
+        {
+          "area": "css/cssom-view",
+          "files": 221,
+          "filesAllPass": 32,
+          "subtests": 2379,
+          "passed": 573
+        },
+        {
           "area": "css/cssom",
-          "files": 250,
+          "files": 252,
           "filesAllPass": 133,
-          "subtests": 4320,
+          "subtests": 4326,
           "passed": 2878
         },
         {
           "area": "dom",
-          "files": 10,
+          "files": 11,
           "filesAllPass": 8,
-          "subtests": 2041,
-          "passed": 1337
+          "subtests": 2058,
+          "passed": 1354
         },
         {
           "area": "dom/abort",
@@ -141,10 +547,10 @@
         },
         {
           "area": "dom/collections",
-          "files": 11,
-          "filesAllPass": 11,
-          "subtests": 55,
-          "passed": 55
+          "files": 12,
+          "filesAllPass": 12,
+          "subtests": 60,
+          "passed": 60
         },
         {
           "area": "dom/events",
@@ -162,10 +568,10 @@
         },
         {
           "area": "dom/nodes",
-          "files": 348,
-          "filesAllPass": 227,
-          "subtests": 9924,
-          "passed": 7133
+          "files": 355,
+          "filesAllPass": 233,
+          "subtests": 9956,
+          "passed": 7144
         },
         {
           "area": "dom/ranges",
@@ -183,24 +589,122 @@
         },
         {
           "area": "domparsing",
-          "files": 36,
+          "files": 45,
           "filesAllPass": 25,
-          "subtests": 498,
-          "passed": 335
+          "subtests": 1127,
+          "passed": 342
+        },
+        {
+          "area": "encoding",
+          "files": 46,
+          "filesAllPass": 18,
+          "subtests": 12059,
+          "passed": 7839
+        },
+        {
+          "area": "encoding/legacy-mb-japanese",
+          "files": 482,
+          "filesAllPass": 0,
+          "subtests": 482,
+          "passed": 0
+        },
+        {
+          "area": "encoding/legacy-mb-korean",
+          "files": 435,
+          "filesAllPass": 0,
+          "subtests": 435,
+          "passed": 0
+        },
+        {
+          "area": "encoding/legacy-mb-schinese",
+          "files": 4,
+          "filesAllPass": 2,
+          "subtests": 660,
+          "passed": 359
+        },
+        {
+          "area": "encoding/legacy-mb-tchinese",
+          "files": 283,
+          "filesAllPass": 1,
+          "subtests": 405,
+          "passed": 123
+        },
+        {
+          "area": "encoding/streams",
+          "files": 13,
+          "filesAllPass": 0,
+          "subtests": 119,
+          "passed": 0
+        },
+        {
+          "area": "hr-time",
+          "files": 13,
+          "filesAllPass": 2,
+          "subtests": 48,
+          "passed": 32
         },
         {
           "area": "html/dom",
           "files": 143,
           "filesAllPass": 77,
-          "subtests": 69278,
-          "passed": 52859
+          "subtests": 69348,
+          "passed": 52863
+        },
+        {
+          "area": "html/semantics",
+          "files": 424,
+          "filesAllPass": 229,
+          "subtests": 4954,
+          "passed": 3822
+        },
+        {
+          "area": "intersection-observer",
+          "files": 112,
+          "filesAllPass": 0,
+          "subtests": 197,
+          "passed": 5
+        },
+        {
+          "area": "intersection-observer/v2",
+          "files": 38,
+          "filesAllPass": 0,
+          "subtests": 40,
+          "passed": 0
+        },
+        {
+          "area": "resize-observer",
+          "files": 34,
+          "filesAllPass": 0,
+          "subtests": 82,
+          "passed": 5
+        },
+        {
+          "area": "url",
+          "files": 44,
+          "filesAllPass": 28,
+          "subtests": 8782,
+          "passed": 6394
+        },
+        {
+          "area": "user-timing",
+          "files": 36,
+          "filesAllPass": 1,
+          "subtests": 175,
+          "passed": 14
+        },
+        {
+          "area": "web-animations/interfaces",
+          "files": 43,
+          "filesAllPass": 0,
+          "subtests": 368,
+          "passed": 5
         },
         {
           "area": "total",
-          "files": 963,
-          "filesAllPass": 613,
-          "subtests": 133158,
-          "passed": 107200
+          "files": 3447,
+          "filesAllPass": 962,
+          "subtests": 176171,
+          "passed": 127119
         }
       ]
     },

@@ -217,6 +217,7 @@ export function renderWpt(wpt) {
     '',
     `Pass rates of the ${link('Web Platform Tests', 'https://web-platform-tests.org/')} (WPT), the browsers' shared conformance suite, in the areas ${s.areas.map(mdxCode).join(', ')}. They complement the probes: many more tests, but only for the areas that were run.`,
     '',
+    ...(s.caveat ? [mdxText(s.caveat), ''] : []),
     `- WPT commit: ${link(s.wptCommit.slice(0, 10), s.wptCommitUrl)}, run on ${s.date}, Node.js ${s.node}`,
     `- Source: ${link(s.file, `${s.repository}/blob/main/${s.file}`)} in ${link('warpdom', s.repository)} (GitHub Actions run ${s.githubRun})`,
     ...Object.entries(wpt.engines).map(
