@@ -2,6 +2,194 @@
   "description": "What changed in the data, newest first: one entry per update (date, engine versions, featured status changes, Web IDL changes per engine, specs and interfaces added from @webref/idl). Appended by scripts/update.mjs; the site's What changed page is generated from it.",
   "entries": [
     {
+      "date": "2026-10-20",
+      "engines": [
+        {
+          "engine": "warpdom",
+          "from": "0.1.6",
+          "version": "0.1.7"
+        },
+        {
+          "engine": "happy-dom",
+          "from": "21.0.3",
+          "version": "21.0.4"
+        },
+        {
+          "engine": "jsdom",
+          "version": "30.1.3"
+        },
+        {
+          "engine": "linkedom",
+          "version": "0.18.13"
+        }
+      ],
+      "packages": [],
+      "featured": [],
+      "apisAdded": [],
+      "apisRemoved": [],
+      "idl": [
+        {
+          "engine": "warpdom",
+          "interfaces": 28,
+          "nowPresent": 191,
+          "nowMissing": 0,
+          "examples": {
+            "interfaces": [
+              {
+                "name": "SVGAnimatedPreserveAspectRatio",
+                "spec": "SVG",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "SVGAnimatedRect",
+                "spec": "SVG",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "SVGAnimatedString",
+                "spec": "SVG",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "SVGDefsElement",
+                "spec": "SVG",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "SVGDescElement",
+                "spec": "SVG",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "SVGGElement",
+                "spec": "SVG",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "SVGMetadataElement",
+                "spec": "SVG",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "SVGNumber",
+                "spec": "SVG",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "SVGPreserveAspectRatio",
+                "spec": "SVG",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "SVGStringList",
+                "spec": "SVG",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "SVGSwitchElement",
+                "spec": "SVG",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "SVGSymbolElement",
+                "spec": "SVG",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSNestedDeclarations",
+                "spec": "css-nesting",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "ElementInternals",
+                "spec": "html",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "HTMLSelectedContentElement",
+                "spec": "html",
+                "from": "P",
+                "to": "-"
+              },
+              {
+                "name": "MimeType",
+                "spec": "html",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "MimeTypeArray",
+                "spec": "html",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "PageTransitionEvent",
+                "spec": "html",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "Plugin",
+                "spec": "html",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "PluginArray",
+                "spec": "html",
+                "from": "-",
+                "to": "P"
+              }
+            ],
+            "nowPresent": [
+              "SVGAnimatedPreserveAspectRatio.baseVal",
+              "SVGAnimatedPreserveAspectRatio.animVal",
+              "SVGAnimatedRect.baseVal",
+              "SVGAnimatedRect.animVal",
+              "SVGAnimatedString.baseVal",
+              "SVGAnimatedString.animVal",
+              "SVGElement.ownerSVGElement",
+              "SVGElement.viewportElement",
+              "SVGGraphicsElement.requiredExtensions",
+              "SVGGraphicsElement.systemLanguage",
+              "SVGNumber.value",
+              "SVGPreserveAspectRatio.SVG_PRESERVEASPECTRATIO_UNKNOWN",
+              "SVGPreserveAspectRatio.SVG_PRESERVEASPECTRATIO_NONE",
+              "SVGPreserveAspectRatio.SVG_PRESERVEASPECTRATIO_XMINYMIN",
+              "SVGPreserveAspectRatio.SVG_PRESERVEASPECTRATIO_XMIDYMIN",
+              "SVGPreserveAspectRatio.SVG_PRESERVEASPECTRATIO_XMAXYMIN",
+              "SVGPreserveAspectRatio.SVG_PRESERVEASPECTRATIO_XMINYMID",
+              "SVGPreserveAspectRatio.SVG_PRESERVEASPECTRATIO_XMIDYMID",
+              "SVGPreserveAspectRatio.SVG_PRESERVEASPECTRATIO_XMAXYMID",
+              "SVGPreserveAspectRatio.SVG_PRESERVEASPECTRATIO_XMINYMAX"
+            ],
+            "nowMissing": []
+          }
+        }
+      ],
+      "specsAdded": [],
+      "specsRemoved": [],
+      "interfacesAdded": 0,
+      "interfacesRemoved": 0,
+      "membersAdded": 0,
+      "membersRemoved": 0
+    },
+    {
       "date": "2026-10-19",
       "engines": [
         {
