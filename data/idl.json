@@ -1,7 +1,7 @@
 {
  "schema": 1,
  "license": "CC BY 4.0",
- "date": "2026-10-20T21:16:14.124Z",
+ "date": "2026-10-21T10:33:59.576Z",
  "node": "v22.23.3",
  "webref": {
   "package": "@webref/idl",
@@ -28,9 +28,9 @@
    "version": "30.1.3"
   },
   {
-   "key": "linkedom@0.18.13",
+   "key": "linkedom@0.18.14",
    "engine": "linkedom",
-   "version": "0.18.13"
+   "version": "0.18.14"
   }
  ],
  "codes": {
@@ -4501,7 +4501,7 @@
      "inherits": "CharacterData",
      "status": "PPPP",
      "ctor": {
-      "linkedom@0.18.13": "TypeError: Illegal constructor"
+      "linkedom@0.18.14": "TypeError: Illegal constructor"
      }
     },
     "CustomEvent": {
@@ -4518,7 +4518,7 @@
      "inherits": "Node",
      "status": "PPPP",
      "ctor": {
-      "linkedom@0.18.13": "TypeError: Illegal constructor"
+      "linkedom@0.18.14": "TypeError: Illegal constructor"
      },
      "members": [
       ["implementation", "a", "1110"],
@@ -4571,7 +4571,7 @@
      "inherits": "Node",
      "status": "PPPP",
      "ctor": {
-      "linkedom@0.18.13": "TypeError: Illegal constructor"
+      "linkedom@0.18.14": "TypeError: Illegal constructor"
      },
      "members": [
       ["getElementById", "o", "1111"],
@@ -4953,7 +4953,7 @@
      "inherits": "CharacterData",
      "status": "PPPP",
      "ctor": {
-      "linkedom@0.18.13": "TypeError: Illegal constructor"
+      "linkedom@0.18.14": "TypeError: Illegal constructor"
      },
      "members": [
       ["splitText", "o", "1110"],
