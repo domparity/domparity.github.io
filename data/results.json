@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "date": "2026-10-20T21:16:12.570Z",
+  "date": "2026-10-21T10:33:57.464Z",
   "node": "v22.23.3",
   "engines": [
     {
@@ -25,10 +25,10 @@
       "setup": "new JSDOM(html, { url: 'http://localhost/', pretendToBeVisual: true })"
     },
     {
-      "key": "linkedom@0.18.13",
+      "key": "linkedom@0.18.14",
       "engine": "linkedom",
       "package": "linkedom",
-      "version": "0.18.13",
+      "version": "0.18.14",
       "setup": "parseHTML(html)"
     }
   ],
@@ -653,7 +653,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "supported",
         "exists": true,
         "sameAsNode": true,
@@ -707,7 +707,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -759,7 +759,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -799,7 +799,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "supported",
         "exists": true,
         "sameAsNode": true,
@@ -860,7 +860,7 @@
         ],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -913,7 +913,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -959,7 +959,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1001,7 +1001,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1044,7 +1044,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "stub",
         "exists": true,
         "sameAsNode": true,
@@ -1096,7 +1096,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -1146,7 +1146,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1179,7 +1179,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1221,7 +1221,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -1272,7 +1272,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1314,7 +1314,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1351,7 +1351,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1383,7 +1383,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1438,7 +1438,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -1487,7 +1487,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "supported",
         "exists": true,
         "sameAsNode": true,
@@ -1531,7 +1531,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "supported",
         "exists": true,
         "sameAsNode": true,
@@ -1568,7 +1568,7 @@
         "failed": [],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1639,7 +1639,7 @@
         ],
         "error": null
       },
-      "linkedom@0.18.13": {
+      "linkedom@0.18.14": {
         "status": "missing",
         "exists": false,
         "passed": [],
