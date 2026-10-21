@@ -1,20 +1,20 @@
 {
   "schema": 1,
-  "date": "2026-10-19T17:05:29.553Z",
+  "date": "2026-10-20T21:16:12.570Z",
   "node": "v22.23.3",
   "engines": [
     {
-      "key": "warpdom@0.1.6",
+      "key": "warpdom@0.1.7",
       "engine": "warpdom",
       "package": "warpdom",
-      "version": "0.1.6",
+      "version": "0.1.7",
       "setup": "createWindow({ url: 'http://localhost/' })"
     },
     {
-      "key": "happy-dom@21.0.3",
+      "key": "happy-dom@21.0.4",
       "engine": "happy-dom",
       "package": "happy-dom",
-      "version": "21.0.3",
+      "version": "21.0.4",
       "setup": "new Window({ url: 'http://localhost/' })"
     },
     {
@@ -620,7 +620,7 @@
   ],
   "results": {
     "abort-signal": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -631,7 +631,7 @@
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -667,7 +667,7 @@
       }
     },
     "computed-style": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -678,7 +678,7 @@
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -716,7 +716,7 @@
       }
     },
     "constraint-validation": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -729,7 +729,7 @@
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -768,7 +768,7 @@
       }
     },
     "crypto": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -778,7 +778,7 @@
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "supported",
         "exists": true,
         "sameAsNode": true,
@@ -812,7 +812,7 @@
       }
     },
     "css-custom-properties": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -827,7 +827,7 @@
         ],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -880,7 +880,7 @@
       }
     },
     "css-has": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -891,7 +891,7 @@
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -926,7 +926,7 @@
       }
     },
     "custom-elements": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -937,7 +937,7 @@
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -972,14 +972,14 @@
       }
     },
     "dialog": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "missing",
         "exists": false,
         "passed": [],
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -1010,7 +1010,7 @@
       }
     },
     "form-data": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1020,7 +1020,7 @@
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -1063,7 +1063,7 @@
       }
     },
     "inner-text": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1074,7 +1074,7 @@
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -1116,14 +1116,14 @@
       }
     },
     "intersection-observer": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "missing",
         "exists": false,
         "passed": [],
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "stub",
         "exists": true,
         "passed": [],
@@ -1155,14 +1155,14 @@
       }
     },
     "match-media": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "missing",
         "exists": false,
         "passed": [],
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1188,7 +1188,7 @@
       }
     },
     "mutation-observer": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1199,7 +1199,7 @@
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1238,7 +1238,7 @@
       }
     },
     "request-animation-frame": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1248,7 +1248,7 @@
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -1281,7 +1281,7 @@
       }
     },
     "request-submit": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1292,7 +1292,7 @@
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1323,14 +1323,14 @@
       }
     },
     "resize-observer": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "missing",
         "exists": false,
         "passed": [],
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -1360,14 +1360,14 @@
       }
     },
     "scroll-into-view": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "missing",
         "exists": false,
         "passed": [],
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1392,7 +1392,7 @@
       }
     },
     "shadow-dom": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1405,7 +1405,7 @@
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "partial",
         "exists": true,
         "passed": [
@@ -1466,14 +1466,14 @@
       }
     },
     "structured-clone": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "missing",
         "exists": false,
         "passed": [],
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1500,7 +1500,7 @@
       }
     },
     "text-encoder": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1510,7 +1510,7 @@
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "supported",
         "exists": true,
         "sameAsNode": true,
@@ -1544,14 +1544,14 @@
       }
     },
     "web-animations": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "missing",
         "exists": false,
         "passed": [],
         "failed": [],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1577,7 +1577,7 @@
       }
     },
     "window-scroll-to": {
-      "warpdom@0.1.6": {
+      "warpdom@0.1.7": {
         "status": "stub",
         "exists": true,
         "passed": [],
@@ -1601,7 +1601,7 @@
         ],
         "error": null
       },
-      "happy-dom@21.0.3": {
+      "happy-dom@21.0.4": {
         "status": "partial",
         "exists": true,
         "passed": [

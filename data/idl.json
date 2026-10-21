@@ -1,7 +1,7 @@
 {
  "schema": 1,
  "license": "CC BY 4.0",
- "date": "2026-10-19T17:05:30.740Z",
+ "date": "2026-10-20T21:16:14.124Z",
  "node": "v22.23.3",
  "webref": {
   "package": "@webref/idl",
@@ -13,14 +13,14 @@
  },
  "engines": [
   {
-   "key": "warpdom@0.1.6",
+   "key": "warpdom@0.1.7",
    "engine": "warpdom",
-   "version": "0.1.6"
+   "version": "0.1.7"
   },
   {
-   "key": "happy-dom@21.0.3",
+   "key": "happy-dom@21.0.4",
    "engine": "happy-dom",
-   "version": "21.0.3"
+   "version": "21.0.4"
   },
   {
    "key": "jsdom@30.1.3",
@@ -449,26 +449,26 @@
     },
     "SVGAnimatedPreserveAspectRatio": {
      "kind": "interface",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["baseVal", "a", "0110"],
-      ["animVal", "a", "0110"]
+      ["baseVal", "a", "1110"],
+      ["animVal", "a", "1110"]
      ]
     },
     "SVGAnimatedRect": {
      "kind": "interface",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["baseVal", "a", "0110"],
-      ["animVal", "a", "0110"]
+      ["baseVal", "a", "1110"],
+      ["animVal", "a", "1110"]
      ]
     },
     "SVGAnimatedString": {
      "kind": "interface",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["baseVal", "a", "0110"],
-      ["animVal", "a", "0110"]
+      ["baseVal", "a", "1110"],
+      ["animVal", "a", "1110"]
      ]
     },
     "SVGAnimatedTransformList": {
@@ -498,12 +498,12 @@
     "SVGDefsElement": {
      "kind": "interface",
      "inherits": "SVGGraphicsElement",
-     "status": "-PP-"
+     "status": "PPP-"
     },
     "SVGDescElement": {
      "kind": "interface",
      "inherits": "SVGElement",
-     "status": "-PP-"
+     "status": "PPP-"
     },
     "SVGElement": {
      "kind": "interface",
@@ -511,8 +511,8 @@
      "status": "PPPP",
      "members": [
       ["className", "a", "1111"],
-      ["ownerSVGElement", "a", "0110"],
-      ["viewportElement", "a", "0110"]
+      ["ownerSVGElement", "a", "1110"],
+      ["viewportElement", "a", "1110"]
      ]
     },
     "SVGEllipseElement": {
@@ -545,7 +545,7 @@
     "SVGGElement": {
      "kind": "interface",
      "inherits": "SVGGraphicsElement",
-     "status": "-PP-"
+     "status": "PPP-"
     },
     "SVGGeometryElement": {
      "kind": "interface",
@@ -583,8 +583,8 @@
       ["getBBox", "o", "0100"],
       ["getCTM", "o", "0100"],
       ["getScreenCTM", "o", "0100"],
-      ["requiredExtensions", "a", "0110"],
-      ["systemLanguage", "a", "0110"]
+      ["requiredExtensions", "a", "1110"],
+      ["systemLanguage", "a", "1110"]
      ]
     },
     "SVGImageElement": {
@@ -690,7 +690,7 @@
     "SVGMetadataElement": {
      "kind": "interface",
      "inherits": "SVGElement",
-     "status": "-PP-"
+     "status": "PPP-"
     },
     "SVGMPathElement": {
      "members": [
@@ -699,9 +699,9 @@
     },
     "SVGNumber": {
      "kind": "interface",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["value", "a", "0110"]
+      ["value", "a", "1110"]
      ]
     },
     "SVGNumberList": {
@@ -771,24 +771,24 @@
     },
     "SVGPreserveAspectRatio": {
      "kind": "interface",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["SVG_PRESERVEASPECTRATIO_UNKNOWN", "c", "0110"],
-      ["SVG_PRESERVEASPECTRATIO_NONE", "c", "0110"],
-      ["SVG_PRESERVEASPECTRATIO_XMINYMIN", "c", "0110"],
-      ["SVG_PRESERVEASPECTRATIO_XMIDYMIN", "c", "0110"],
-      ["SVG_PRESERVEASPECTRATIO_XMAXYMIN", "c", "0110"],
-      ["SVG_PRESERVEASPECTRATIO_XMINYMID", "c", "0110"],
-      ["SVG_PRESERVEASPECTRATIO_XMIDYMID", "c", "0110"],
-      ["SVG_PRESERVEASPECTRATIO_XMAXYMID", "c", "0110"],
-      ["SVG_PRESERVEASPECTRATIO_XMINYMAX", "c", "0110"],
-      ["SVG_PRESERVEASPECTRATIO_XMIDYMAX", "c", "0110"],
-      ["SVG_PRESERVEASPECTRATIO_XMAXYMAX", "c", "0110"],
-      ["SVG_MEETORSLICE_UNKNOWN", "c", "0110"],
-      ["SVG_MEETORSLICE_MEET", "c", "0110"],
-      ["SVG_MEETORSLICE_SLICE", "c", "0110"],
-      ["align", "a", "0110"],
-      ["meetOrSlice", "a", "0110"]
+      ["SVG_PRESERVEASPECTRATIO_UNKNOWN", "c", "1110"],
+      ["SVG_PRESERVEASPECTRATIO_NONE", "c", "1110"],
+      ["SVG_PRESERVEASPECTRATIO_XMINYMIN", "c", "1110"],
+      ["SVG_PRESERVEASPECTRATIO_XMIDYMIN", "c", "1110"],
+      ["SVG_PRESERVEASPECTRATIO_XMAXYMIN", "c", "1110"],
+      ["SVG_PRESERVEASPECTRATIO_XMINYMID", "c", "1110"],
+      ["SVG_PRESERVEASPECTRATIO_XMIDYMID", "c", "1110"],
+      ["SVG_PRESERVEASPECTRATIO_XMAXYMID", "c", "1110"],
+      ["SVG_PRESERVEASPECTRATIO_XMINYMAX", "c", "1110"],
+      ["SVG_PRESERVEASPECTRATIO_XMIDYMAX", "c", "1110"],
+      ["SVG_PRESERVEASPECTRATIO_XMAXYMAX", "c", "1110"],
+      ["SVG_MEETORSLICE_UNKNOWN", "c", "1110"],
+      ["SVG_MEETORSLICE_MEET", "c", "1110"],
+      ["SVG_MEETORSLICE_SLICE", "c", "1110"],
+      ["align", "a", "1110"],
+      ["meetOrSlice", "a", "1110"]
      ]
     },
     "SVGRadialGradientElement": {
@@ -837,17 +837,17 @@
     },
     "SVGStringList": {
      "kind": "interface",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["length", "a", "0110"],
-      ["numberOfItems", "a", "0110"],
-      ["clear", "o", "0110"],
-      ["initialize", "o", "0110"],
-      ["getItem", "o", "0110"],
-      ["insertItemBefore", "o", "0110"],
-      ["replaceItem", "o", "0110"],
-      ["removeItem", "o", "0110"],
-      ["appendItem", "o", "0110"]
+      ["length", "a", "1110"],
+      ["numberOfItems", "a", "1110"],
+      ["clear", "o", "1110"],
+      ["initialize", "o", "1110"],
+      ["getItem", "o", "1110"],
+      ["insertItemBefore", "o", "1110"],
+      ["replaceItem", "o", "1110"],
+      ["removeItem", "o", "1110"],
+      ["appendItem", "o", "1110"]
      ]
     },
     "SVGStyleElement": {
@@ -877,35 +877,35 @@
       ["checkIntersection", "o", "0100"],
       ["checkEnclosure", "o", "0100"],
       ["deselectAll", "o", "0100"],
-      ["createSVGNumber", "o", "0110"],
+      ["createSVGNumber", "o", "1110"],
       ["createSVGLength", "o", "0100"],
       ["createSVGAngle", "o", "0100"],
       ["createSVGPoint", "o", "0100"],
       ["createSVGMatrix", "o", "0100"],
-      ["createSVGRect", "o", "0110"],
+      ["createSVGRect", "o", "1110"],
       ["createSVGTransform", "o", "0100"],
       ["createSVGTransformFromMatrix", "o", "0100"],
-      ["getElementById", "o", "0110"],
-      ["suspendRedraw", "o", "0010"],
-      ["unsuspendRedraw", "o", "0010"],
-      ["unsuspendRedrawAll", "o", "0010"],
-      ["forceRedraw", "o", "0010"],
-      ["viewBox", "a", "0110"],
-      ["preserveAspectRatio", "a", "0110"]
+      ["getElementById", "o", "1110"],
+      ["suspendRedraw", "o", "1010"],
+      ["unsuspendRedraw", "o", "1010"],
+      ["unsuspendRedrawAll", "o", "1010"],
+      ["forceRedraw", "o", "1010"],
+      ["viewBox", "a", "1110"],
+      ["preserveAspectRatio", "a", "1110"]
      ]
     },
     "SVGSwitchElement": {
      "kind": "interface",
      "inherits": "SVGGraphicsElement",
-     "status": "-PP-"
+     "status": "PPP-"
     },
     "SVGSymbolElement": {
      "kind": "interface",
      "inherits": "SVGGraphicsElement",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["viewBox", "a", "0010"],
-      ["preserveAspectRatio", "a", "0010"]
+      ["viewBox", "a", "1010"],
+      ["preserveAspectRatio", "a", "1010"]
      ]
     },
     "SVGTextContentElement": {
@@ -2447,7 +2447,7 @@
      "status": "PPP-",
      "members": [
       ["media", "a", "1110"],
-      ["matches", "a", "0010"]
+      ["matches", "a", "1010"]
      ]
     },
     "CSSRule": {
@@ -2982,9 +2982,9 @@
     "CSSNestedDeclarations": {
      "kind": "interface",
      "inherits": "CSSRule",
-     "status": "--P-",
+     "status": "P-P-",
      "members": [
-      ["style", "a", "0010"]
+      ["style", "a", "1010"]
      ]
     }
    }
@@ -6955,8 +6955,8 @@
      "kind": "interface",
      "status": "PPP-",
      "ctor": {
-      "warpdom@0.1.6": "TypeError: Illegal constructor",
-      "happy-dom@21.0.3": "TypeError: Illegal constructor",
+      "warpdom@0.1.7": "TypeError: Illegal constructor",
+      "happy-dom@21.0.4": "TypeError: Illegal constructor",
       "jsdom@30.1.3": "TypeError: Illegal constructor"
      },
      "members": [
@@ -7198,9 +7198,9 @@
     },
     "ElementInternals": {
      "kind": "interface",
-     "status": "--P-",
+     "status": "P-P-",
      "members": [
-      ["shadowRoot", "a", "0010"],
+      ["shadowRoot", "a", "1010"],
       ["setFormValue", "o", "0000"],
       ["form", "a", "0000"],
       ["setValidity", "o", "0000"],
@@ -7209,7 +7209,7 @@
       ["validationMessage", "a", "0000"],
       ["checkValidity", "o", "0000"],
       ["reportValidity", "o", "0000"],
-      ["labels", "a", "0010"],
+      ["labels", "a", "1010"],
       ["states", "a", "0000"]
      ]
     },
@@ -7532,7 +7532,7 @@
       ["autocorrect", "a", "0000"],
       ["innerText", "a", "1101"],
       ["outerText", "a", "1100"],
-      ["attachInternals", "o", "0010"],
+      ["attachInternals", "o", "1010"],
       ["showPopover", "o", "0000"],
       ["hidePopover", "o", "0000"],
       ["togglePopover", "o", "0000"],
@@ -7796,7 +7796,7 @@
       ["loading", "a", "0001"],
       ["contentDocument", "a", "1110"],
       ["contentWindow", "a", "1110"],
-      ["getSVGDocument", "o", "0010"],
+      ["getSVGDocument", "o", "1010"],
       ["align", "a", "1010"],
       ["scrolling", "a", "1010"],
       ["frameBorder", "a", "1010"],
@@ -8032,8 +8032,8 @@
       ["muted", "a", "1110"],
       ["defaultMuted", "a", "1110"],
       ["loading", "a", "0000"],
-      ["audioTracks", "a", "0010"],
-      ["videoTracks", "a", "0010"],
+      ["audioTracks", "a", "1010"],
+      ["videoTracks", "a", "1010"],
       ["textTracks", "a", "1110"],
       ["addTextTrack", "o", "1110"]
      ]
@@ -8258,7 +8258,7 @@
     "HTMLSelectedContentElement": {
      "kind": "interface",
      "inherits": "HTMLElement",
-     "status": "P---"
+     "status": "----"
     },
     "HTMLSelectElement": {
      "kind": "interface",
@@ -8747,21 +8747,21 @@
     },
     "MimeType": {
      "kind": "interface",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["type", "a", "0010"],
-      ["description", "a", "0010"],
-      ["suffixes", "a", "0010"],
-      ["enabledPlugin", "a", "0010"]
+      ["type", "a", "1010"],
+      ["description", "a", "1010"],
+      ["suffixes", "a", "1010"],
+      ["enabledPlugin", "a", "1010"]
      ]
     },
     "MimeTypeArray": {
      "kind": "interface",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["length", "a", "0010"],
-      ["item", "o", "0110"],
-      ["namedItem", "o", "0110"]
+      ["length", "a", "1010"],
+      ["item", "o", "1110"],
+      ["namedItem", "o", "1110"]
      ]
     },
     "NavigateEvent": {
@@ -8892,8 +8892,8 @@
       ["registerProtocolHandler", "o", "0000"],
       ["unregisterProtocolHandler", "o", "0000"],
       ["cookieEnabled", "a", "1110"],
-      ["plugins", "a", "0110"],
-      ["mimeTypes", "a", "0110"],
+      ["plugins", "a", "1110"],
+      ["mimeTypes", "a", "1110"],
       ["javaEnabled", "o", "1010"],
       ["pdfViewerEnabled", "a", "0000"],
       ["hardwareConcurrency", "a", "1111"]
@@ -9042,9 +9042,9 @@
     "PageTransitionEvent": {
      "kind": "interface",
      "inherits": "Event",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["persisted", "a", "0010"]
+      ["persisted", "a", "1010"]
      ]
     },
     "Path2D": {
@@ -9066,24 +9066,24 @@
     },
     "Plugin": {
      "kind": "interface",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["name", "a", "0010"],
-      ["description", "a", "0010"],
-      ["filename", "a", "0010"],
-      ["length", "a", "0010"],
-      ["item", "o", "0110"],
-      ["namedItem", "o", "0110"]
+      ["name", "a", "1010"],
+      ["description", "a", "1010"],
+      ["filename", "a", "1010"],
+      ["length", "a", "1010"],
+      ["item", "o", "1110"],
+      ["namedItem", "o", "1110"]
      ]
     },
     "PluginArray": {
      "kind": "interface",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["refresh", "o", "0110"],
-      ["length", "a", "0010"],
-      ["item", "o", "0110"],
-      ["namedItem", "o", "0110"]
+      ["refresh", "o", "1110"],
+      ["length", "a", "1010"],
+      ["item", "o", "1110"],
+      ["namedItem", "o", "1110"]
      ]
     },
     "PopStateEvent": {
@@ -9098,10 +9098,10 @@
     "PromiseRejectionEvent": {
      "kind": "interface",
      "inherits": "Event",
-     "status": "--P-",
+     "status": "P-P-",
      "members": [
-      ["promise", "a", "0010"],
-      ["reason", "a", "0010"]
+      ["promise", "a", "1010"],
+      ["reason", "a", "1010"]
      ]
     },
     "RadioNodeList": {
@@ -9290,7 +9290,7 @@
       ["onwebkittransitionend", "a", "1010"],
       ["onwheel", "a", "1110"],
       ["dataset", "a", "1111"],
-      ["nonce", "a", "0011"],
+      ["nonce", "a", "1011"],
       ["autofocus", "a", "0000"],
       ["tabIndex", "a", "1111"],
       ["focus", "o", "1111"],
@@ -9299,24 +9299,24 @@
     },
     "SVGSVGElement": {
      "members": [
-      ["onafterprint", "a", "0110"],
-      ["onbeforeprint", "a", "0110"],
-      ["onbeforeunload", "a", "0110"],
-      ["onhashchange", "a", "0110"],
-      ["onlanguagechange", "a", "0110"],
-      ["onmessage", "a", "0110"],
-      ["onmessageerror", "a", "0110"],
-      ["onoffline", "a", "0110"],
-      ["ononline", "a", "0110"],
-      ["onpagehide", "a", "0110"],
+      ["onafterprint", "a", "1110"],
+      ["onbeforeprint", "a", "1110"],
+      ["onbeforeunload", "a", "1110"],
+      ["onhashchange", "a", "1110"],
+      ["onlanguagechange", "a", "1110"],
+      ["onmessage", "a", "1110"],
+      ["onmessageerror", "a", "1110"],
+      ["onoffline", "a", "1110"],
+      ["ononline", "a", "1110"],
+      ["onpagehide", "a", "1110"],
       ["onpagereveal", "a", "0000"],
-      ["onpageshow", "a", "0110"],
+      ["onpageshow", "a", "1110"],
       ["onpageswap", "a", "0000"],
-      ["onpopstate", "a", "0110"],
-      ["onrejectionhandled", "a", "0110"],
-      ["onstorage", "a", "0110"],
-      ["onunhandledrejection", "a", "0110"],
-      ["onunload", "a", "0110"]
+      ["onpopstate", "a", "1110"],
+      ["onrejectionhandled", "a", "1110"],
+      ["onstorage", "a", "1110"],
+      ["onunhandledrejection", "a", "1110"],
+      ["onunload", "a", "1110"]
      ]
     },
     "TextMetrics": {
@@ -10774,10 +10774,10 @@
     "BlobEvent": {
      "kind": "interface",
      "inherits": "Event",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["data", "a", "0010"],
-      ["timecode", "a", "0010"]
+      ["data", "a", "1010"],
+      ["timecode", "a", "1010"]
      ]
     },
     "MediaRecorder": {
@@ -11062,20 +11062,20 @@
     },
     "DeviceMotionEventAcceleration": {
      "kind": "interface",
-     "status": "--P-",
+     "status": "P-P-",
      "members": [
-      ["x", "a", "0010"],
-      ["y", "a", "0010"],
-      ["z", "a", "0010"]
+      ["x", "a", "1010"],
+      ["y", "a", "1010"],
+      ["z", "a", "1010"]
      ]
     },
     "DeviceMotionEventRotationRate": {
      "kind": "interface",
-     "status": "--P-",
+     "status": "P-P-",
      "members": [
-      ["alpha", "a", "0010"],
-      ["beta", "a", "0010"],
-      ["gamma", "a", "0010"]
+      ["alpha", "a", "1010"],
+      ["beta", "a", "1010"],
+      ["gamma", "a", "1010"]
      ]
     },
     "DeviceOrientationEvent": {
@@ -13940,58 +13940,58 @@
     },
     "ElementInternals": {
      "members": [
-      ["role", "a", "0010"],
+      ["role", "a", "1010"],
       ["ariaActiveDescendantElement", "a", "0000"],
-      ["ariaAtomic", "a", "0010"],
-      ["ariaAutoComplete", "a", "0010"],
+      ["ariaAtomic", "a", "1010"],
+      ["ariaAutoComplete", "a", "1010"],
       ["ariaBrailleLabel", "a", "0000"],
       ["ariaBrailleRoleDescription", "a", "0000"],
-      ["ariaBusy", "a", "0010"],
-      ["ariaChecked", "a", "0010"],
-      ["ariaColCount", "a", "0010"],
-      ["ariaColIndex", "a", "0010"],
-      ["ariaColIndexText", "a", "0010"],
-      ["ariaColSpan", "a", "0010"],
+      ["ariaBusy", "a", "1010"],
+      ["ariaChecked", "a", "1010"],
+      ["ariaColCount", "a", "1010"],
+      ["ariaColIndex", "a", "1010"],
+      ["ariaColIndexText", "a", "1010"],
+      ["ariaColSpan", "a", "1010"],
       ["ariaControlsElements", "a", "0000"],
-      ["ariaCurrent", "a", "0010"],
+      ["ariaCurrent", "a", "1010"],
       ["ariaDescribedByElements", "a", "0000"],
-      ["ariaDescription", "a", "0010"],
+      ["ariaDescription", "a", "1010"],
       ["ariaDetailsElements", "a", "0000"],
-      ["ariaDisabled", "a", "0010"],
+      ["ariaDisabled", "a", "1010"],
       ["ariaErrorMessageElements", "a", "0000"],
-      ["ariaExpanded", "a", "0010"],
+      ["ariaExpanded", "a", "1010"],
       ["ariaFlowToElements", "a", "0000"],
-      ["ariaHasPopup", "a", "0010"],
-      ["ariaHidden", "a", "0010"],
-      ["ariaInvalid", "a", "0010"],
-      ["ariaKeyShortcuts", "a", "0010"],
-      ["ariaLabel", "a", "0010"],
+      ["ariaHasPopup", "a", "1010"],
+      ["ariaHidden", "a", "1010"],
+      ["ariaInvalid", "a", "1010"],
+      ["ariaKeyShortcuts", "a", "1010"],
+      ["ariaLabel", "a", "1010"],
       ["ariaLabelledByElements", "a", "0000"],
-      ["ariaLevel", "a", "0010"],
-      ["ariaLive", "a", "0010"],
-      ["ariaModal", "a", "0010"],
-      ["ariaMultiLine", "a", "0010"],
-      ["ariaMultiSelectable", "a", "0010"],
-      ["ariaOrientation", "a", "0010"],
+      ["ariaLevel", "a", "1010"],
+      ["ariaLive", "a", "1010"],
+      ["ariaModal", "a", "1010"],
+      ["ariaMultiLine", "a", "1010"],
+      ["ariaMultiSelectable", "a", "1010"],
+      ["ariaOrientation", "a", "1010"],
       ["ariaOwnsElements", "a", "0000"],
-      ["ariaPlaceholder", "a", "0010"],
-      ["ariaPosInSet", "a", "0010"],
-      ["ariaPressed", "a", "0010"],
-      ["ariaReadOnly", "a", "0010"],
-      ["ariaRelevant", "a", "0010"],
-      ["ariaRequired", "a", "0010"],
-      ["ariaRoleDescription", "a", "0010"],
-      ["ariaRowCount", "a", "0010"],
-      ["ariaRowIndex", "a", "0010"],
-      ["ariaRowIndexText", "a", "0010"],
-      ["ariaRowSpan", "a", "0010"],
-      ["ariaSelected", "a", "0010"],
-      ["ariaSetSize", "a", "0010"],
-      ["ariaSort", "a", "0010"],
-      ["ariaValueMax", "a", "0010"],
-      ["ariaValueMin", "a", "0010"],
-      ["ariaValueNow", "a", "0010"],
-      ["ariaValueText", "a", "0010"]
+      ["ariaPlaceholder", "a", "1010"],
+      ["ariaPosInSet", "a", "1010"],
+      ["ariaPressed", "a", "1010"],
+      ["ariaReadOnly", "a", "1010"],
+      ["ariaRelevant", "a", "1010"],
+      ["ariaRequired", "a", "1010"],
+      ["ariaRoleDescription", "a", "1010"],
+      ["ariaRowCount", "a", "1010"],
+      ["ariaRowIndex", "a", "1010"],
+      ["ariaRowIndexText", "a", "1010"],
+      ["ariaRowSpan", "a", "1010"],
+      ["ariaSelected", "a", "1010"],
+      ["ariaSetSize", "a", "1010"],
+      ["ariaSort", "a", "1010"],
+      ["ariaValueMax", "a", "1010"],
+      ["ariaValueMin", "a", "1010"],
+      ["ariaValueNow", "a", "1010"],
+      ["ariaValueText", "a", "1010"]
      ]
     }
    }
@@ -17815,24 +17815,24 @@
     "WebSocket": {
      "kind": "interface",
      "inherits": "EventTarget",
-     "status": "-PPN",
+     "status": "NPPN",
      "members": [
-      ["url", "a", "0111"],
-      ["CONNECTING", "c", "0111"],
-      ["OPEN", "c", "0111"],
-      ["CLOSING", "c", "0111"],
-      ["CLOSED", "c", "0111"],
-      ["readyState", "a", "0111"],
-      ["bufferedAmount", "a", "0011"],
-      ["onopen", "a", "0011"],
-      ["onerror", "a", "0011"],
-      ["onclose", "a", "0011"],
-      ["extensions", "a", "0111"],
-      ["protocol", "a", "0111"],
-      ["close", "o", "0111"],
-      ["onmessage", "a", "0011"],
-      ["binaryType", "a", "0111"],
-      ["send", "o", "0111"]
+      ["url", "a", "1111"],
+      ["CONNECTING", "c", "1111"],
+      ["OPEN", "c", "1111"],
+      ["CLOSING", "c", "1111"],
+      ["CLOSED", "c", "1111"],
+      ["readyState", "a", "1111"],
+      ["bufferedAmount", "a", "1011"],
+      ["onopen", "a", "1011"],
+      ["onerror", "a", "1011"],
+      ["onclose", "a", "1011"],
+      ["extensions", "a", "1111"],
+      ["protocol", "a", "1111"],
+      ["close", "o", "1111"],
+      ["onmessage", "a", "1011"],
+      ["binaryType", "a", "1111"],
+      ["send", "o", "1111"]
      ]
     }
    }
@@ -18956,52 +18956,52 @@
     "XMLHttpRequest": {
      "kind": "interface",
      "inherits": "XMLHttpRequestEventTarget",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["onreadystatechange", "a", "0010"],
-      ["UNSENT", "c", "0110"],
-      ["OPENED", "c", "0110"],
-      ["HEADERS_RECEIVED", "c", "0110"],
-      ["LOADING", "c", "0110"],
-      ["DONE", "c", "0110"],
-      ["readyState", "a", "0110"],
-      ["open", "o", "0110"],
-      ["setRequestHeader", "o", "0110"],
-      ["timeout", "a", "0010"],
-      ["withCredentials", "a", "0010"],
-      ["upload", "a", "0010"],
-      ["send", "o", "0110"],
-      ["abort", "o", "0110"],
-      ["responseURL", "a", "0110"],
-      ["status", "a", "0110"],
-      ["statusText", "a", "0110"],
-      ["getResponseHeader", "o", "0110"],
-      ["getAllResponseHeaders", "o", "0110"],
-      ["overrideMimeType", "o", "0110"],
-      ["responseType", "a", "0110"],
-      ["response", "a", "0110"],
-      ["responseText", "a", "0110"],
-      ["responseXML", "a", "0110"]
+      ["onreadystatechange", "a", "1010"],
+      ["UNSENT", "c", "1110"],
+      ["OPENED", "c", "1110"],
+      ["HEADERS_RECEIVED", "c", "1110"],
+      ["LOADING", "c", "1110"],
+      ["DONE", "c", "1110"],
+      ["readyState", "a", "1110"],
+      ["open", "o", "1110"],
+      ["setRequestHeader", "o", "1110"],
+      ["timeout", "a", "1010"],
+      ["withCredentials", "a", "1010"],
+      ["upload", "a", "1010"],
+      ["send", "o", "1110"],
+      ["abort", "o", "1110"],
+      ["responseURL", "a", "1110"],
+      ["status", "a", "1110"],
+      ["statusText", "a", "1110"],
+      ["getResponseHeader", "o", "1110"],
+      ["getAllResponseHeaders", "o", "1110"],
+      ["overrideMimeType", "o", "1110"],
+      ["responseType", "a", "1110"],
+      ["response", "a", "1110"],
+      ["responseText", "a", "1110"],
+      ["responseXML", "a", "1110"]
      ]
     },
     "XMLHttpRequestEventTarget": {
      "kind": "interface",
      "inherits": "EventTarget",
-     "status": "-PP-",
+     "status": "PPP-",
      "members": [
-      ["onloadstart", "a", "0110"],
-      ["onprogress", "a", "0110"],
-      ["onabort", "a", "0110"],
-      ["onerror", "a", "0110"],
-      ["onload", "a", "0110"],
-      ["ontimeout", "a", "0110"],
-      ["onloadend", "a", "0110"]
+      ["onloadstart", "a", "1110"],
+      ["onprogress", "a", "1110"],
+      ["onabort", "a", "1110"],
+      ["onerror", "a", "1110"],
+      ["onload", "a", "1110"],
+      ["ontimeout", "a", "1110"],
+      ["onloadend", "a", "1110"]
      ]
     },
     "XMLHttpRequestUpload": {
      "kind": "interface",
      "inherits": "XMLHttpRequestEventTarget",
-     "status": "-PP-"
+     "status": "PPP-"
     }
    }
   }
