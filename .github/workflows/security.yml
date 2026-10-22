@@ -1,0 +1,69 @@
+# Dependency scan with CVE Lite CLI on pushes and pull requests to main, and
+# weekly for advisories published in between. Two projects: the data scripts
+# (root, dev dependencies only) and the Docusaurus site (website/, used only
+# to build the static site). Both are scanned in full, report only; results
+# go to GitHub Code Scanning as SARIF.
+name: security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '29 6 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  dependencies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Tag-pinned on purpose: CVE Lite CLI is the maintainer's own action, so
+      # its minor and patch releases are taken without an edit here.
+      - name: Scan the data scripts' dependencies (report only)
+        uses: OWASP/cve-lite-cli@v1
+        with:
+          sarif: 'true'
+          output: cve-lite/root
+      - name: Scan the site's dependencies (report only)
+        if: always()
+        uses: OWASP/cve-lite-cli@v1
+        with:
+          path: website
+          sarif: 'true'
+          output: cve-lite/website
+      # CVE Lite writes artifact and result locations relative to the scanned
+      # project ("package-lock.json"); Code Scanning reads them relative to
+      # the repository root, so point the site's at website/.
+      - name: Rebase the site's SARIF locations to website/
+        if: always()
+        run: |
+          shopt -s nullglob
+          for f in cve-lite/website/*.sarif; do
+            jq 'reduce (paths(type == "string") | select(.[-1] == "uri")) as $p (.;
+              getpath($p) as $u
+              | if ($u | test("^(website/|[a-z]+:)")) then . else setpath($p; "website/" + $u) end)' "$f" > "$f.tmp"
+            mv "$f.tmp" "$f"
+          done
+      # Fork pull requests get a read-only token and cannot upload.
+      - name: Upload SARIF (data scripts)
+        if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          sarif_file: cve-lite/root
+          category: cve-lite-root
+      - name: Upload SARIF (site)
+        if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          sarif_file: cve-lite/website
+          category: cve-lite-website
