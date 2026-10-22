@@ -41,6 +41,19 @@ jobs:
           path: website
           sarif: 'true'
           output: cve-lite/website
+      # CVE Lite writes artifact and result locations relative to the scanned
+      # project ("package-lock.json"); Code Scanning reads them relative to
+      # the repository root, so point the site's at website/.
+      - name: Rebase the site's SARIF locations to website/
+        if: always()
+        run: |
+          shopt -s nullglob
+          for f in cve-lite/website/*.sarif; do
+            jq 'reduce (paths(type == "string") | select(.[-1] == "uri")) as $p (.;
+              getpath($p) as $u
+              | if ($u | test("^(website/|[a-z]+:)")) then . else setpath($p; "website/" + $u) end)' "$f" > "$f.tmp"
+            mv "$f.tmp" "$f"
+          done
       # Fork pull requests get a read-only token and cannot upload.
       - name: Upload SARIF (data scripts)
         if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
