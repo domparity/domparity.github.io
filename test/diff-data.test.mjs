@@ -167,7 +167,10 @@ test('data/changelog.json is newest first and every entry has a date and engine 
 
 test('the update installs every engine and the Web IDL sources', () => {
   const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
-  assert.deepEqual([...PACKAGES].sort(), Object.keys(pkg.devDependencies).sort());
+  // Formatting and lint tools are dev dependencies the update leaves alone.
+  const tools = ['eslint', 'prettier', 'typescript-eslint'];
+  const sources = Object.keys(pkg.devDependencies).filter((name) => !tools.includes(name));
+  assert.deepEqual([...PACKAGES].sort(), sources.sort());
   const engines = JSON.parse(readFileSync(new URL('../engines.json', import.meta.url), 'utf8'));
   for (const e of engines) assert.ok(PACKAGES.includes(e.package), e.package);
 });

@@ -1,0 +1,13 @@
+# Probe results and brand assets.
+data/
+brand/
+# Build output.
+site/
+website/build/
+website/.docusaurus/
+# Everything that isn't code.
+*.md
+*.mdx
+*.json
+*.yml
+*.yaml
