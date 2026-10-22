@@ -93,6 +93,8 @@ npm install
 npm run probe        # writes data/results.json
 npm run probe-idl    # writes data/idl.json
 npm test             # status classification, results format, site generator
+npm run format       # Prettier (CI runs npm run format:check)
+npm run lint         # ESLint readability rules, such as no nested ternaries
 
 cd website
 npm install
