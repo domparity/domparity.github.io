@@ -86,7 +86,7 @@ Node.js's own global the data marks it `sameAsNode`.
 
 ## Run
 
-Node.js >= 22.13.
+Node.js 22.13 or later in 22.x, or 24 and later.
 
 ```sh
 npm install
