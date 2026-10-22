@@ -49,7 +49,10 @@ function reportUrl(page: Page): string {
   return `${ISSUES_NEW}?${params.toString()}`;
 }
 
-const KIND_LABEL: Record<string, string> = { namespace: 'Namespace', callback: 'Callback interface' };
+const KIND_LABEL = new Map([
+  ['namespace', 'Namespace'],
+  ['callback', 'Callback interface'],
+]);
 
 // The missing members of one engine (the first 15, linked), or why there is no list.
 function MissingMembers({
@@ -109,7 +112,7 @@ export default function InterfacePage({ bucket }: { bucket: Record<string, Page>
           <code style={{ background: 'none', padding: 0, fontSize: 'inherit' }}>{page.name}</code>
         </h1>
         <p className="meta">
-          {KIND_LABEL[page.kind] ?? 'Interface'} defined in{' '}
+          {KIND_LABEL.get(page.kind) ?? 'Interface'} defined in{' '}
           <Link to={`/coverage/spec/${page.spec.id.toLowerCase()}`}>{page.spec.title}</Link>
           {page.spec.url ? (
             <>

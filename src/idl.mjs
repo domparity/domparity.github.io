@@ -89,7 +89,7 @@ export function memberEntries(m) {
 
 // Whether a constructor exists in the IDL and can be called with no arguments.
 // The page kind of a Web IDL definition type; everything else is an interface.
-const KIND = { namespace: 'namespace', 'callback interface': 'callback' };
+const KIND = { __proto__: null, namespace: 'namespace', 'callback interface': 'callback' };
 
 function constructorInfo(defs) {
   // [HTMLConstructor] constructors (HTML elements) only work for custom
@@ -264,7 +264,9 @@ function isBuiltinRoot(o) {
   return typeof o === 'function' && Object.getPrototypeOf(parent) === null && !Object.hasOwn(o, 'prototype');
 }
 
-const WELL_KNOWN_SYMBOLS = { '@@iterator': Symbol.iterator, '@@asyncIterator': Symbol.asyncIterator };
+// Null prototype: a member named like an Object.prototype method (toString)
+// must not find that method here.
+const WELL_KNOWN_SYMBOLS = { __proto__: null, '@@iterator': Symbol.iterator, '@@asyncIterator': Symbol.asyncIterator };
 function has(target, name) {
   if (target == null || (typeof target !== 'object' && typeof target !== 'function')) return false;
   const key = WELL_KNOWN_SYMBOLS[name] ?? name;

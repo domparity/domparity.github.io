@@ -107,7 +107,7 @@ export function featuredReport(api, engine, r, data) {
 // for one engine: whether each interface is defined and which of its members
 // (from every spec) are missing. Empty when there is no coverage data.
 // Added after "interface present" for a global that isn't a plain one.
-const INTERFACE_NOTE = { N: " (Node.js's own global)", S: ' (a stub)' };
+const INTERFACE_NOTE = { __proto__: null, N: " (Node.js's own global)", S: ' (a stub)' };
 
 export function idlLines(api, engineKey, idl) {
   if (!idl || !api.interfaces?.length) return [];

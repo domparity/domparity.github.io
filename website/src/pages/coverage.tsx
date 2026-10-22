@@ -68,11 +68,14 @@ function useScope(): [string, (id: string) => void] {
 }
 
 // Arrow keys move between the scope tabs.
-const ARROW_STEP: Record<string, number> = { ArrowRight: 1, ArrowLeft: -1 };
+const ARROW_STEP = new Map([
+  ['ArrowRight', 1],
+  ['ArrowLeft', -1],
+]);
 
 function ScopeTabs({ scope, onSelect }: { scope: string; onSelect: (id: string) => void }) {
   const onKey = (e: React.KeyboardEvent<HTMLButtonElement>, i: number) => {
-    const d = ARROW_STEP[e.key] ?? 0;
+    const d = ARROW_STEP.get(e.key) ?? 0;
     if (!d) return;
     const next = SCOPES[(i + d + SCOPES.length) % SCOPES.length];
     onSelect(next);
