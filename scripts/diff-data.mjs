@@ -253,7 +253,10 @@ export function renderSummary(diff, { date, max = 40, maxChars = 60000 } = {}) {
   L.push(`## Data update ${date}`, '');
   L.push('| Engine | Version |', '|---|---|');
   for (const e of diff.engines) {
-    const note = e.added ? ' (new engine)' : e.removed ? ' (removed)' : e.crashed ? ' (crashed while probing)' : '';
+    let note = '';
+    if (e.added) note = ' (new engine)';
+    else if (e.removed) note = ' (removed)';
+    else if (e.crashed) note = ' (crashed while probing)';
     L.push(`| ${e.engine} | ${versionText(e.from, e.to)}${note} |`);
   }
   L.push('');

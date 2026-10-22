@@ -49,6 +49,43 @@ function reportUrl(page: Page): string {
   return `${ISSUES_NEW}?${params.toString()}`;
 }
 
+const KIND_LABEL: Record<string, string> = { namespace: 'Namespace', callback: 'Callback interface' };
+
+// The missing members of one engine (the first 15, linked), or why there is no list.
+function MissingMembers({
+  status,
+  kind,
+  missing,
+  total,
+  shown,
+}: {
+  status: string;
+  kind: string;
+  missing: string[];
+  total: number;
+  shown: (name: string) => string;
+}) {
+  if (status === '-') {
+    return <span className="missing-list">{kind === 'namespace' ? 'Namespace' : 'Interface'} not defined.</span>;
+  }
+  if (status === '?') return <span className="missing-list">Not probed.</span>;
+  if (missing.length === 0) return <span className="missing-list">None missing.</span>;
+  return (
+    <span className="missing-list">
+      Missing{missing.length === total ? ' (all)' : ''}:{' '}
+      {missing.slice(0, 15).map((m, j) => (
+        <span key={m}>
+          {j ? ', ' : ''}
+          <a href={`#m-${m.replace(/[^A-Za-z0-9_-]/g, '_')}`}>
+            <code>{shown(m)}</code>
+          </a>
+        </span>
+      ))}
+      {missing.length > 15 ? ` and ${missing.length - 15} more` : ''}
+    </span>
+  );
+}
+
 export default function InterfacePage({ bucket }: { bucket: Record<string, Page> }) {
   const name = decodeURIComponent(useLocation().pathname.replace(/\/+$/, '').split('/').pop() ?? '');
   const page = bucket[name];
@@ -72,8 +109,8 @@ export default function InterfacePage({ bucket }: { bucket: Record<string, Page>
           <code style={{ background: 'none', padding: 0, fontSize: 'inherit' }}>{page.name}</code>
         </h1>
         <p className="meta">
-          {page.kind === 'namespace' ? 'Namespace' : page.kind === 'callback' ? 'Callback interface' : 'Interface'}{' '}
-          defined in <Link to={`/coverage/spec/${page.spec.id.toLowerCase()}`}>{page.spec.title}</Link>
+          {KIND_LABEL[page.kind] ?? 'Interface'} defined in{' '}
+          <Link to={`/coverage/spec/${page.spec.id.toLowerCase()}`}>{page.spec.title}</Link>
           {page.spec.url ? (
             <>
               {' '}
@@ -123,28 +160,13 @@ export default function InterfacePage({ bucket }: { bucket: Record<string, Page>
                     </td>
                     <td>
                       <Bar value={present[i]} total={all.length} label={e.engine} />
-                      {page.status[i] === '-' || page.status[i] === '?' ? (
-                        <span className="missing-list">
-                          {page.status[i] === '-'
-                            ? `${page.kind === 'namespace' ? 'Namespace' : 'Interface'} not defined.`
-                            : 'Not probed.'}
-                        </span>
-                      ) : missing[i].length === 0 ? (
-                        <span className="missing-list">None missing.</span>
-                      ) : (
-                        <span className="missing-list">
-                          Missing{missing[i].length === all.length ? ' (all)' : ''}:{' '}
-                          {missing[i].slice(0, 15).map((m, j) => (
-                            <span key={m}>
-                              {j ? ', ' : ''}
-                              <a href={`#m-${m.replace(/[^A-Za-z0-9_-]/g, '_')}`}>
-                                <code>{shown(m)}</code>
-                              </a>
-                            </span>
-                          ))}
-                          {missing[i].length > 15 ? ` and ${missing[i].length - 15} more` : ''}
-                        </span>
-                      )}
+                      <MissingMembers
+                        status={page.status[i]}
+                        kind={page.kind}
+                        missing={missing[i]}
+                        total={all.length}
+                        shown={shown}
+                      />
                     </td>
                   </tr>
                 ))}

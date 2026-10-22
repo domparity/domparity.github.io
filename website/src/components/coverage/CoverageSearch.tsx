@@ -6,6 +6,15 @@ import { InterfaceChip, MemberChip } from './Chip';
 type Row = [string, string, string, string]; // interface, member ('' for the interface), spec id, codes
 const MAX = 60;
 
+// The line under the search box: an error, loading, the match count or a hint.
+function searchStatus(error: string | null, loading: boolean, results: { total: number } | null): string {
+  if (error) return `Could not load the index: ${error}`;
+  if (loading) return 'Loading the index…';
+  if (!results) return 'Type at least two characters.';
+  const matches = `${results.total} match${results.total === 1 ? '' : 'es'}`;
+  return results.total > MAX ? `${matches}, showing the first ${MAX}` : matches;
+}
+
 // Search across every interface and member. The index (static/data/idl-search.json)
 // is fetched on first use, so the page itself stays small.
 export default function CoverageSearch() {
@@ -60,13 +69,7 @@ export default function CoverageSearch() {
         </label>
       </div>
       <p className="filters__count" aria-live="polite">
-        {error
-          ? `Could not load the index: ${error}`
-          : query && !data
-            ? 'Loading the index…'
-            : results
-              ? `${results.total} match${results.total === 1 ? '' : 'es'}${results.total > MAX ? `, showing the first ${MAX}` : ''}`
-              : 'Type at least two characters.'}
+        {searchStatus(error, query !== '' && !data, results)}
       </p>
       {results && results.rows.length ? (
         <div className="panel">
