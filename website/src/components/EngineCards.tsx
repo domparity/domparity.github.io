@@ -12,7 +12,11 @@ const ORDER: Status[] = ['supported', 'partial', 'stub', 'missing'];
 // One card per engine: featured API statuses and existence coverage, in one
 // scope (a spec group, or every spec); "Test DOM core" by default.
 export default function EngineCards({ featured = true, scope = 'core' }: { featured?: boolean; scope?: ScopeId }) {
-  const r = results as unknown as { engines: { key: string; engine: string; version: string }[]; apis: { id: string }[]; results: Record<string, Record<string, { status: Status }>> };
+  const r = results as unknown as {
+    engines: { key: string; engine: string; version: string }[];
+    apis: { id: string }[];
+    results: Record<string, Record<string, { status: Status }>>;
+  };
   const { totals: t, noun } = coverageScope(scope);
   return (
     <div className="cards">
@@ -35,8 +39,16 @@ export default function EngineCards({ featured = true, scope = 'core' }: { featu
                   <small>/ {total}</small>
                 </div>
                 <p className="card-dp__label">featured APIs fully supported</p>
-                <div className="stack" role="img" aria-label={ORDER.map((s) => `${counts[s]} ${STATUS[s].label.toLowerCase()}`).join(', ')}>
-                  {ORDER.map((s) => (counts[s] ? <span key={s} className={`s-${s}`} style={{ width: `${(100 * counts[s]) / total}%` }} /> : null))}
+                <div
+                  className="stack"
+                  role="img"
+                  aria-label={ORDER.map((s) => `${counts[s]} ${STATUS[s].label.toLowerCase()}`).join(', ')}
+                >
+                  {ORDER.map((s) =>
+                    counts[s] ? (
+                      <span key={s} className={`s-${s}`} style={{ width: `${(100 * counts[s]) / total}%` }} />
+                    ) : null,
+                  )}
                 </div>
                 <ul className="stack-legend" aria-hidden="true">
                   {ORDER.map((s) => (
@@ -56,7 +68,9 @@ export default function EngineCards({ featured = true, scope = 'core' }: { featu
                 </strong>
               </div>
               <Bar value={t.membersPresent[i]} total={t.members} label={`${e.engine}, ${noun} members`} />
-              <p className="scope-dp">of {t.members.toLocaleString('en')} {noun} members</p>
+              <p className="scope-dp">
+                of {t.members.toLocaleString('en')} {noun} members
+              </p>
               <div className="card-dp__row-head" style={{ marginTop: '0.6rem' }}>
                 <span>Interfaces present</span>
                 <strong>
@@ -64,10 +78,13 @@ export default function EngineCards({ featured = true, scope = 'core' }: { featu
                 </strong>
               </div>
               <Bar value={t.interfacesPresent[i]} total={t.interfaces} label={`${e.engine}, ${noun} interfaces`} />
-              <p className="scope-dp">of {t.interfaces.toLocaleString('en')} {noun} interfaces</p>
+              <p className="scope-dp">
+                of {t.interfaces.toLocaleString('en')} {noun} interfaces
+              </p>
               {t.nodeGlobals[i] ? (
                 <p className="card-dp__label" style={{ marginBottom: 0 }}>
-                  {t.nodeGlobals[i]} of them {t.nodeGlobals[i] === 1 ? 'is' : 'are'} Node.js's own global{t.nodeGlobals[i] === 1 ? '' : 's'}.
+                  {t.nodeGlobals[i]} of them {t.nodeGlobals[i] === 1 ? 'is' : 'are'} Node.js's own global
+                  {t.nodeGlobals[i] === 1 ? '' : 's'}.
                 </p>
               ) : null}
             </div>

@@ -108,7 +108,9 @@ export default function Coverage() {
   const { some, none } = useMemo(() => {
     const q = query.trim().toLowerCase();
     const specs = idl.specs.filter(
-      (s) => (scope === ALL || s.group === scope) && (!q || s.title.toLowerCase().includes(q) || s.id.toLowerCase().includes(q)),
+      (s) =>
+        (scope === ALL || s.group === scope) &&
+        (!q || s.title.toLowerCase().includes(q) || s.id.toLowerCase().includes(q)),
     );
     const any = (s: Spec) => s.membersPresent.some((v) => v > 0) || s.interfacesPresent.some((v) => v > 0);
     return { some: specs.filter(any), none: specs.filter((s) => !any(s)) };
@@ -117,7 +119,10 @@ export default function Coverage() {
   const core = coverageScope(DEFAULT_SCOPE).totals;
 
   return (
-    <Layout title="Coverage" description="Every Web IDL interface and member exposed on Window, and whether warpdom, happy-dom, jsdom and linkedom define it.">
+    <Layout
+      title="Coverage"
+      description="Every Web IDL interface and member exposed on Window, and whether warpdom, happy-dom, jsdom and linkedom define it."
+    >
       <header className="hero-dp">
         <div className="hero-dp__inner">
           <span className="hero-dp__eyebrow">Coverage · existence pass</span>
@@ -125,44 +130,49 @@ export default function Coverage() {
             Every web API, <em>checked for existence</em>
           </h1>
           <p>
-            {t.interfaces.toLocaleString('en')} interfaces and {t.members.toLocaleString('en')} members from {t.specs} specs: everything
-            the Web IDL says a browser window exposes, looked up in each engine. Shown by default: the{' '}
+            {t.interfaces.toLocaleString('en')} interfaces and {t.members.toLocaleString('en')} members from {t.specs}{' '}
+            specs: everything the Web IDL says a browser window exposes, looked up in each engine. Shown by default: the{' '}
             {core.specs} specs ({core.members.toLocaleString('en')} members) that matter most for unit tests.
           </p>
         </div>
       </header>
       <main className="dp-page">
         <p className="dp-note">
-          <strong>Existence is not behavior.</strong> “Present” means the name is defined where Web IDL puts it; the member can
-          still do nothing or the wrong thing. The <Link to="/">featured checks</Link> test what the standards say for the APIs
-          tests use most.
+          <strong>Existence is not behavior.</strong> “Present” means the name is defined where Web IDL puts it; the
+          member can still do nothing or the wrong thing. The <Link to="/">featured checks</Link> test what the
+          standards say for the APIs tests use most.
         </p>
 
         <section className="dp-section">
           <h2>By group</h2>
           <p className="meta">
-            Web IDL lists everything browsers expose, WebGL, WebGPU and WebRTC included, which no test DOM aims for. Each spec is
-            in one group (<Link to="pathname:///data/spec-groups.json">spec-groups.json</Link>, with the reason for each group);
-            every percentage below is of the group shown.
+            Web IDL lists everything browsers expose, WebGL, WebGPU and WebRTC included, which no test DOM aims for.
+            Each spec is in one group (<Link to="pathname:///data/spec-groups.json">spec-groups.json</Link>, with the
+            reason for each group); every percentage below is of the group shown.
           </p>
           <ScopeTabs scope={scope} onSelect={setScope} />
           <div id="scope-panel" role="tabpanel" aria-labelledby={`tab-${current.id}`}>
             <p className="meta">
-              <strong>{current.title}:</strong> {current.totals.specs} specs, {current.totals.interfaces.toLocaleString('en')}{' '}
-              interfaces, {current.totals.members.toLocaleString('en')} members.{' '}
-              {current.reason ?? 'Every spec in the Web IDL of the web platform, all groups together.'}
+              <strong>{current.title}:</strong> {current.totals.specs} specs,{' '}
+              {current.totals.interfaces.toLocaleString('en')} interfaces, {current.totals.members.toLocaleString('en')}{' '}
+              members. {current.reason ?? 'Every spec in the Web IDL of the web platform, all groups together.'}
             </p>
             <EngineCards featured={false} scope={current.id} />
 
             <h3 style={{ marginTop: '1.75rem' }}>By spec</h3>
             <p className="meta">
-              Share of each spec's members present per engine. Members count in the spec that defines them (a partial interface
-              in CSSOM View counts for CSSOM View).
+              Share of each spec's members present per engine. Members count in the spec that defines them (a partial
+              interface in CSSOM View counts for CSSOM View).
             </p>
             <div className="filters" role="search">
               <label>
                 <span>Filter specs</span>
-                <input type="search" value={query} placeholder="e.g. DOM, HTML, CSS" onChange={(e) => setQuery(e.target.value)} />
+                <input
+                  type="search"
+                  value={query}
+                  placeholder="e.g. DOM, HTML, CSS"
+                  onChange={(e) => setQuery(e.target.value)}
+                />
               </label>
             </div>
             <details className="group" open>
@@ -180,7 +190,9 @@ export default function Coverage() {
                 <span className="group__meta">{none.length} specs</span>
               </summary>
               <div className="group__body">
-                {showNone ? <SpecTable specs={none} caption={`${current.title}: specs no engine defines anything of`} /> : null}
+                {showNone ? (
+                  <SpecTable specs={none} caption={`${current.title}: specs no engine defines anything of`} />
+                ) : null}
               </div>
             </details>
           </div>
@@ -195,9 +207,10 @@ export default function Coverage() {
           <h2>How it is measured</h2>
           <ul>
             <li>
-              Web IDL from <a href="https://www.npmjs.com/package/@webref/idl">@webref/idl</a> {idl.webref.version}, spec titles from{' '}
-              <a href="https://www.npmjs.com/package/browser-specs">browser-specs</a> {idl.browserSpecs.version}. Interfaces and
-              namespaces exposed on Window, with partial interfaces and mixins.
+              Web IDL from <a href="https://www.npmjs.com/package/@webref/idl">@webref/idl</a> {idl.webref.version},
+              spec titles from <a href="https://www.npmjs.com/package/browser-specs">browser-specs</a>{' '}
+              {idl.browserSpecs.version}. Interfaces and namespaces exposed on Window, with partial interfaces and
+              mixins.
             </li>
             <li>
               Interface statuses:{' '}
@@ -207,14 +220,15 @@ export default function Coverage() {
                 .join(' ')}
             </li>
             <li>
-              Members are looked up on the interface prototype (covering its prototype chain), on the interface object for
-              constants and static members, on the window for Window's own members; members inherited only from{' '}
-              <code>Object.prototype</code> do not count. Each engine runs in its own process; probed {idl.date.slice(0, 10)} on
-              Node.js {idl.node}.
+              Members are looked up on the interface prototype (covering its prototype chain), on the interface object
+              for constants and static members, on the window for Window's own members; members inherited only from{' '}
+              <code>Object.prototype</code> do not count. Each engine runs in its own process; probed{' '}
+              {idl.date.slice(0, 10)} on Node.js {idl.node}.
             </li>
             <li>
               Data: <Link to="pathname:///data/idl.json">idl.json</Link> and{' '}
-              <Link to="pathname:///data/spec-groups.json">spec-groups.json</Link> (CC BY 4.0). See also <Link to="/about">About and method</Link>.
+              <Link to="pathname:///data/spec-groups.json">spec-groups.json</Link> (CC BY 4.0). See also{' '}
+              <Link to="/about">About and method</Link>.
             </li>
           </ul>
         </section>

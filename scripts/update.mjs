@@ -37,7 +37,14 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 
 export const ENGINE_PACKAGES = JSON.parse(readFileSync(join(root, 'engines.json'), 'utf8')).map((e) => e.package);
 export const PACKAGES = [...ENGINE_PACKAGES, '@webref/idl', 'browser-specs', 'webidl2'];
-const FILES = ['data/results.json', 'data/idl.json', 'data/changelog.json', 'data/spec-groups.json', 'package.json', 'package-lock.json'];
+const FILES = [
+  'data/results.json',
+  'data/idl.json',
+  'data/changelog.json',
+  'data/spec-groups.json',
+  'package.json',
+  'package-lock.json',
+];
 // Files edited by hand on an update branch (spec classifications) that a
 // rebuild from main carries over, unless main changed them since.
 const CARRIED = ['data/spec-groups.json'];
@@ -55,8 +62,10 @@ export function addChangelogEntry(changelog, entry) {
 export function recordedVersions(data, engines = JSON.parse(readFileSync(join(root, 'engines.json'), 'utf8'))) {
   const out = Object.fromEntries(engines.map((e) => [e.package, new Set()]));
   const add = (pkg, v) => pkg in out && v && out[pkg].add(v);
-  for (const e of data.results?.engines ?? []) add(e.package ?? engines.find((x) => x.engine === e.engine)?.package, e.version);
-  for (const e of data.idl?.engines ?? []) add(e.package ?? engines.find((x) => x.engine === e.engine)?.package, e.version);
+  for (const e of data.results?.engines ?? [])
+    add(e.package ?? engines.find((x) => x.engine === e.engine)?.package, e.version);
+  for (const e of data.idl?.engines ?? [])
+    add(e.package ?? engines.find((x) => x.engine === e.engine)?.package, e.version);
   for (const pkg of Object.keys(out)) add(pkg, data.devDependencies?.[pkg]);
   return out;
 }
@@ -102,7 +111,8 @@ function run(cmd, args) {
   if (r.status !== 0) throw new Error(`${cmd} ${args.join(' ')} exited with ${r.status}`);
 }
 
-const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+const git = (...args) =>
+  execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 const out = (k, v) => process.env.GITHUB_OUTPUT && appendFileSync(process.env.GITHUB_OUTPUT, `${k}=${v}\n`);
 
 async function check(args, opt) {
@@ -114,7 +124,11 @@ async function check(args, opt) {
     const c = changed.find((x) => x.package === p);
     console.log(`${p}: ${c ? `${c.from ?? 'none'} -> ${c.to}` : `${latest[p]} (unchanged)`}`);
   }
-  console.log(changed.length ? `New engine version: ${changed.map((c) => `${c.package} ${c.to}`).join(', ')}` : 'No new engine version');
+  console.log(
+    changed.length
+      ? `New engine version: ${changed.map((c) => `${c.package} ${c.to}`).join(', ')}`
+      : 'No new engine version',
+  );
   out('changed', String(changed.length > 0));
   out('engines', changed.map((c) => `${c.package}@${c.to}`).join(' '));
   if (!changed.length && args.includes('--exit-code')) process.exitCode = 78;
@@ -123,11 +137,17 @@ async function check(args, opt) {
 function update(args, opt, flag) {
   const date = new Date().toISOString().slice(0, 10);
 
-  const saved = Object.fromEntries(FILES.map((f) => [f, existsSync(join(root, f)) ? readFileSync(join(root, f), 'utf8') : null]));
+  const saved = Object.fromEntries(
+    FILES.map((f) => [f, existsSync(join(root, f)) ? readFileSync(join(root, f), 'utf8') : null]),
+  );
   const restore = () => {
     for (const [f, text] of Object.entries(saved)) if (text != null) writeFileSync(join(root, f), text);
   };
-  const old = opt('--old') ? readData({ dir: opt('--old') }) : opt('--base') ? readData({ ref: opt('--base') }) : readData();
+  const old = opt('--old')
+    ? readData({ dir: opt('--old') })
+    : opt('--base')
+      ? readData({ ref: opt('--base') })
+      : readData();
 
   let pending = {};
   if (opt('--pending')) {
@@ -137,11 +157,25 @@ function update(args, opt, flag) {
       branch: readData({ ref }).devDependencies,
       main: readData().devDependencies,
     });
-    console.log(`Pending from ${ref}: ${Object.entries(pending).map(([p, v]) => `${p}@${v}`).join(', ') || 'none'}`);
+    console.log(
+      `Pending from ${ref}: ${
+        Object.entries(pending)
+          .map(([p, v]) => `${p}@${v}`)
+          .join(', ') || 'none'
+      }`,
+    );
     const base = git('merge-base', 'HEAD', ref);
     for (const f of CARRIED) {
-      const at = (r) => { try { return git('show', `${r}:${f}`); } catch { return null; } };
-      const b = at(base), branch = at(ref), main = at('HEAD');
+      const at = (r) => {
+        try {
+          return git('show', `${r}:${f}`);
+        } catch {
+          return null;
+        }
+      };
+      const b = at(base),
+        branch = at(ref),
+        main = at('HEAD');
       if (branch != null && branch !== b && main === b) {
         writeFileSync(join(root, f), branch + '\n');
         console.log(`Carried over from ${ref}: ${f}`);
@@ -151,7 +185,14 @@ function update(args, opt, flag) {
 
   try {
     if (!flag('--no-install')) {
-      run('npm', ['install', '--save-dev', '--save-exact', '--no-audit', '--no-fund', ...installSpecs({ enginesOnly: flag('--engines-only'), pending })]);
+      run('npm', [
+        'install',
+        '--save-dev',
+        '--save-exact',
+        '--no-audit',
+        '--no-fund',
+        ...installSpecs({ enginesOnly: flag('--engines-only'), pending }),
+      ]);
     }
     if (!flag('--no-probe')) {
       run('npm', ['run', 'probe']);
@@ -183,7 +224,9 @@ function update(args, opt, flag) {
     const changelog = JSON.parse(saved['data/changelog.json'] ?? '{"entries":[]}');
     writeFileSync(file, JSON.stringify(addChangelogEntry(changelog, changelogEntry(diff, { date })), null, 2) + '\n');
   }
-  console.log(`${title}\nresults changed: ${diff.resultsChanged}; unclassified specs: ${diff.unclassified.length}; auto-merge: ${diff.autoMerge}`);
+  console.log(
+    `${title}\nresults changed: ${diff.resultsChanged}; unclassified specs: ${diff.unclassified.length}; auto-merge: ${diff.autoMerge}`,
+  );
   out('changed', 'true');
   out('auto_merge', String(diff.autoMerge));
   out('title', title);

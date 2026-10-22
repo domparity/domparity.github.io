@@ -5,7 +5,8 @@ const SPEC = 'https://html.spec.whatwg.org/multipage/dom.html#the-innertext-idl-
 export default {
   id: 'inner-text',
   title: 'element.innerText',
-  summary: 'The rendered text of an element (line breaks, hidden content left out) and a setter that turns newlines into <br>.',
+  summary:
+    'The rendered text of an element (line breaks, hidden content left out) and a setter that turns newlines into <br>.',
   spec: SPEC,
   exists: (w) => 'innerText' in w.document.createElement('div'),
   existsDescription: '"innerText" in element.',
@@ -22,7 +23,8 @@ export default {
     },
     {
       id: 'display-none-skipped',
-      description: 'Text inside a display: none child is left out: <div>a<span style="display:none">b</span></div> gives "a".',
+      description:
+        'Text inside a display: none child is left out: <div>a<span style="display:none">b</span></div> gives "a".',
       spec: 'https://html.spec.whatwg.org/multipage/dom.html#rendered-text-collection-steps',
       run(w) {
         const d = w.document.body.appendChild(w.document.createElement('div'));

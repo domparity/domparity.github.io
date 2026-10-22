@@ -4,7 +4,8 @@ const SPEC = 'https://drafts.csswg.org/selectors-4/#relational';
 
 function fixture(w) {
   const root = w.document.body.appendChild(w.document.createElement('section'));
-  root.innerHTML = '<div id="a"><span class="x"></span></div><div id="b"><p><span class="x"></span></p></div><div id="c"></div>';
+  root.innerHTML =
+    '<div id="a"><span class="x"></span></div><div id="b"><p><span class="x"></span></p></div><div id="c"></div>';
   return root;
 }
 

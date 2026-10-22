@@ -8,7 +8,8 @@ export default {
   interfaces: ['HTMLDialogElement'],
   summary: 'The dialog element and its methods for opening it as a modal and closing it with a return value.',
   spec: SPEC,
-  exists: (w) => typeof w.HTMLDialogElement === 'function' && typeof w.document.createElement('dialog').showModal === 'function',
+  exists: (w) =>
+    typeof w.HTMLDialogElement === 'function' && typeof w.document.createElement('dialog').showModal === 'function',
   existsDescription: 'HTMLDialogElement exists and a <dialog> has showModal().',
   checks: [
     {

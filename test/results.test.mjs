@@ -33,15 +33,29 @@ const raw = [
       },
     },
   },
-  { engine: 'jsdom', package: 'jsdom29', version: '29.0.0', results: { thing: { exists: false, checks: [], error: null } } },
+  {
+    engine: 'jsdom',
+    package: 'jsdom29',
+    version: '29.0.0',
+    results: { thing: { exists: false, checks: [], error: null } },
+  },
   { engine: 'linkedom', package: 'linkedom', version: null, crashed: 'boom', results: {} },
 ];
 
-const out = buildResults({ probes, raw, setups: { jsdom: 'new JSDOM()' }, date: '2026-10-17T00:00:00.000Z', node: 'v22.23.3' });
+const out = buildResults({
+  probes,
+  raw,
+  setups: { jsdom: 'new JSDOM()' },
+  date: '2026-10-17T00:00:00.000Z',
+  node: 'v22.23.3',
+});
 
 test('engines are keyed by engine and version, so versions can sit side by side', () => {
   assert.equal(out.schema, SCHEMA_VERSION);
-  assert.deepEqual(out.engines.map((e) => e.key), ['jsdom@30.1.3', 'jsdom@29.0.0', 'linkedom@unknown']);
+  assert.deepEqual(
+    out.engines.map((e) => e.key),
+    ['jsdom@30.1.3', 'jsdom@29.0.0', 'linkedom@unknown'],
+  );
   assert.equal(out.engines[0].setup, 'new JSDOM()');
   assert.equal(out.engines[2].crashed, 'boom');
 });
@@ -57,7 +71,11 @@ test('per-engine results carry status, passed and failed checks with their error
 
 test('an engine that crashed is reported as missing with the reason', () => {
   assert.deepEqual(out.results.thing['linkedom@unknown'], {
-    status: 'missing', exists: false, passed: [], failed: [], error: 'engine crashed',
+    status: 'missing',
+    exists: false,
+    passed: [],
+    failed: [],
+    error: 'engine crashed',
   });
 });
 

@@ -32,5 +32,6 @@ export default {
       },
     },
   ],
-  workaround: 'Node.js has structuredClone as a global since 17. Under Jest\'s jsdom environment it is not copied in; assigning the Node global in a setup file (globalThis.structuredClone ??= ...) is common, or the core-js polyfill.',
+  workaround:
+    "Node.js has structuredClone as a global since 17. Under Jest's jsdom environment it is not copied in; assigning the Node global in a setup file (globalThis.structuredClone ??= ...) is common, or the core-js polyfill.",
 };

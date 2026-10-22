@@ -37,7 +37,13 @@ export function buildResults({ probes, raw: unordered, setups, date, node }) {
       const o = r.results[p.id];
       const key = engines[i].key;
       if (!o) {
-        results[p.id][key] = { status: 'missing', exists: false, passed: [], failed: [], error: r.crashed ? 'engine crashed' : 'not run' };
+        results[p.id][key] = {
+          status: 'missing',
+          exists: false,
+          passed: [],
+          failed: [],
+          error: r.crashed ? 'engine crashed' : 'not run',
+        };
         return;
       }
       results[p.id][key] = {

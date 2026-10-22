@@ -12,15 +12,25 @@ const data = {
   ],
   apis: [
     {
-      id: 'zeta', title: 'Zeta <x>', summary: 'Has {braces}.', spec: 'https://example.org/z#s',
-      existsDescription: null, nodeGlobal: 'zeta', workaround: 'Use `zeta-polyfill`.',
+      id: 'zeta',
+      title: 'Zeta <x>',
+      summary: 'Has {braces}.',
+      spec: 'https://example.org/z#s',
+      existsDescription: null,
+      nodeGlobal: 'zeta',
+      workaround: 'Use `zeta-polyfill`.',
       checks: [{ id: 'c1', description: 'Returns <b>{}</b>.', spec: 'https://example.org/#c1' }],
     },
     { id: 'alpha', title: 'Alpha', summary: 'A.', spec: 'https://example.org/a', checks: [] },
   ],
   results: {
     zeta: {
-      'a@1.0.0': { status: 'partial', passed: [], failed: [{ id: 'c1', error: 'got `{x}` <y>', logged: ['Not implemented: zeta'] }], error: null },
+      'a@1.0.0': {
+        status: 'partial',
+        passed: [],
+        failed: [{ id: 'c1', error: 'got `{x}` <y>', logged: ['Not implemented: zeta'] }],
+        error: null,
+      },
       'b@2.0.0': { status: 'missing', exists: false, passed: [], failed: [], error: null },
     },
   },
@@ -63,12 +73,17 @@ test('the sidebar lists API pages by title', () => {
 
 test('WPT summary tables are parsed and rendered with the source and unmeasured engines', () => {
   const md = [
-    '## warpdom', '', '| Directory | Files | Harness OK | All pass | Subtests | Passed | Pass rate | Score | Skipped |',
+    '## warpdom',
+    '',
+    '| Directory | Files | Harness OK | All pass | Subtests | Passed | Pass rate | Score | Skipped |',
     '|---|---:|---:|---:|---:|---:|---:|---:|---:|',
     '| dom/abort/ | 6 | 6 | 6 | 37 | 37 | 100.0% | 100.0% | 0 |',
     '| dom/observable/ | 0 | 0 | 0 | 0 | 0 | - | - | 27 |',
     '| **Total** | 6 | 6 | 6 | 37 | 37 | 100.0% | 100.0% | 0 |',
-    '', '## Side by side', '| Directory | Files |', '| dom/abort/ | 6 |',
+    '',
+    '## Side by side',
+    '| Directory | Files |',
+    '| dom/abort/ | 6 |',
   ].join('\n');
   const tables = parseSummary(md);
   assert.deepEqual(tables.warpdom, [
@@ -76,8 +91,21 @@ test('WPT summary tables are parsed and rendered with the source and unmeasured 
     { area: 'total', files: 6, filesAllPass: 6, subtests: 37, passed: 37 },
   ]);
   const page = renderWpt({
-    source: { wptCommit: '87b5d13099c8', wptCommitUrl: 'https://x/', date: '2026-10-13', node: 'v22', file: 'f.md', repository: 'https://r', githubRun: '1', areas: ['dom'], notes: 'n' },
-    engines: { warpdom: { measured: true, version: 'c1', areas: tables.warpdom }, linkedom: { measured: false, version: null, areas: null } },
+    source: {
+      wptCommit: '87b5d13099c8',
+      wptCommitUrl: 'https://x/',
+      date: '2026-10-13',
+      node: 'v22',
+      file: 'f.md',
+      repository: 'https://r',
+      githubRun: '1',
+      areas: ['dom'],
+      notes: 'n',
+    },
+    engines: {
+      warpdom: { measured: true, version: 'c1', areas: tables.warpdom },
+      linkedom: { measured: false, version: null, areas: null },
+    },
   });
   assert.ok(page.includes('| `dom/abort` | 37 | 37 | 100.0% |'));
   assert.ok(page.includes('| **Total** | 37 | 37 | 100.0% |'));
@@ -85,7 +113,18 @@ test('WPT summary tables are parsed and rendered with the source and unmeasured 
   assert.ok(page.includes('87b5d13099'));
   assert.ok(!page.includes('tuned'));
   const withCaveat = renderWpt({
-    source: { wptCommit: '87b5d13099c8', wptCommitUrl: 'https://x/', date: '2026-10-13', node: 'v22', file: 'f.md', repository: 'https://r', githubRun: '1', areas: ['dom'], notes: 'n', caveat: 'warpdom was tuned on dom.' },
+    source: {
+      wptCommit: '87b5d13099c8',
+      wptCommitUrl: 'https://x/',
+      date: '2026-10-13',
+      node: 'v22',
+      file: 'f.md',
+      repository: 'https://r',
+      githubRun: '1',
+      areas: ['dom'],
+      notes: 'n',
+      caveat: 'warpdom was tuned on dom.',
+    },
     engines: { warpdom: { measured: true, version: 'c1', areas: tables.warpdom } },
   });
   assert.ok(withCaveat.includes('\nwarpdom was tuned on dom.\n'));
@@ -96,7 +135,9 @@ test('every engine section links to a prefilled "wrong result" issue', async () 
   const page = renderApiPage(data.apis[0], data);
   assert.equal((page.match(/<ReportLink href=/g) ?? []).length, 2);
   assert.ok(page.includes("import ReportLink from '@site/src/components/ReportLink';"));
-  const url = new URL(featuredReport(data.apis[0], { ...data.engines[0], setup: 'new A()' }, data.results.zeta['a@1.0.0'], data));
+  const url = new URL(
+    featuredReport(data.apis[0], { ...data.engines[0], setup: 'new A()' }, data.results.zeta['a@1.0.0'], data),
+  );
   assert.equal(`${url.origin}${url.pathname}`, ISSUES_NEW);
   assert.equal(url.searchParams.get('title'), 'Wrong result: Zeta <x> in a 1.0.0');
   const body = url.searchParams.get('body');
@@ -105,7 +146,9 @@ test('every engine section links to a prefilled "wrong result" issue', async () 
   assert.ok(body.includes('**Expected (per the spec):** Returns <b>{}</b>.'));
   assert.ok(body.includes("**Observed:** `got '{x}' <y>`"));
   assert.ok(body.includes('**Logged by the engine:** `Not implemented: zeta`'));
-  const missing = new URL(featuredReport(data.apis[0], data.engines[1], data.results.zeta['b@2.0.0'], data)).searchParams.get('body');
+  const missing = new URL(
+    featuredReport(data.apis[0], data.engines[1], data.results.zeta['b@2.0.0'], data),
+  ).searchParams.get('body');
   assert.ok(missing.includes('**Observed:** not defined'));
 });
 
@@ -120,16 +163,33 @@ test('featured pages show Web IDL existence for the interfaces an API is about',
   const idl = {
     engines: [{ key: 'a@1.0.0' }, { key: 'b@2.0.0' }],
     specs: {
-      html: { interfaces: { HTMLThing: { kind: 'interface', status: 'P-', members: [['open', 'a', '11'], ['show', 'o', '10'], ['close', 'o', '00']] } } },
+      html: {
+        interfaces: {
+          HTMLThing: {
+            kind: 'interface',
+            status: 'P-',
+            members: [
+              ['open', 'a', '11'],
+              ['show', 'o', '10'],
+              ['close', 'o', '00'],
+            ],
+          },
+        },
+      },
       other: { interfaces: { HTMLThing: { members: [['extra', 'o', '00']] } } },
     },
   };
   const api = { ...data.apis[0], interfaces: ['HTMLThing'] };
   assert.deepEqual(idlLines(api, 'a@1.0.0', idl), [
-    'Web IDL existence ([coverage](/coverage)):', '',
-    '- [HTMLThing](/coverage/interface/HTMLThing): interface present; 2 of 4 members present, missing: `close`, `extra`.', '',
+    'Web IDL existence ([coverage](/coverage)):',
+    '',
+    '- [HTMLThing](/coverage/interface/HTMLThing): interface present; 2 of 4 members present, missing: `close`, `extra`.',
+    '',
   ]);
-  assert.equal(idlLines(api, 'b@2.0.0', idl)[2], '- [HTMLThing](/coverage/interface/HTMLThing): interface not defined.');
+  assert.equal(
+    idlLines(api, 'b@2.0.0', idl)[2],
+    '- [HTMLThing](/coverage/interface/HTMLThing): interface not defined.',
+  );
   assert.deepEqual(idlLines(data.apis[1], 'a@1.0.0', idl), []);
   assert.ok(renderApiPage(api, data, idl).includes('interface present; 2 of 4 members present'));
 });
@@ -140,12 +200,37 @@ test('the What changed page lists updates newest first, with version moves, stat
     entries: [
       {
         date: '2026-10-19',
-        engines: [{ engine: 'jsdom', from: '30.1.3', version: '30.2.0' }, { engine: 'linkedom', version: '0.18.13' }],
+        engines: [
+          { engine: 'jsdom', from: '30.1.3', version: '30.2.0' },
+          { engine: 'linkedom', version: '0.18.13' },
+        ],
         packages: [{ package: '@webref/idl', from: '3.85.2', to: '3.86.0' }],
-        featured: [{ engine: 'jsdom', api: 'zeta', title: 'Zeta <x>', from: 'partial', to: 'supported', nowPass: ['c1'], nowFail: [] }],
+        featured: [
+          {
+            engine: 'jsdom',
+            api: 'zeta',
+            title: 'Zeta <x>',
+            from: 'partial',
+            to: 'supported',
+            nowPass: ['c1'],
+            nowFail: [],
+          },
+        ],
         apisAdded: [],
         apisRemoved: [],
-        idl: [{ engine: 'jsdom', interfaces: 1, nowPresent: 2, nowMissing: 0, examples: { interfaces: [{ name: 'Foo', spec: 'dom', from: '-', to: 'P' }], nowPresent: ['Foo.a', 'Foo.b'], nowMissing: [] } }],
+        idl: [
+          {
+            engine: 'jsdom',
+            interfaces: 1,
+            nowPresent: 2,
+            nowMissing: 0,
+            examples: {
+              interfaces: [{ name: 'Foo', spec: 'dom', from: '-', to: 'P' }],
+              nowPresent: ['Foo.a', 'Foo.b'],
+              nowMissing: [],
+            },
+          },
+        ],
         specsAdded: [{ id: 'new-spec', title: 'New Spec', group: null }],
         specsRemoved: [],
         interfacesAdded: 3,
@@ -163,8 +248,14 @@ test('the What changed page lists updates newest first, with version moves, stat
   assert.ok(page.includes('jsdom 30.1.3 → **30.2.0**, linkedom 0.18.13.'));
   assert.ok(page.includes('`@webref/idl` 3.85.2 → 3.86.0'));
   assert.ok(page.includes('- jsdom: [Zeta \\<x\\>](/apis/zeta): Partial → **Supported** (now passes `c1`)'));
-  assert.ok(page.includes('1 interface changed status, 2 members now present, 0 now missing: `Foo` missing → present, `Foo.a` now present'));
-  assert.ok(page.includes('New in the Web IDL: spec New Spec (not yet in a group); 3 interfaces added; 1 member added.'));
+  assert.ok(
+    page.includes(
+      '1 interface changed status, 2 members now present, 0 now missing: `Foo` missing → present, `Foo.a` now present',
+    ),
+  );
+  assert.ok(
+    page.includes('New in the Web IDL: spec New Spec (not yet in a group); 3 interfaces added; 1 member added.'),
+  );
   assert.ok(page.includes('First data.'));
   // An API that no longer exists is not linked (the build fails on broken links).
   assert.ok(!renderChanges(changelog).includes('](/apis/zeta)'));

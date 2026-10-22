@@ -87,7 +87,12 @@ export function featuredReport(api, engine, r, data) {
     );
   }
   if (r.passed.length) lines.push(`Checks that work: ${r.passed.map(fence).join(', ')}`, '');
-  lines.push('### What is wrong?', '', '<!-- Which result is wrong, what you expected and why, with a link to the specification. -->', '');
+  lines.push(
+    '### What is wrong?',
+    '',
+    '<!-- Which result is wrong, what you expected and why, with a link to the specification. -->',
+    '',
+  );
   return issueUrl(`Wrong result: ${api.title} in ${engine.engine} ${engine.version ?? ''}`.trim(), lines.join('\n'));
 }
 
@@ -144,7 +149,12 @@ export function renderApiPage(api, data, idl = null) {
   for (const engine of data.engines) {
     const r = data.results[api.id]?.[engine.key];
     if (!r) continue;
-    lines.push(`### ${mdxText(engine.engine)} ${mdxText(engine.version ?? '')}`, '', `<StatusBadge status="${r.status}" />`, '');
+    lines.push(
+      `### ${mdxText(engine.engine)} ${mdxText(engine.version ?? '')}`,
+      '',
+      `<StatusBadge status="${r.status}" />`,
+      '',
+    );
     const report = `<ReportLink href={${JSON.stringify(featuredReport(api, engine, r, data))}} engine={${JSON.stringify(engine.engine)}} />`;
     const total = api.checks.length;
     if (r.status === 'missing') {
@@ -153,17 +163,14 @@ export function renderApiPage(api, data, idl = null) {
           ? `Missing: checking for it threw ${mdxCode(r.error)}.`
           : api.existsDescription
             ? `Missing: in this engine's window, this does not hold: ${mdxText(api.existsDescription)}`
-            : 'Not defined in this engine\'s window.',
+            : "Not defined in this engine's window.",
         '',
       );
     } else {
       lines.push(`${r.passed.length} of ${total} checks work.`, '');
     }
     if (r.sameAsNode) {
-      lines.push(
-        `The window's value is Node.js's own global (identical object), not the engine's implementation.`,
-        '',
-      );
+      lines.push(`The window's value is Node.js's own global (identical object), not the engine's implementation.`, '');
     }
     lines.push(...idlLines(api, engine.key, idl));
     for (const f of r.failed) {
@@ -194,9 +201,7 @@ export function renderApiPage(api, data, idl = null) {
 }
 
 export function renderSidebar(data) {
-  return [...data.apis]
-    .sort((a, b) => a.title.localeCompare(b.title))
-    .map((a) => `apis/${a.id}`);
+  return [...data.apis].sort((a, b) => a.title.localeCompare(b.title)).map((a) => `apis/${a.id}`);
 }
 
 const pct = (a) => `${((100 * a.passed) / a.subtests).toFixed(1)}%`;
@@ -229,7 +234,8 @@ export function renderWpt(wpt) {
   ];
   for (const area of areas) {
     const rows = measured.map(([, e]) => e.areas.find((a) => a.area === area));
-    const label = area === 'total' ? '**Total**' : area === 'dom' ? `${mdxCode('dom')} (top-level files)` : mdxCode(area);
+    const label =
+      area === 'total' ? '**Total**' : area === 'dom' ? `${mdxCode('dom')} (top-level files)` : mdxCode(area);
     lines.push(
       `| ${label} | ${rows[0]?.subtests ?? ''} | ${rows.map((a) => (a ? `${a.passed} | ${pct(a)}` : '- | -')).join(' | ')} |`,
     );
@@ -272,21 +278,31 @@ export function renderChanges(changelog, { apiIds = new Set(), groups = { groups
     lines.push(`## ${e.date}${sameDay > 1 ? ` (${sameDay - seen[e.date] + 1})` : ''}`, '');
     if (e.note) lines.push(mdxText(e.note), '');
     const versions = (e.engines ?? []).map((x) =>
-      x.from && x.from !== x.version ? `${mdxText(x.engine)} ${mdxText(x.from)} → **${mdxText(x.version)}**` : `${mdxText(x.engine)} ${mdxText(x.version)}`,
+      x.from && x.from !== x.version
+        ? `${mdxText(x.engine)} ${mdxText(x.from)} → **${mdxText(x.version)}**`
+        : `${mdxText(x.engine)} ${mdxText(x.version)}`,
     );
     lines.push(`Engines: ${versions.join(', ')}.`, '');
     if (e.packages?.length) {
-      lines.push(`Packages: ${e.packages.map((p) => `${mdxCode(p.package)} ${mdxText(p.from ?? 'none')} → ${mdxText(p.to ?? 'none')}`).join(', ')}.`, '');
+      lines.push(
+        `Packages: ${e.packages.map((p) => `${mdxCode(p.package)} ${mdxText(p.from ?? 'none')} → ${mdxText(p.to ?? 'none')}`).join(', ')}.`,
+        '',
+      );
     }
     if (e.initial) continue;
     const featured = e.featured ?? [];
     lines.push('### Featured checks', '');
-    for (const a of e.apisAdded ?? []) lines.push(`- New API: ${apiIds.has(a.id) ? link(a.title, `/apis/${a.id}`) : mdxText(a.title)}`);
+    for (const a of e.apisAdded ?? [])
+      lines.push(`- New API: ${apiIds.has(a.id) ? link(a.title, `/apis/${a.id}`) : mdxText(a.title)}`);
     for (const a of e.apisRemoved ?? []) lines.push(`- Removed API: ${mdxText(a.title)}`);
-    if (!featured.length && !(e.apisAdded ?? []).length && !(e.apisRemoved ?? []).length) lines.push('No status changed.');
+    if (!featured.length && !(e.apisAdded ?? []).length && !(e.apisRemoved ?? []).length)
+      lines.push('No status changed.');
     for (const c of featured) {
       const title = apiIds.has(c.api) ? link(c.title, `/apis/${c.api}`) : mdxText(c.title);
-      const move = c.from === c.to ? `still ${mdxText(STATUS_LABEL[c.to] ?? c.to).toLowerCase()}` : `${mdxText(STATUS_LABEL[c.from] ?? c.from)} → **${mdxText(STATUS_LABEL[c.to] ?? c.to)}**`;
+      const move =
+        c.from === c.to
+          ? `still ${mdxText(STATUS_LABEL[c.to] ?? c.to).toLowerCase()}`
+          : `${mdxText(STATUS_LABEL[c.from] ?? c.from)} → **${mdxText(STATUS_LABEL[c.to] ?? c.to)}**`;
       const parts = [];
       if (c.nowPass?.length) parts.push(`now passes ${c.nowPass.map(mdxCode).join(', ')}`);
       if (c.nowFail?.length) parts.push(`now fails ${c.nowFail.map(mdxCode).join(', ')}`);
@@ -296,7 +312,9 @@ export function renderChanges(changelog, { apiIds = new Set(), groups = { groups
     if (!(e.idl ?? []).length) lines.push('No interface or member changed for any engine.');
     for (const x of e.idl ?? []) {
       const examples = [
-        ...x.examples.interfaces.map((i) => `${mdxCode(i.name)} ${mdxText(IFACE_WORD[i.from] ?? i.from)} → ${mdxText(IFACE_WORD[i.to] ?? i.to)}`),
+        ...x.examples.interfaces.map(
+          (i) => `${mdxCode(i.name)} ${mdxText(IFACE_WORD[i.from] ?? i.from)} → ${mdxText(IFACE_WORD[i.to] ?? i.to)}`,
+        ),
         ...x.examples.nowPresent.map((m) => `${mdxCode(m)} now present`),
         ...x.examples.nowMissing.map((m) => `${mdxCode(m)} now missing`),
       ];
@@ -306,7 +324,9 @@ export function renderChanges(changelog, { apiIds = new Set(), groups = { groups
       );
     }
     const added = [
-      ...(e.specsAdded ?? []).map((s) => `spec ${mdxText(s.title)} (${s.group ? mdxText(groupTitle[s.group] ?? s.group) : 'not yet in a group'})`),
+      ...(e.specsAdded ?? []).map(
+        (s) => `spec ${mdxText(s.title)} (${s.group ? mdxText(groupTitle[s.group] ?? s.group) : 'not yet in a group'})`,
+      ),
       ...(e.specsRemoved ?? []).map((s) => `spec ${mdxCode(s)} removed`),
     ];
     const counts = [
@@ -342,7 +362,10 @@ function main() {
   for (const api of data.apis) writeFileSync(join(apiDir, `${api.id}.mdx`), renderApiPage(api, data, idl));
   writeFileSync(join(site, 'docs', 'wpt.mdx'), renderWpt(wpt));
   const changelogText = readFileSync(join(dataDir, 'changelog.json'), 'utf8');
-  writeFileSync(join(site, 'docs', 'changes.mdx'), renderChanges(JSON.parse(changelogText), { apiIds: new Set(data.apis.map((a) => a.id)), groups }));
+  writeFileSync(
+    join(site, 'docs', 'changes.mdx'),
+    renderChanges(JSON.parse(changelogText), { apiIds: new Set(data.apis.map((a) => a.id)), groups }),
+  );
   writeFileSync(join(site, 'sidebars.generated.json'), JSON.stringify(renderSidebar(data), null, 2) + '\n');
   for (const dir of [join(site, 'src', 'data'), join(site, 'static', 'data')]) {
     mkdirSync(dir, { recursive: true });
@@ -350,11 +373,17 @@ function main() {
     writeFileSync(join(dir, 'wpt.json'), JSON.stringify(wpt, null, 2) + '\n');
   }
   writeFileSync(join(site, 'src', 'data', 'idl-summary.json'), JSON.stringify(summarize(idl, groups)) + '\n');
-  writeFileSync(join(site, 'src', 'data', 'site.json'), JSON.stringify({ maintainerEngine: MAINTAINER_ENGINE, dataUpdated: dataDate(data, idl) }) + '\n');
+  writeFileSync(
+    join(site, 'src', 'data', 'site.json'),
+    JSON.stringify({ maintainerEngine: MAINTAINER_ENGINE, dataUpdated: dataDate(data, idl) }) + '\n',
+  );
   writeFileSync(join(site, 'static', 'data', 'changelog.json'), changelogText);
   writeFileSync(join(site, 'static', 'data', 'spec-groups.json'), groupsText);
   writeFileSync(join(site, 'static', 'data', 'idl.json'), idlText);
-  writeFileSync(join(site, 'static', 'data', 'idl-search.json'), JSON.stringify({ engines: idl.engines.map((e) => e.engine), rows: searchRows(idl) }));
+  writeFileSync(
+    join(site, 'static', 'data', 'idl-search.json'),
+    JSON.stringify({ engines: idl.engines.map((e) => e.engine), rows: searchRows(idl) }),
+  );
   console.log(`generated ${data.apis.length} API pages, wpt.mdx, changes.mdx, sidebar and data files`);
 }
 

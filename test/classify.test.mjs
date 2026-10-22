@@ -28,7 +28,12 @@ test('partial, not stub, as soon as one check works', () => {
 });
 
 test('stub when every check fails and the engine throws "not implemented"', () => {
-  const ni = { id: 'a', pass: false, error: 'Error: Not implemented: HTMLFormElement.prototype.requestSubmit', notImplemented: true };
+  const ni = {
+    id: 'a',
+    pass: false,
+    error: 'Error: Not implemented: HTMLFormElement.prototype.requestSubmit',
+    notImplemented: true,
+  };
   assert.equal(classify({ exists: true, checks: [ni, fail('b')] }), 'stub');
 });
 

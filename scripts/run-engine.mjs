@@ -42,7 +42,10 @@ function errorText(e) {
 async function inWindow(fn) {
   const { window, close } = await adapter.create(pkg);
   try {
-    return await withTimeout(Promise.resolve().then(() => fn(window)), CHECK_TIMEOUT_MS);
+    return await withTimeout(
+      Promise.resolve().then(() => fn(window)),
+      CHECK_TIMEOUT_MS,
+    );
   } finally {
     try {
       await close();

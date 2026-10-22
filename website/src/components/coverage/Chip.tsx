@@ -35,7 +35,10 @@ export function Bar({ value, total, label }: { value: number; total: number; lab
       </span>
       <span className="bar__text">
         {text}
-        <span className="sr-only"> ({value} of {total})</span>
+        <span className="sr-only">
+          {' '}
+          ({value} of {total})
+        </span>
       </span>
     </span>
   );

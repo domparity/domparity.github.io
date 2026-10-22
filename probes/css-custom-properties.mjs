@@ -25,7 +25,8 @@ export default {
     },
     {
       id: 'computed-inherited',
-      description: 'A custom property from a stylesheet rule on the parent is inherited: getComputedStyle(child).getPropertyValue("--gap") is "10px".',
+      description:
+        'A custom property from a stylesheet rule on the parent is inherited: getComputedStyle(child).getPropertyValue("--gap") is "10px".',
       spec: 'https://drafts.csswg.org/css-variables/#defining-variables',
       run(w) {
         const d = w.document;

@@ -13,7 +13,8 @@ export default {
   checks: [
     {
       id: 'attach-open',
-      description: 'attachShadow({ mode: "open" }) returns a shadow root whose host is the element, and element.shadowRoot returns it.',
+      description:
+        'attachShadow({ mode: "open" }) returns a shadow root whose host is the element, and element.shadowRoot returns it.',
       spec: SPEC,
       run(w) {
         const a = w.document.createElement('div');
@@ -24,7 +25,8 @@ export default {
     },
     {
       id: 'mode-closed',
-      description: 'The root\'s mode reflects the option: "open" for an open root; for mode "closed", element.shadowRoot is null.',
+      description:
+        'The root\'s mode reflects the option: "open" for an open root; for mode "closed", element.shadowRoot is null.',
       spec: 'https://dom.spec.whatwg.org/#dom-element-shadowroot',
       run(w) {
         const a = w.document.createElement('div');
@@ -36,7 +38,8 @@ export default {
     },
     {
       id: 'slot-assignment',
-      description: 'Named and default slots: assignedNodes() returns the matching light-DOM children and assignedSlot points back.',
+      description:
+        'Named and default slots: assignedNodes() returns the matching light-DOM children and assignedSlot points back.',
       spec: 'https://dom.spec.whatwg.org/#find-slotables',
       run(w) {
         const host = w.document.body.appendChild(w.document.createElement('div'));
@@ -51,7 +54,8 @@ export default {
     },
     {
       id: 'encapsulation-and-retarget',
-      description: 'document.querySelector does not see into the shadow tree, and an event from inside is retargeted to the host.',
+      description:
+        'document.querySelector does not see into the shadow tree, and an event from inside is retargeted to the host.',
       spec: 'https://dom.spec.whatwg.org/#retarget',
       run(w) {
         const host = w.document.body.appendChild(w.document.createElement('div'));

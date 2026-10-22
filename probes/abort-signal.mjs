@@ -6,7 +6,8 @@ export default {
   id: 'abort-signal',
   title: 'AbortController / AbortSignal.timeout()',
   interfaces: ['AbortController', 'AbortSignal'],
-  summary: 'Cancels asynchronous work through a signal; AbortSignal.timeout() and any() create signals that abort on their own.',
+  summary:
+    'Cancels asynchronous work through a signal; AbortSignal.timeout() and any() create signals that abort on their own.',
   spec: SPEC,
   global: 'AbortController',
   exists: (w) => typeof w.AbortController === 'function' && typeof w.AbortSignal === 'function',

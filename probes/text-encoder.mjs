@@ -29,5 +29,6 @@ export default {
       },
     },
   ],
-  workaround: 'Node.js has TextEncoder and TextDecoder as globals (also in the "util" module); a setup file can assign them to the test global.',
+  workaround:
+    'Node.js has TextEncoder and TextDecoder as globals (also in the "util" module); a setup file can assign them to the test global.',
 };

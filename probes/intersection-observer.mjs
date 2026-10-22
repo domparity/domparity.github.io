@@ -40,5 +40,6 @@ export default {
       },
     },
   ],
-  workaround: 'Tests usually replace it with a mock class (for example the "react-intersection-observer/test-utils" helpers or a hand-written stub).',
+  workaround:
+    'Tests usually replace it with a mock class (for example the "react-intersection-observer/test-utils" helpers or a hand-written stub).',
 };

@@ -18,7 +18,10 @@ export default {
       run(w) {
         const a = new Uint8Array(64);
         ok(w.crypto.getRandomValues(a) === a, 'did not return the same array');
-        ok(a.some((x) => x !== 0), 'array still all zeros');
+        ok(
+          a.some((x) => x !== 0),
+          'array still all zeros',
+        );
       },
     },
     {
@@ -32,5 +35,6 @@ export default {
       },
     },
   ],
-  workaround: 'Node.js has a Web Crypto global (globalThis.crypto) since 19; a setup file can assign it to the test global.',
+  workaround:
+    'Node.js has a Web Crypto global (globalThis.crypto) since 19; a setup file can assign it to the test global.',
 };
