@@ -75,7 +75,8 @@ export function diffData({ old, new: cur, groups }) {
   }
 
   const packages = versionChanges(old.devDependencies, cur.devDependencies);
-  const node = old.results?.node !== cur.results?.node ? { from: old.results?.node ?? null, to: cur.results?.node ?? null } : null;
+  const node =
+    old.results?.node !== cur.results?.node ? { from: old.results?.node ?? null, to: cur.results?.node ?? null } : null;
 
   // Featured APIs.
   const oldApis = new Map((old.results?.apis ?? []).map((a) => [a.id, a]));
@@ -105,9 +106,20 @@ export function diffData({ old, new: cur, groups }) {
       const passedAfter = new Set(after.passed ?? []);
       const known = new Set(oldApis.get(apiId).checks.map((c) => c.id));
       const nowPass = [...passedAfter].filter((c) => !passedBefore.has(c) && known.has(c));
-      const nowFail = api.checks.map((c) => c.id).filter((c) => known.has(c) && passedBefore.has(c) && !passedAfter.has(c));
+      const nowFail = api.checks
+        .map((c) => c.id)
+        .filter((c) => known.has(c) && passedBefore.has(c) && !passedAfter.has(c));
       if (before.status !== after.status || nowPass.length || nowFail.length) {
-        featured.push({ engine: e.engine, engineId: id, api: apiId, title: api.title, from: before.status, to: after.status, nowPass, nowFail });
+        featured.push({
+          engine: e.engine,
+          engineId: id,
+          api: apiId,
+          title: api.title,
+          from: before.status,
+          to: after.status,
+          nowPass,
+          nowFail,
+        });
       }
     }
   }
@@ -160,18 +172,32 @@ export function diffData({ old, new: cur, groups }) {
   const presentIn = (codes, isPresent) => newNames.filter((_, k) => isPresent(codes[k]));
   const interfacesAdded = [...newIdx.interfaces.values()]
     .filter((i) => !oldIdx.interfaces.has(`${i.spec}|${i.name}`))
-    .map((i) => ({ spec: i.spec, name: i.name, group: group(i.spec), presentIn: presentIn(i.status, (c) => c === 'P' || c === 'N' || c === 'S') }));
+    .map((i) => ({
+      spec: i.spec,
+      name: i.name,
+      group: group(i.spec),
+      presentIn: presentIn(i.status, (c) => c === 'P' || c === 'N' || c === 'S'),
+    }));
   const interfacesRemoved = [...oldIdx.interfaces.values()]
     .filter((i) => !newIdx.interfaces.has(`${i.spec}|${i.name}`))
     .map((i) => ({ spec: i.spec, name: i.name }));
   const membersAdded = [...newIdx.members]
     .filter(([k]) => !oldIdx.members.has(k))
-    .map(([, m]) => ({ spec: m.spec, iface: m.iface, name: m.name, kind: m.kind, group: group(m.spec), presentIn: presentIn(m.codes, (c) => c === '1') }));
+    .map(([, m]) => ({
+      spec: m.spec,
+      iface: m.iface,
+      name: m.name,
+      kind: m.kind,
+      group: group(m.spec),
+      presentIn: presentIn(m.codes, (c) => c === '1'),
+    }));
   const membersRemoved = [...oldIdx.members]
     .filter(([k]) => !newIdx.members.has(k))
     .map(([, m]) => ({ spec: m.spec, iface: m.iface, name: m.name, kind: m.kind }));
 
-  const unclassified = Object.keys(newSpecs).filter((s) => !group(s)).sort();
+  const unclassified = Object.keys(newSpecs)
+    .filter((s) => !group(s))
+    .sort();
 
   const versionsChanged = engines.some((e) => e.from !== e.to) || packages.length > 0 || !!node;
   const resultsChanged =
@@ -215,7 +241,9 @@ function capped(items, render, max) {
 
 export function prTitle(diff, date) {
   const bumps = diff.engines.filter((e) => e.from !== e.to && e.from && e.to).map((e) => `${e.engine} ${e.to}`);
-  const tools = diff.packages.filter((p) => !diff.engines.some((e) => e.id === p.package)).map((p) => `${p.package} ${p.to}`);
+  const tools = diff.packages
+    .filter((p) => !diff.engines.some((e) => e.id === p.package))
+    .map((p) => `${p.package} ${p.to}`);
   const parts = [...bumps, ...tools];
   return `Data update ${date}${parts.length ? `: ${parts.join(', ')}` : ''}`;
 }
@@ -230,7 +258,8 @@ export function renderSummary(diff, { date, max = 40, maxChars = 60000 } = {}) {
   }
   L.push('');
   const tools = diff.packages.filter((p) => !diff.engines.some((e) => e.id === p.package));
-  if (tools.length) L.push('Other packages:', '', ...tools.map((p) => `- ${code(p.package)}: ${versionText(p.from, p.to)}`), '');
+  if (tools.length)
+    L.push('Other packages:', '', ...tools.map((p) => `- ${code(p.package)}: ${versionText(p.from, p.to)}`), '');
   if (diff.node) L.push(`Node.js: ${versionText(diff.node.from, diff.node.to)}`, '');
 
   // Featured.
@@ -242,7 +271,9 @@ export function renderSummary(diff, { date, max = 40, maxChars = 60000 } = {}) {
     for (const a of f.apisAdded) L.push(`- New API: ${code(a.id)} ${a.title}`);
     for (const a of f.apisRemoved) L.push(`- Removed API: ${code(a.id)} ${a.title}`);
     for (const c of f.checksChanged) {
-      L.push(`- ${code(c.api)}: checks ${[...c.added.map((x) => `added ${code(x)}`), ...c.removed.map((x) => `removed ${code(x)}`)].join(', ')}`);
+      L.push(
+        `- ${code(c.api)}: checks ${[...c.added.map((x) => `added ${code(x)}`), ...c.removed.map((x) => `removed ${code(x)}`)].join(', ')}`,
+      );
     }
     const engines = [...new Set(f.changes.map((c) => c.engine))];
     for (const name of engines) {
@@ -252,7 +283,10 @@ export function renderSummary(diff, { date, max = 40, maxChars = 60000 } = {}) {
         const parts = [];
         if (c.nowPass.length) parts.push(`now passes: ${c.nowPass.map(code).join(', ')}`);
         if (c.nowFail.length) parts.push(`now fails: ${c.nowFail.map(code).join(', ')}`);
-        const move = c.from === c.to ? `still ${STATUS_WORD[c.to] ?? c.to}` : `${STATUS_WORD[c.from] ?? c.from} → **${STATUS_WORD[c.to] ?? c.to}**`;
+        const move =
+          c.from === c.to
+            ? `still ${STATUS_WORD[c.to] ?? c.to}`
+            : `${STATUS_WORD[c.from] ?? c.from} → **${STATUS_WORD[c.to] ?? c.to}**`;
         L.push(`- ${code(c.api)} ${c.title}: ${move}${parts.length ? ` (${parts.join('; ')})` : ''}`);
       }
     }
@@ -269,24 +303,85 @@ export function renderSummary(diff, { date, max = 40, maxChars = 60000 } = {}) {
       `**${e.engine}** (${versionText(v?.from, v?.to)}): ${plural(e.interfaces.length, 'interface')} changed status, ${plural(e.nowPresent.length, 'member')} now present, ${e.nowMissing.length} now missing${e.other.length ? `, ${plural(e.other.length, 'other change')}` : ''}`,
       '',
     );
-    L.push(...capped(e.interfaces, (x) => `interface ${code(x.name)} (${x.spec}): ${IFACE_WORD[x.from]} → **${IFACE_WORD[x.to]}**`, max));
+    L.push(
+      ...capped(
+        e.interfaces,
+        (x) => `interface ${code(x.name)} (${x.spec}): ${IFACE_WORD[x.from]} → **${IFACE_WORD[x.to]}**`,
+        max,
+      ),
+    );
     L.push(...capped(e.nowPresent, (x) => `now present: ${code(memberName(x))} (${x.spec})`, max));
     L.push(...capped(e.nowMissing, (x) => `now missing: ${code(memberName(x))} (${x.spec})`, max));
-    L.push(...capped(e.other, (x) => `${code(memberName(x))} (${x.spec}): ${MEMBER_WORD[x.from]} → ${MEMBER_WORD[x.to]}`, max));
+    L.push(
+      ...capped(
+        e.other,
+        (x) => `${code(memberName(x))} (${x.spec}): ${MEMBER_WORD[x.from]} → ${MEMBER_WORD[x.to]}`,
+        max,
+      ),
+    );
     L.push('');
   }
 
   // Web IDL plan (from @webref/idl).
-  const planChanges = i.specsAdded.length + i.specsRemoved.length + i.interfacesAdded.length + i.interfacesRemoved.length + i.membersAdded.length + i.membersRemoved.length;
-  L.push(`### New and removed web APIs (@webref/idl ${versionText(diff.webref.from, diff.webref.to)}, browser-specs ${versionText(diff.browserSpecs.from, diff.browserSpecs.to)})`, '');
+  const planChanges =
+    i.specsAdded.length +
+    i.specsRemoved.length +
+    i.interfacesAdded.length +
+    i.interfacesRemoved.length +
+    i.membersAdded.length +
+    i.membersRemoved.length;
+  L.push(
+    `### New and removed web APIs (@webref/idl ${versionText(diff.webref.from, diff.webref.to)}, browser-specs ${versionText(diff.browserSpecs.from, diff.browserSpecs.to)})`,
+    '',
+  );
   if (!planChanges) L.push('No spec, interface or member was added or removed.', '');
   else {
-    if (i.specsAdded.length) L.push(`Specs added (${i.specsAdded.length}):`, '', ...capped(i.specsAdded, (s) => `${code(s.id)} ${s.title}: ${groupText(s.group)}`, max), '');
-    if (i.specsRemoved.length) L.push(`Specs removed (${i.specsRemoved.length}):`, '', ...capped(i.specsRemoved, (s) => `${code(s.id)} ${s.title}`, max), '');
-    if (i.interfacesAdded.length) L.push(`Interfaces added (${i.interfacesAdded.length}):`, '', ...capped(i.interfacesAdded, (x) => `${code(x.name)} (${x.spec}): ${groupText(x.group)}${presence(x)}`, max), '');
-    if (i.interfacesRemoved.length) L.push(`Interfaces removed (${i.interfacesRemoved.length}):`, '', ...capped(i.interfacesRemoved, (x) => `${code(x.name)} (${x.spec})`, max), '');
-    if (i.membersAdded.length) L.push(`Members added (${i.membersAdded.length}):`, '', ...capped(i.membersAdded, (x) => `${code(memberName(x))} (${x.spec}): ${groupText(x.group)}${presence(x)}`, max), '');
-    if (i.membersRemoved.length) L.push(`Members removed (${i.membersRemoved.length}):`, '', ...capped(i.membersRemoved, (x) => `${code(memberName(x))} (${x.spec})`, max), '');
+    if (i.specsAdded.length)
+      L.push(
+        `Specs added (${i.specsAdded.length}):`,
+        '',
+        ...capped(i.specsAdded, (s) => `${code(s.id)} ${s.title}: ${groupText(s.group)}`, max),
+        '',
+      );
+    if (i.specsRemoved.length)
+      L.push(
+        `Specs removed (${i.specsRemoved.length}):`,
+        '',
+        ...capped(i.specsRemoved, (s) => `${code(s.id)} ${s.title}`, max),
+        '',
+      );
+    if (i.interfacesAdded.length)
+      L.push(
+        `Interfaces added (${i.interfacesAdded.length}):`,
+        '',
+        ...capped(i.interfacesAdded, (x) => `${code(x.name)} (${x.spec}): ${groupText(x.group)}${presence(x)}`, max),
+        '',
+      );
+    if (i.interfacesRemoved.length)
+      L.push(
+        `Interfaces removed (${i.interfacesRemoved.length}):`,
+        '',
+        ...capped(i.interfacesRemoved, (x) => `${code(x.name)} (${x.spec})`, max),
+        '',
+      );
+    if (i.membersAdded.length)
+      L.push(
+        `Members added (${i.membersAdded.length}):`,
+        '',
+        ...capped(
+          i.membersAdded,
+          (x) => `${code(memberName(x))} (${x.spec}): ${groupText(x.group)}${presence(x)}`,
+          max,
+        ),
+        '',
+      );
+    if (i.membersRemoved.length)
+      L.push(
+        `Members removed (${i.membersRemoved.length}):`,
+        '',
+        ...capped(i.membersRemoved, (x) => `${code(memberName(x))} (${x.spec})`, max),
+        '',
+      );
   }
 
   if (diff.unclassified.length) {
@@ -301,11 +396,13 @@ export function renderSummary(diff, { date, max = 40, maxChars = 60000 } = {}) {
   }
 
   L.push('### Review', '');
-  if (diff.autoMerge) L.push('Pure version bumps with identical results and every spec classified: eligible for auto-merge.', '');
+  if (diff.autoMerge)
+    L.push('Pure version bumps with identical results and every spec classified: eligible for auto-merge.', '');
   else {
     const why = [];
     if (diff.resultsChanged) why.push('results changed');
-    if (diff.unclassified.length) why.push(`${diff.unclassified.length} unclassified spec${diff.unclassified.length > 1 ? 's' : ''}`);
+    if (diff.unclassified.length)
+      why.push(`${diff.unclassified.length} unclassified spec${diff.unclassified.length > 1 ? 's' : ''}`);
     L.push(`Not eligible for auto-merge (${why.join(', ')}): needs the maintainer's review.`, '');
   }
 
@@ -321,9 +418,21 @@ export function changelogEntry(diff, { date, examples = 20 } = {}) {
   const pick = (list, fn) => list.slice(0, examples).map(fn);
   return {
     date,
-    engines: diff.engines.filter((e) => !e.removed).map((e) => (e.from === e.to ? { engine: e.engine, version: e.to } : { engine: e.engine, from: e.from, version: e.to })),
+    engines: diff.engines
+      .filter((e) => !e.removed)
+      .map((e) =>
+        e.from === e.to ? { engine: e.engine, version: e.to } : { engine: e.engine, from: e.from, version: e.to },
+      ),
     packages: diff.packages.filter((p) => !diff.engines.some((e) => e.id === p.package)),
-    featured: diff.featured.changes.map(({ engine, api, title, from, to, nowPass, nowFail }) => ({ engine, api, title, from, to, nowPass, nowFail })),
+    featured: diff.featured.changes.map(({ engine, api, title, from, to, nowPass, nowFail }) => ({
+      engine,
+      api,
+      title,
+      from,
+      to,
+      nowPass,
+      nowFail,
+    })),
     apisAdded: diff.featured.apisAdded,
     apisRemoved: diff.featured.apisRemoved,
     idl: diff.idl.perEngine.map((e) => ({
@@ -356,7 +465,12 @@ export function readData({ ref = null, dir = root } = {}) {
   const read = (f) => {
     try {
       const text = ref
-        ? execFileSync('git', ['show', `${ref}:${f}`], { cwd: root, encoding: 'utf8', maxBuffer: 64 << 20, stdio: ['ignore', 'pipe', 'ignore'] })
+        ? execFileSync('git', ['show', `${ref}:${f}`], {
+            cwd: root,
+            encoding: 'utf8',
+            maxBuffer: 64 << 20,
+            stdio: ['ignore', 'pipe', 'ignore'],
+          })
         : readFileSync(join(dir, f), 'utf8');
       return JSON.parse(text);
     } catch {

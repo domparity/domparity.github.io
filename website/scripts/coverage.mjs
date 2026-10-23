@@ -93,7 +93,10 @@ export function summarize(idl, groups = { groups: [] }) {
       id: g.id,
       title: g.title,
       reason: g.reason,
-      ...tally(g.specs.filter((id) => id in idl.specs).map((id) => idl.specs[id]), n),
+      ...tally(
+        g.specs.filter((id) => id in idl.specs).map((id) => idl.specs[id]),
+        n,
+      ),
     })),
     specs,
   };
@@ -103,7 +106,8 @@ export function summarize(idl, groups = { groups: [] }) {
 export function interfaceIndex(idl) {
   const index = {};
   for (const [id, spec] of Object.entries(idl.specs)) {
-    for (const [name, iface] of Object.entries(spec.interfaces)) if (iface.status) index[name] = { spec: id, inherits: iface.inherits ?? null, kind: iface.kind };
+    for (const [name, iface] of Object.entries(spec.interfaces))
+      if (iface.status) index[name] = { spec: id, inherits: iface.inherits ?? null, kind: iface.kind };
   }
   return index;
 }
@@ -133,7 +137,11 @@ export function specPage(idl, id, groups = { groups: [] }) {
     totals: {
       interfaces: interfaces.filter((i) => i.definedHere).length,
       members: members.length,
-      interfacesPresent: count(interfaces.filter((i) => i.status).map((i) => i.status), n, ifacePresent),
+      interfacesPresent: count(
+        interfaces.filter((i) => i.status).map((i) => i.status),
+        n,
+        ifacePresent,
+      ),
       membersPresent: count(members, n, memberPresent),
     },
     interfaces,
@@ -145,14 +153,17 @@ export function interfacePage(idl, name) {
   const own = index[name];
   const def = idl.specs[own.spec].interfaces[name];
   const chain = [];
-  for (let p = own.inherits; p && chain.length < 20; p = index[p]?.inherits) chain.push({ name: p, linked: !!index[p] });
+  for (let p = own.inherits; p && chain.length < 20; p = index[p]?.inherits)
+    chain.push({ name: p, linked: !!index[p] });
   const groups = [];
   for (const [id, spec] of Object.entries(idl.specs)) {
     const members = spec.interfaces[name]?.members;
     if (members?.length) groups.push({ spec: { id, title: spec.title, url: spec.url }, members });
   }
   // The defining spec first, then the others by title.
-  groups.sort((a, b) => (a.spec.id === own.spec ? -1 : b.spec.id === own.spec ? 1 : a.spec.title.localeCompare(b.spec.title)));
+  groups.sort((a, b) =>
+    a.spec.id === own.spec ? -1 : b.spec.id === own.spec ? 1 : a.spec.title.localeCompare(b.spec.title),
+  );
   const children = Object.entries(index)
     .filter(([, v]) => v.inherits === name)
     .map(([k]) => k)

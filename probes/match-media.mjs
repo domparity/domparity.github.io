@@ -31,5 +31,6 @@ export default {
       },
     },
   ],
-  workaround: 'A common pattern is to define window.matchMedia in a setup file with a function returning { matches: false, media, addEventListener() {}, removeEventListener() {} } (shown in the Jest documentation).',
+  workaround:
+    'A common pattern is to define window.matchMedia in a setup file with a function returning { matches: false, media, addEventListener() {}, removeEventListener() {} } (shown in the Jest documentation).',
 };

@@ -36,7 +36,8 @@ export default {
     },
     {
       id: 'initial-and-default',
-      description: 'Values not set by the page use the initial or user-agent value: a <div> has display "block", a <span> has visibility "visible".',
+      description:
+        'Values not set by the page use the initial or user-agent value: a <div> has display "block", a <span> has visibility "visible".',
       spec: 'https://drafts.csswg.org/css-cascade/#initial-value',
       run(w) {
         const d = w.document;

@@ -18,7 +18,12 @@ export default function coveragePlugin(context) {
       const { createData, addRoute } = actions;
       for (const id of Object.keys(idl.specs)) {
         const data = await createData(`spec-${id}.json`, JSON.stringify(specPage(idl, id, groups)));
-        addRoute({ path: specPath(id), component: '@site/src/components/coverage/SpecPage', modules: { page: data }, exact: true });
+        addRoute({
+          path: specPath(id),
+          component: '@site/src/components/coverage/SpecPage',
+          modules: { page: data },
+          exact: true,
+        });
       }
       // Interface pages share data modules (BUCKET interfaces each): one module
       // per page would put ~1000 entries in the client's route registry, which
@@ -26,9 +31,17 @@ export default function coveragePlugin(context) {
       const names = Object.keys(interfaceIndex(idl)).sort();
       for (let b = 0; b * BUCKET < names.length; b++) {
         const group = names.slice(b * BUCKET, (b + 1) * BUCKET);
-        const data = await createData(`interfaces-${b}.json`, JSON.stringify(Object.fromEntries(group.map((n) => [n, interfacePage(idl, n)]))));
+        const data = await createData(
+          `interfaces-${b}.json`,
+          JSON.stringify(Object.fromEntries(group.map((n) => [n, interfacePage(idl, n)]))),
+        );
         for (const name of group) {
-          addRoute({ path: interfacePath(name), component: '@site/src/components/coverage/InterfacePage', modules: { bucket: data }, exact: true });
+          addRoute({
+            path: interfacePath(name),
+            component: '@site/src/components/coverage/InterfacePage',
+            modules: { bucket: data },
+            exact: true,
+          });
         }
       }
     },

@@ -17,7 +17,8 @@ export default {
   checks: [
     {
       id: 'controls',
-      description: 'Includes text inputs, checked checkboxes and selected options; skips unchecked, disabled and unnamed controls.',
+      description:
+        'Includes text inputs, checked checkboxes and selected options; skips unchecked, disabled and unnamed controls.',
       spec: 'https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#constructing-the-form-data-set',
       run(w) {
         const f = w.document.body.appendChild(w.document.createElement('form'));
@@ -30,7 +31,7 @@ export default {
     },
     {
       id: 'submitter',
-      description: 'new FormData(form, submitter) includes the submitter button\'s name and value.',
+      description: "new FormData(form, submitter) includes the submitter button's name and value.",
       spec: SPEC,
       run(w) {
         const f = w.document.body.appendChild(w.document.createElement('form'));

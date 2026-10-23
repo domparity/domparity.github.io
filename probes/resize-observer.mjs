@@ -34,7 +34,10 @@ export default {
         ro.observe(el);
         await until(() => entries.length > 0, 500, 'no entry delivered');
         ok(entries[0].target === el, 'entry.target is not the element');
-        ok(entries[0].contentRect && typeof entries[0].contentRect.width === 'number', 'entry.contentRect.width is not a number');
+        ok(
+          entries[0].contentRect && typeof entries[0].contentRect.width === 'number',
+          'entry.contentRect.width is not a number',
+        );
         ro.disconnect();
       },
     },

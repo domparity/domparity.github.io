@@ -13,7 +13,8 @@ export default {
   checks: [
     {
       id: 'animate-returns-animation',
-      description: 'animate(keyframes, 1000) returns an Animation whose playState is "running" and whose finished is a promise.',
+      description:
+        'animate(keyframes, 1000) returns an Animation whose playState is "running" and whose finished is a promise.',
       spec: SPEC,
       run(w) {
         const el = w.document.body.appendChild(w.document.createElement('div'));

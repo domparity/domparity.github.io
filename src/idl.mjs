@@ -43,10 +43,29 @@ export function declarationMembers(m) {
   }
   if (m.type === 'async_iterable') return ['values', '@@asyncIterator'];
   if (m.type === 'maplike') {
-    return ['size', 'entries', 'forEach', 'get', 'has', 'keys', 'values', '@@iterator', ...(m.readonly ? [] : ['set', 'delete', 'clear'])];
+    return [
+      'size',
+      'entries',
+      'forEach',
+      'get',
+      'has',
+      'keys',
+      'values',
+      '@@iterator',
+      ...(m.readonly ? [] : ['set', 'delete', 'clear']),
+    ];
   }
   if (m.type === 'setlike') {
-    return ['size', 'entries', 'forEach', 'has', 'keys', 'values', '@@iterator', ...(m.readonly ? [] : ['add', 'delete', 'clear'])];
+    return [
+      'size',
+      'entries',
+      'forEach',
+      'has',
+      'keys',
+      'values',
+      '@@iterator',
+      ...(m.readonly ? [] : ['add', 'delete', 'clear']),
+    ];
   }
   return [];
 }
@@ -72,7 +91,9 @@ export function memberEntries(m) {
 function constructorInfo(defs) {
   // [HTMLConstructor] constructors (HTML elements) only work for custom
   // elements defined in the registry, so they are not tried.
-  const ctors = defs.flatMap((d) => d.members.filter((m) => m.type === 'constructor' && !extAttr(m, 'HTMLConstructor')));
+  const ctors = defs.flatMap((d) =>
+    d.members.filter((m) => m.type === 'constructor' && !extAttr(m, 'HTMLConstructor')),
+  );
   if (!ctors.length) return null;
   return { noArgs: ctors.some((c) => c.arguments.every((a) => a.optional || a.variadic)) };
 }
@@ -130,7 +151,13 @@ export function buildPlan(parsed, specMeta = (s) => ({ title: s, url: null })) {
         if (seen.has(key)) continue;
         seen.add(key);
         const on = kind === 'namespace' || statik ? 'object' : global ? 'global' : 'proto';
-        members.push({ name: e.name, kind: e.kind, spec: memberSpec, on, ...(unforgeable ? { unforgeable: true } : {}) });
+        members.push({
+          name: e.name,
+          kind: e.kind,
+          spec: memberSpec,
+          on,
+          ...(unforgeable ? { unforgeable: true } : {}),
+        });
         specs[memberSpec] ??= specMeta(memberSpec);
       }
     };
@@ -164,12 +191,21 @@ export function buildPlan(parsed, specMeta = (s) => ({ title: s, url: null })) {
     });
   }
 
-  const sortedSpecs = Object.fromEntries(Object.keys(specs).sort().map((s) => [s, specs[s]]));
+  const sortedSpecs = Object.fromEntries(
+    Object.keys(specs)
+      .sort()
+      .map((s) => [s, specs[s]]),
+  );
   return { specs: sortedSpecs, interfaces };
 }
 
 // Webref file names that browser-specs knows under another shortname.
-const SPEC_ALIASES = { bluetooth: 'web-bluetooth', 'bluetooth-scanning': 'web-bluetooth-scanning', hid: 'webhid', usb: 'webusb' };
+const SPEC_ALIASES = {
+  bluetooth: 'web-bluetooth',
+  'bluetooth-scanning': 'web-bluetooth-scanning',
+  hid: 'webhid',
+  usb: 'webusb',
+};
 
 // Spec titles and URLs from browser-specs, by shortname or series shortname.
 export function specMetaFrom(browserSpecs) {
@@ -256,7 +292,11 @@ function sampleInstance(window, iface) {
 // missing implementation; `captureLogs(fn)` runs fn and returns the console
 // lines it produced (the child process captures console output).
 // Returns { <interface name>: { code, members: "0101...", ctorError? } }.
-export function probeWindow(window, plan, { nodeGlobal = globalThis, isNotImplemented = () => false, captureLogs = (fn) => (fn(), []), construct = true } = {}) {
+export function probeWindow(
+  window,
+  plan,
+  { nodeGlobal = globalThis, isNotImplemented = () => false, captureLogs = (fn) => (fn(), []), construct = true } = {},
+) {
   const out = {};
   for (const iface of plan.interfaces) {
     const value = safe(() => window[iface.name]);
@@ -282,7 +322,10 @@ export function probeWindow(window, plan, { nodeGlobal = globalThis, isNotImplem
         try {
           new value();
         } catch (e) {
-          error = e && e.message !== undefined ? `${e.name && e.name !== 'Error' ? `${e.name}: ` : ''}${e.message}` : String(e);
+          error =
+            e && e.message !== undefined
+              ? `${e.name && e.name !== 'Error' ? `${e.name}: ` : ''}${e.message}`
+              : String(e);
         }
       });
       const reported = isNotImplemented(error) || logs.some(isNotImplemented);
@@ -299,7 +342,10 @@ export const IDL_SCHEMA_VERSION = 1;
 
 // One member per line keeps diffs of data/idl.json readable.
 export function formatIdlData(data) {
-  return JSON.stringify(data, null, 1).replace(/\[\s+("(?:[^"\\]|\\.)*"),\s+("[^"]*"),\s+("[^"]*")\s+\]/g, '[$1, $2, $3]') + '\n';
+  return (
+    JSON.stringify(data, null, 1).replace(/\[\s+("(?:[^"\\]|\\.)*"),\s+("[^"]*"),\s+("[^"]*")\s+\]/g, '[$1, $2, $3]') +
+    '\n'
+  );
 }
 
 // Combines the plan and each engine's raw outcome into data/idl.json:
@@ -333,7 +379,7 @@ export function buildIdlData({ plan, raw: unordered, date, node, webref, browser
     if (Object.keys(ctor).length) own.ctor = ctor;
     iface.members.forEach((m, j) => {
       const e = entry(m.spec, iface.name);
-      (e.members ??= []).push([m.name, m.kind, outcomes.map((o) => (o ? o.members[j] ?? '?' : '?')).join('')]);
+      (e.members ??= []).push([m.name, m.kind, outcomes.map((o) => (o ? (o.members[j] ?? '?') : '?')).join('')]);
     });
   }
   // Specs whose IDL adds nothing exposed on Window are dropped by the plan already.
@@ -345,8 +391,18 @@ export function buildIdlData({ plan, raw: unordered, date, node, webref, browser
     webref,
     browserSpecs,
     engines,
-    codes: { interface: { ...INTERFACE_CODES, '?': 'not probed' }, member: { 1: 'present', 0: 'missing', '?': 'not probed' } },
-    memberKinds: { a: 'attribute', o: 'operation', c: 'constant', sa: 'static attribute', so: 'static operation', i: 'iterable, maplike or setlike member' },
+    codes: {
+      interface: { ...INTERFACE_CODES, '?': 'not probed' },
+      member: { 1: 'present', 0: 'missing', '?': 'not probed' },
+    },
+    memberKinds: {
+      a: 'attribute',
+      o: 'operation',
+      c: 'constant',
+      sa: 'static attribute',
+      so: 'static operation',
+      i: 'iterable, maplike or setlike member',
+    },
     note: 'Existence only: present means the name is defined where Web IDL puts it, not that it behaves as the standard says.',
     specs,
   };

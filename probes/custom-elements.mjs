@@ -9,7 +9,8 @@ export default {
   id: 'custom-elements',
   title: 'customElements.define() and lifecycle callbacks',
   interfaces: ['CustomElementRegistry'],
-  summary: 'Autonomous custom elements: registration, upgrade and the connected, disconnected and attributeChanged callbacks.',
+  summary:
+    'Autonomous custom elements: registration, upgrade and the connected, disconnected and attributeChanged callbacks.',
   spec: SPEC,
   exists: (w) => !!w.customElements && typeof w.customElements.define === 'function',
   existsDescription: 'window.customElements.define is a function.',
@@ -21,10 +22,17 @@ export default {
       run(w) {
         const log = [];
         const tag = name('x-life');
-        w.customElements.define(tag, class extends w.HTMLElement {
-          connectedCallback() { log.push('connected'); }
-          disconnectedCallback() { log.push('disconnected'); }
-        });
+        w.customElements.define(
+          tag,
+          class extends w.HTMLElement {
+            connectedCallback() {
+              log.push('connected');
+            }
+            disconnectedCallback() {
+              log.push('disconnected');
+            }
+          },
+        );
         const el = w.document.createElement(tag);
         w.document.body.appendChild(el);
         el.remove();
@@ -38,10 +46,17 @@ export default {
       run(w) {
         const log = [];
         const tag = name('x-attr');
-        w.customElements.define(tag, class extends w.HTMLElement {
-          static get observedAttributes() { return ['size']; }
-          attributeChangedCallback(n, o, v) { log.push(`${n}:${o}->${v}`); }
-        });
+        w.customElements.define(
+          tag,
+          class extends w.HTMLElement {
+            static get observedAttributes() {
+              return ['size'];
+            }
+            attributeChangedCallback(n, o, v) {
+              log.push(`${n}:${o}->${v}`);
+            }
+          },
+        );
         const el = w.document.createElement(tag);
         el.setAttribute('size', '1');
         el.setAttribute('other', 'x');
@@ -51,7 +66,8 @@ export default {
     },
     {
       id: 'upgrade',
-      description: 'An element parsed before define() is upgraded when its definition arrives; whenDefined() and get() see it.',
+      description:
+        'An element parsed before define() is upgraded when its definition arrives; whenDefined() and get() see it.',
       spec: 'https://html.spec.whatwg.org/multipage/custom-elements.html#upgrades',
       async run(w) {
         const tag = name('x-late');
@@ -59,7 +75,10 @@ export default {
         const el = w.document.body.firstChild;
         const defined = w.customElements.whenDefined(tag);
         class Late extends w.HTMLElement {
-          constructor() { super(); this.upgraded = true; }
+          constructor() {
+            super();
+            this.upgraded = true;
+          }
         }
         w.customElements.define(tag, Late);
         equal(el.upgraded, true, 'el.upgraded');

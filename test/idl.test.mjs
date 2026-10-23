@@ -1,7 +1,15 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parse } from 'webidl2';
-import { buildPlan, probeWindow, interfaceCode, buildIdlData, formatIdlData, memberEntries, specMetaFrom } from '../src/idl.mjs';
+import {
+  buildPlan,
+  probeWindow,
+  interfaceCode,
+  buildIdlData,
+  formatIdlData,
+  memberEntries,
+  specMetaFrom,
+} from '../src/idl.mjs';
 
 const parsed = {
   dom: parse(`
@@ -31,7 +39,9 @@ const parsed = {
     [Exposed=(Window,Worker)] namespace CSS { boolean supports(DOMString c); };
     [Exposed=Window] interface URL { constructor(USVString url); static boolean canParse(USVString url); stringifier attribute USVString href; };
   `),
-  cssom: parse(`partial interface Element { undefined scrollTo(); }; partial interface mixin ParentNode { undefined fancy(); };`),
+  cssom: parse(
+    `partial interface Element { undefined scrollTo(); }; partial interface mixin ParentNode { undefined fancy(); };`,
+  ),
 };
 
 const plan = buildPlan(parsed);
@@ -39,14 +49,30 @@ const byName = Object.fromEntries(plan.interfaces.map((i) => [i.name, i]));
 const names = (i) => byName[i].members.map((m) => `${m.kind}:${m.name}@${m.spec}`);
 
 test('the plan keeps what is exposed on Window and drops the rest', () => {
-  assert.deepEqual(Object.keys(byName).sort(), ['CSS', 'Element', 'Event', 'EventTarget', 'HTMLElement', 'Node', 'NodeFilter', 'NodeList', 'URL', 'Window']);
+  assert.deepEqual(Object.keys(byName).sort(), [
+    'CSS',
+    'Element',
+    'Event',
+    'EventTarget',
+    'HTMLElement',
+    'Node',
+    'NodeFilter',
+    'NodeList',
+    'URL',
+    'Window',
+  ]);
   assert.equal(byName.CSS.kind, 'namespace');
   assert.equal(byName.NodeFilter.kind, 'callback');
   assert.deepEqual(Object.keys(plan.specs), ['cssom', 'dom', 'html']);
 });
 
 test('members come from partials and mixins, each attributed to the spec that defines it', () => {
-  assert.deepEqual(names('Element'), ['o:getAttribute@dom', 'o:scrollTo@cssom', 'o:fancy@cssom', 'a:childElementCount@dom']);
+  assert.deepEqual(names('Element'), [
+    'o:getAttribute@dom',
+    'o:scrollTo@cssom',
+    'o:fancy@cssom',
+    'a:childElementCount@dom',
+  ]);
   assert.equal(byName.Element.inherits, 'Node');
   assert.equal(byName.Element.spec, 'dom');
 });
@@ -55,18 +81,34 @@ test('overloads count once; constants and statics are looked up on the interface
   assert.deepEqual(names('Node'), ['c:ELEMENT_NODE@dom', 'a:nodeName@dom', 'o:appendChild@dom']);
   assert.equal(byName.Node.members[0].on, 'object');
   assert.equal(byName.Node.members[1].on, 'proto');
-  assert.deepEqual(byName.URL.members.map((m) => `${m.kind}:${m.name}:${m.on}`), ['so:canParse:object', 'a:href:proto', 'o:toString:proto']);
+  assert.deepEqual(
+    byName.URL.members.map((m) => `${m.kind}:${m.name}:${m.on}`),
+    ['so:canParse:object', 'a:href:proto', 'o:toString:proto'],
+  );
 });
 
 test('iterable declarations add their methods; anonymous getters add nothing', () => {
-  assert.deepEqual(names('NodeList'), ['o:item@dom', 'i:entries@dom', 'i:keys@dom', 'i:values@dom', 'i:forEach@dom', 'i:@@iterator@dom']);
+  assert.deepEqual(names('NodeList'), [
+    'o:item@dom',
+    'i:entries@dom',
+    'i:keys@dom',
+    'i:values@dom',
+    'i:forEach@dom',
+    'i:@@iterator@dom',
+  ]);
   assert.deepEqual(memberEntries({ type: 'operation', name: '', special: 'getter' }), []);
-  assert.deepEqual(memberEntries({ type: 'setlike', readonly: true }).map((e) => e.name), ['size', 'entries', 'forEach', 'has', 'keys', 'values', '@@iterator']);
+  assert.deepEqual(
+    memberEntries({ type: 'setlike', readonly: true }).map((e) => e.name),
+    ['size', 'entries', 'forEach', 'has', 'keys', 'values', '@@iterator'],
+  );
 });
 
 test("Window's own members are looked up on the window itself", () => {
   assert.equal(byName.Window.global, true);
-  assert.deepEqual(byName.Window.members.map((m) => `${m.name}:${m.on}`), ['self:global', 'onclick:global']);
+  assert.deepEqual(
+    byName.Window.members.map((m) => `${m.name}:${m.on}`),
+    ['self:global', 'onclick:global'],
+  );
 });
 
 test('constructors: no-argument ones are tried, [HTMLConstructor] and required arguments are not', () => {
@@ -152,13 +194,31 @@ test('data/idl.json groups by spec, then interface, with one code per engine', (
     { engine: 'a', version: '1.0.0', results: probeWindow(window, plan, { nodeGlobal, construct: false }) },
     { engine: 'b', version: null, crashed: 'boom', results: {} },
   ];
-  const data = buildIdlData({ plan, raw, date: 'd', node: 'v22', webref: { version: '1' }, browserSpecs: { version: '2' } });
-  assert.deepEqual(data.engines.map((e) => e.key), ['a@1.0.0', 'b@unknown']);
+  const data = buildIdlData({
+    plan,
+    raw,
+    date: 'd',
+    node: 'v22',
+    webref: { version: '1' },
+    browserSpecs: { version: '2' },
+  });
+  assert.deepEqual(
+    data.engines.map((e) => e.key),
+    ['a@1.0.0', 'b@unknown'],
+  );
   const el = data.specs.dom.interfaces.Element;
   assert.equal(el.status, 'P?');
   assert.equal(el.inherits, 'Node');
-  assert.deepEqual(el.members, [['getAttribute', 'o', '1?'], ['childElementCount', 'a', '0?']]);
-  assert.deepEqual(data.specs.cssom.interfaces.Element, { members: [['scrollTo', 'o', '0?'], ['fancy', 'o', '0?']] });
+  assert.deepEqual(el.members, [
+    ['getAttribute', 'o', '1?'],
+    ['childElementCount', 'a', '0?'],
+  ]);
+  assert.deepEqual(data.specs.cssom.interfaces.Element, {
+    members: [
+      ['scrollTo', 'o', '0?'],
+      ['fancy', 'o', '0?'],
+    ],
+  });
   assert.equal(data.specs.cssom.interfaces.Element.status, undefined);
   const text = formatIdlData(data);
   assert.deepEqual(JSON.parse(text), data);
@@ -167,7 +227,13 @@ test('data/idl.json groups by spec, then interface, with one code per engine', (
 
 test('spec titles come from browser-specs, by shortname, series or alias', () => {
   const meta = specMetaFrom([
-    { shortname: 'dom', title: 'DOM Standard', nightly: { url: 'https://dom.spec.whatwg.org/' }, organization: 'WHATWG', series: { shortname: 'dom' } },
+    {
+      shortname: 'dom',
+      title: 'DOM Standard',
+      nightly: { url: 'https://dom.spec.whatwg.org/' },
+      organization: 'WHATWG',
+      series: { shortname: 'dom' },
+    },
     { shortname: 'css-foo-2', title: 'CSS Foo 2', url: 'https://x/', series: { shortname: 'css-foo' } },
     { shortname: 'webusb', title: 'WebUSB', url: 'https://u/' },
   ]);

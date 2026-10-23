@@ -25,7 +25,17 @@ type Page = {
   interfaces: Iface[];
 };
 
-function Group({ iface, engines, open, onToggle }: { iface: Iface; engines: Engine[]; open: boolean; onToggle: (open: boolean) => void }) {
+function Group({
+  iface,
+  engines,
+  open,
+  onToggle,
+}: {
+  iface: Iface;
+  engines: Engine[];
+  open: boolean;
+  onToggle: (open: boolean) => void;
+}) {
   const n = iface.members.length;
   return (
     <details className="group" open={open} onToggle={(e) => onToggle((e.currentTarget as HTMLDetailsElement).open)}>
@@ -51,7 +61,11 @@ function Group({ iface, engines, open, onToggle }: { iface: Iface; engines: Engi
       </summary>
       {open ? (
         <div className="group__body">
-          <MemberTable members={iface.members} engines={engines} caption={`Members of ${iface.name} in this spec, per engine`} />
+          <MemberTable
+            members={iface.members}
+            engines={engines}
+            caption={`Members of ${iface.name} in this spec, per engine`}
+          />
           <p style={{ margin: '0.6rem 1rem' }}>
             <Link to={`/coverage/interface/${iface.name}`}>All of {iface.name}, every spec →</Link>
           </p>
@@ -68,12 +82,17 @@ export default function SpecPage({ page }: { page: Page }) {
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return page.interfaces;
-    return page.interfaces.filter((i) => i.name.toLowerCase().includes(q) || i.members.some((m) => m[0].toLowerCase().includes(q)));
+    return page.interfaces.filter(
+      (i) => i.name.toLowerCase().includes(q) || i.members.some((m) => m[0].toLowerCase().includes(q)),
+    );
   }, [query, page.interfaces]);
   const setAll = (value: boolean) => setOpen(Object.fromEntries(shown.map((i) => [i.name, value])));
 
   return (
-    <Layout title={`${spec.title}: coverage`} description={`Which ${spec.title} interfaces and members exist in warpdom, happy-dom, jsdom and linkedom.`}>
+    <Layout
+      title={`${spec.title}: coverage`}
+      description={`Which ${spec.title} interfaces and members exist in warpdom, happy-dom, jsdom and linkedom.`}
+    >
       <main className="dp-page">
         <p className="dp-crumbs">
           <Link to="/coverage">Coverage</Link> / {spec.id}
@@ -85,12 +104,13 @@ export default function SpecPage({ page }: { page: Page }) {
               Specification: <a href={spec.url}>{spec.url.replace(/^https?:\/\//, '')}</a>.{' '}
             </>
           ) : null}
-          {totals.interfaces} interface{totals.interfaces === 1 ? '' : 's'} defined here, {totals.members} members exposed on Window (Web IDL).
+          {totals.interfaces} interface{totals.interfaces === 1 ? '' : 's'} defined here, {totals.members} members
+          exposed on Window (Web IDL).
           {page.group ? <> Group: {page.group}.</> : null}
         </p>
         <p className="dp-note">
-          Existence only: “present” means the name is defined where Web IDL puts it, not that it behaves as the standard says.
-          The <Link to="/">featured checks</Link> test behavior.
+          Existence only: “present” means the name is defined where Web IDL puts it, not that it behaves as the standard
+          says. The <Link to="/">featured checks</Link> test behavior.
         </p>
 
         <div className="panel">
@@ -126,15 +146,24 @@ export default function SpecPage({ page }: { page: Page }) {
         <div className="filters" role="search">
           <label>
             <span>Filter interfaces and members</span>
-            <input type="search" value={query} placeholder="e.g. Element, scroll" onChange={(e) => setQuery(e.target.value)} />
+            <input
+              type="search"
+              value={query}
+              placeholder="e.g. Element, scroll"
+              onChange={(e) => setQuery(e.target.value)}
+            />
           </label>
         </div>
         <div className="toolbar">
           <span className="filters__count" aria-live="polite">
             {shown.length} of {page.interfaces.length} interfaces
           </span>
-          <button type="button" onClick={() => setAll(true)}>Expand all</button>
-          <button type="button" onClick={() => setAll(false)}>Collapse all</button>
+          <button type="button" onClick={() => setAll(true)}>
+            Expand all
+          </button>
+          <button type="button" onClick={() => setAll(false)}>
+            Collapse all
+          </button>
         </div>
         {shown.map((iface) => (
           <Group

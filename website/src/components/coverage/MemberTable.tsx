@@ -9,7 +9,17 @@ export type Member = [string, string, string];
 const anchor = (name: string) => `m-${name.replace(/[^A-Za-z0-9_-]/g, '_')}`;
 
 // One row per member, one column per engine.
-export default function MemberTable({ members, engines, anchors = false, caption }: { members: Member[]; engines: Engine[]; anchors?: boolean; caption: string }) {
+export default function MemberTable({
+  members,
+  engines,
+  anchors = false,
+  caption,
+}: {
+  members: Member[];
+  engines: Engine[];
+  anchors?: boolean;
+  caption: string;
+}) {
   return (
     <div className="dp-scroll">
       <table className="grid-dp">

@@ -81,7 +81,10 @@ const config: Config = {
           items: [
             { label: 'About and method', to: '/about' },
             { label: 'What changed', to: '/changes' },
-            { label: 'Report a wrong result', href: 'https://github.com/domparity/domparity.github.io/issues/new?template=wrong-result.yml' },
+            {
+              label: 'Report a wrong result',
+              href: 'https://github.com/domparity/domparity.github.io/issues/new?template=wrong-result.yml',
+            },
             { label: 'Sponsor the maintainer', href: 'https://github.com/sponsors/sonukapoor' },
           ],
         },

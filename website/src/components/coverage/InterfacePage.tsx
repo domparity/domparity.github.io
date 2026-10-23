@@ -31,7 +31,9 @@ function reportUrl(page: Page): string {
     `**Probed:** ${page.date.slice(0, 10)}, Web IDL from @webref/idl ${page.webref.version}`,
     '',
     '**Shown:**',
-    ...page.engines.map((e, i) => `- ${e.engine} ${e.version ?? ''}: ${IDL_INTERFACE[page.status[i]]?.label ?? page.status[i]}`),
+    ...page.engines.map(
+      (e, i) => `- ${e.engine} ${e.version ?? ''}: ${IDL_INTERFACE[page.status[i]]?.label ?? page.status[i]}`,
+    ),
     '',
     '**Member (if it is about one):** ',
     '**Engine and version:** ',
@@ -39,7 +41,11 @@ function reportUrl(page: Page): string {
     '**Observed:** ',
     '',
   ];
-  const params = new URLSearchParams({ title: `Wrong result: ${page.name} (coverage)`, body: lines.join('\n'), labels: 'accuracy' });
+  const params = new URLSearchParams({
+    title: `Wrong result: ${page.name} (coverage)`,
+    body: lines.join('\n'),
+    labels: 'accuracy',
+  });
   return `${ISSUES_NEW}?${params.toString()}`;
 }
 
@@ -53,26 +59,32 @@ export default function InterfacePage({ bucket }: { bucket: Record<string, Page>
   const missing = engines.map((_, i) => all.filter((m) => m[2][i] === '0').map((m) => m[0]));
   const shown = (name: string) => (name.startsWith('@@') ? `[Symbol.${name.slice(2)}]` : name);
   return (
-    <Layout title={`${page.name}: coverage`} description={`Is ${page.name} and each of its members defined in warpdom, happy-dom, jsdom and linkedom?`}>
+    <Layout
+      title={`${page.name}: coverage`}
+      description={`Is ${page.name} and each of its members defined in warpdom, happy-dom, jsdom and linkedom?`}
+    >
       <main className="dp-page">
         <p className="dp-crumbs">
-          <Link to="/coverage">Coverage</Link> / <Link to={`/coverage/spec/${page.spec.id.toLowerCase()}`}>{page.spec.id}</Link> / {page.name}
+          <Link to="/coverage">Coverage</Link> /{' '}
+          <Link to={`/coverage/spec/${page.spec.id.toLowerCase()}`}>{page.spec.id}</Link> / {page.name}
         </p>
         <h1>
           <code style={{ background: 'none', padding: 0, fontSize: 'inherit' }}>{page.name}</code>
         </h1>
         <p className="meta">
-          {page.kind === 'namespace' ? 'Namespace' : page.kind === 'callback' ? 'Callback interface' : 'Interface'} defined in{' '}
-          <Link to={`/coverage/spec/${page.spec.id.toLowerCase()}`}>{page.spec.title}</Link>
+          {page.kind === 'namespace' ? 'Namespace' : page.kind === 'callback' ? 'Callback interface' : 'Interface'}{' '}
+          defined in <Link to={`/coverage/spec/${page.spec.id.toLowerCase()}`}>{page.spec.title}</Link>
           {page.spec.url ? (
             <>
-              {' '}(<a href={page.spec.url}>spec</a>)
+              {' '}
+              (<a href={page.spec.url}>spec</a>)
             </>
           ) : null}
           .
           {page.chain.length ? (
             <>
-              {' '}Inherits from{' '}
+              {' '}
+              Inherits from{' '}
               {page.chain.map((c, i) => (
                 <span key={c.name}>
                   {i ? ' → ' : ''}
@@ -112,7 +124,11 @@ export default function InterfacePage({ bucket }: { bucket: Record<string, Page>
                     <td>
                       <Bar value={present[i]} total={all.length} label={e.engine} />
                       {page.status[i] === '-' || page.status[i] === '?' ? (
-                        <span className="missing-list">{page.status[i] === '-' ? `${page.kind === 'namespace' ? 'Namespace' : 'Interface'} not defined.` : 'Not probed.'}</span>
+                        <span className="missing-list">
+                          {page.status[i] === '-'
+                            ? `${page.kind === 'namespace' ? 'Namespace' : 'Interface'} not defined.`
+                            : 'Not probed.'}
+                        </span>
                       ) : missing[i].length === 0 ? (
                         <span className="missing-list">None missing.</span>
                       ) : (
@@ -137,8 +153,8 @@ export default function InterfacePage({ bucket }: { bucket: Record<string, Page>
           </div>
         </div>
         <p className="dp-note">
-          An interface can be present while some of its members are missing; the table lists them per engine. Existence only:
-          “present” means the name is defined where Web IDL puts it (the prototype, the interface object for
+          An interface can be present while some of its members are missing; the table lists them per engine. Existence
+          only: “present” means the name is defined where Web IDL puts it (the prototype, the interface object for
           constants and static members, or the window itself for Window), not that it behaves as the standard says.
         </p>
 
@@ -152,7 +168,12 @@ export default function InterfacePage({ bucket }: { bucket: Record<string, Page>
               </span>
             </summary>
             <div className="group__body">
-              <MemberTable members={g.members} engines={engines} anchors caption={`${page.name} members from ${g.spec.title}`} />
+              <MemberTable
+                members={g.members}
+                engines={engines}
+                anchors
+                caption={`${page.name} members from ${g.spec.title}`}
+              />
             </div>
           </details>
         ))}

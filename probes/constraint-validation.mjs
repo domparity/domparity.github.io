@@ -16,7 +16,8 @@ export default {
   checks: [
     {
       id: 'value-missing',
-      description: 'An empty required input has validity.valueMissing true; checkValidity() returns false and fires "invalid".',
+      description:
+        'An empty required input has validity.valueMissing true; checkValidity() returns false and fires "invalid".',
       spec: 'https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#dom-cva-checkvalidity',
       run(w) {
         const i = w.document.body.appendChild(w.document.createElement('input'));

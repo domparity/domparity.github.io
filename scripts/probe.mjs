@@ -28,7 +28,13 @@ function runEngine({ engine, package: pkg }) {
         try {
           resolve(JSON.parse(readFileSync(out, 'utf8')));
         } catch {
-          resolve({ engine, package: pkg, version: null, crashed: (err && err.message) || stderr || 'no output', results: {} });
+          resolve({
+            engine,
+            package: pkg,
+            version: null,
+            crashed: (err && err.message) || stderr || 'no output',
+            results: {},
+          });
         }
       },
     );

@@ -81,7 +81,11 @@ export default function CoverageSearch() {
                   <span className="spec">{spec}</span>
                   <span className="chips">
                     {data!.engines.map((e, i) =>
-                      member ? <MemberChip key={e} code={codes[i]} engine={e} /> : <InterfaceChip key={e} code={codes[i]} engine={e} />,
+                      member ? (
+                        <MemberChip key={e} code={codes[i]} engine={e} />
+                      ) : (
+                        <InterfaceChip key={e} code={codes[i]} engine={e} />
+                      ),
                     )}
                   </span>
                 </li>
