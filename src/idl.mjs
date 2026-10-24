@@ -88,6 +88,9 @@ export function memberEntries(m) {
 }
 
 // Whether a constructor exists in the IDL and can be called with no arguments.
+// The page kind of a Web IDL definition type; everything else is an interface.
+const KIND = { __proto__: null, namespace: 'namespace', 'callback interface': 'callback' };
+
 function constructorInfo(defs) {
   // [HTMLConstructor] constructors (HTML elements) only work for custom
   // elements defined in the registry, so they are not tried.
@@ -138,7 +141,7 @@ export function buildPlan(parsed, specMeta = (s) => ({ title: s, url: null })) {
     if (extAttr(def, 'LegacyNoInterfaceObject')) continue;
     if (def.type === 'callback interface' && !def.members.some((m) => m.type === 'const')) continue;
 
-    const kind = def.type === 'namespace' ? 'namespace' : def.type === 'callback interface' ? 'callback' : 'interface';
+    const kind = KIND[def.type] ?? 'interface';
     const global = extAttr(def, 'Global') && onWindow(exposure(def)) && name === 'Window';
     const members = [];
     const seen = new Set();
@@ -150,7 +153,10 @@ export function buildPlan(parsed, specMeta = (s) => ({ title: s, url: null })) {
         const key = `${statik ? 'static ' : ''}${e.name}`;
         if (seen.has(key)) continue;
         seen.add(key);
-        const on = kind === 'namespace' || statik ? 'object' : global ? 'global' : 'proto';
+        // Where the member lives: on the object itself, on the global, or on the prototype.
+        let on = 'proto';
+        if (kind === 'namespace' || statik) on = 'object';
+        else if (global) on = 'global';
         members.push({
           name: e.name,
           kind: e.kind,
@@ -258,9 +264,12 @@ function isBuiltinRoot(o) {
   return typeof o === 'function' && Object.getPrototypeOf(parent) === null && !Object.hasOwn(o, 'prototype');
 }
 
+// Null prototype: a member named like an Object.prototype method (toString)
+// must not find that method here.
+const WELL_KNOWN_SYMBOLS = { __proto__: null, '@@iterator': Symbol.iterator, '@@asyncIterator': Symbol.asyncIterator };
 function has(target, name) {
   if (target == null || (typeof target !== 'object' && typeof target !== 'function')) return false;
-  const key = name === '@@iterator' ? Symbol.iterator : name === '@@asyncIterator' ? Symbol.asyncIterator : name;
+  const key = WELL_KNOWN_SYMBOLS[name] ?? name;
   return (
     safe(() => {
       if (!(key in target)) return false;

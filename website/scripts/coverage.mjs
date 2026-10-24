@@ -161,9 +161,11 @@ export function interfacePage(idl, name) {
     if (members?.length) groups.push({ spec: { id, title: spec.title, url: spec.url }, members });
   }
   // The defining spec first, then the others by title.
-  groups.sort((a, b) =>
-    a.spec.id === own.spec ? -1 : b.spec.id === own.spec ? 1 : a.spec.title.localeCompare(b.spec.title),
-  );
+  groups.sort((a, b) => {
+    if (a.spec.id === own.spec) return -1;
+    if (b.spec.id === own.spec) return 1;
+    return a.spec.title.localeCompare(b.spec.title);
+  });
   const children = Object.entries(index)
     .filter(([, v]) => v.inherits === name)
     .map(([k]) => k)

@@ -143,11 +143,11 @@ function update(args, opt, flag) {
   const restore = () => {
     for (const [f, text] of Object.entries(saved)) if (text != null) writeFileSync(join(root, f), text);
   };
-  const old = opt('--old')
-    ? readData({ dir: opt('--old') })
-    : opt('--base')
-      ? readData({ ref: opt('--base') })
-      : readData();
+  // The data to compare with: a directory, a git ref, or the committed data.
+  let old;
+  if (opt('--old')) old = readData({ dir: opt('--old') });
+  else if (opt('--base')) old = readData({ ref: opt('--base') });
+  else old = readData();
 
   let pending = {};
   if (opt('--pending')) {

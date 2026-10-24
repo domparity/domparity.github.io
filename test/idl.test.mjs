@@ -180,6 +180,31 @@ test('probing a window: present, missing, Node.js globals, stubs and unforgeable
   assert.deepEqual(r.CSS, { code: 'P', members: '1' });
 });
 
+test('members named like Object.prototype methods or well-known symbols are probed by their own key', () => {
+  class Thing {
+    toString() {
+      return 'thing';
+    }
+    *[Symbol.iterator]() {}
+  }
+  class Plain {}
+  const members = [
+    { name: 'toString', on: 'proto' },
+    { name: '@@iterator', on: 'proto' },
+  ];
+  const plan2 = {
+    interfaces: [
+      { name: 'Thing', members },
+      { name: 'Plain', members },
+    ],
+  };
+  const r = probeWindow({ Thing, Plain }, plan2, { nodeGlobal: {}, construct: false });
+  assert.equal(r.Thing.members, '11');
+  // Plain.prototype only inherits toString from Object.prototype, which
+  // doesn't count, and has no iterator.
+  assert.equal(r.Plain.members, '00');
+});
+
 test('a window that answers reads but not `in` (a proxy) still has its members', () => {
   const { window, nodeGlobal } = fakeWindow();
   const proxy = new Proxy(window, { has: () => false });

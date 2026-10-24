@@ -58,6 +58,13 @@ export function issueUrl(title, body) {
   return `${ISSUES_NEW}?${new URLSearchParams({ title, body, labels: 'accuracy' }).toString()}`;
 }
 
+// What a report says was observed for a missing API.
+function observedMissing(api, r) {
+  if (r.error) return fence(clip(r.error));
+  if (api.existsDescription) return 'the existence test fails';
+  return 'not defined';
+}
+
 // Prefilled "wrong result" report for one API in one engine.
 export function featuredReport(api, engine, r, data) {
   const STATUS = STATUS_LABEL[r.status] ?? r.status;
@@ -71,7 +78,7 @@ export function featuredReport(api, engine, r, data) {
   if (r.status === 'missing') {
     lines.push(
       `**Expected:** ${api.existsDescription ? `it exists: ${api.existsDescription}` : "the API exists in this engine's window."}`,
-      `**Observed:** ${r.error ? fence(clip(r.error)) : api.existsDescription ? 'the existence test fails' : 'not defined'}`,
+      `**Observed:** ${observedMissing(api, r)}`,
       '',
     );
   }
@@ -99,6 +106,9 @@ export function featuredReport(api, engine, r, data) {
 // Web IDL existence of the interfaces a featured API is about (api.interfaces),
 // for one engine: whether each interface is defined and which of its members
 // (from every spec) are missing. Empty when there is no coverage data.
+// Added after "interface present" for a global that isn't a plain one.
+const INTERFACE_NOTE = { __proto__: null, N: " (Node.js's own global)", S: ' (a stub)' };
+
 export function idlLines(api, engineKey, idl) {
   if (!idl || !api.interfaces?.length) return [];
   const i = idl.engines.findIndex((e) => e.key === engineKey);
@@ -118,11 +128,21 @@ export function idlLines(api, engineKey, idl) {
     }
     const shown = missing.slice(0, 12).map((m) => mdxCode(m.startsWith('@@') ? `[Symbol.${m.slice(2)}]` : m));
     const more = missing.length > shown.length ? ` and ${missing.length - shown.length} more` : '';
+    const note = INTERFACE_NOTE[status] ?? '';
     out.push(
-      `- ${page}: interface present${status === 'N' ? " (Node.js's own global)" : status === 'S' ? ' (a stub)' : ''}; ${members.length - missing.length} of ${members.length} members present${missing.length ? `, missing: ${shown.join(', ')}${more}` : ''}.`,
+      `- ${page}: interface present${note}; ${members.length - missing.length} of ${members.length} members present${missing.length ? `, missing: ${shown.join(', ')}${more}` : ''}.`,
     );
   }
   return out.length ? ['Web IDL existence ([coverage](/coverage)):', '', ...out, ''] : [];
+}
+
+// The API page's line for an API the engine doesn't have.
+function missingText(api, r) {
+  if (r.error) return `Missing: checking for it threw ${mdxCode(r.error)}.`;
+  if (api.existsDescription) {
+    return `Missing: in this engine's window, this does not hold: ${mdxText(api.existsDescription)}`;
+  }
+  return "Not defined in this engine's window.";
 }
 
 export function renderApiPage(api, data, idl = null) {
@@ -158,14 +178,7 @@ export function renderApiPage(api, data, idl = null) {
     const report = `<ReportLink href={${JSON.stringify(featuredReport(api, engine, r, data))}} engine={${JSON.stringify(engine.engine)}} />`;
     const total = api.checks.length;
     if (r.status === 'missing') {
-      lines.push(
-        r.error
-          ? `Missing: checking for it threw ${mdxCode(r.error)}.`
-          : api.existsDescription
-            ? `Missing: in this engine's window, this does not hold: ${mdxText(api.existsDescription)}`
-            : "Not defined in this engine's window.",
-        '',
-      );
+      lines.push(missingText(api, r), '');
     } else {
       lines.push(`${r.passed.length} of ${total} checks work.`, '');
     }
@@ -234,8 +247,9 @@ export function renderWpt(wpt) {
   ];
   for (const area of areas) {
     const rows = measured.map(([, e]) => e.areas.find((a) => a.area === area));
-    const label =
-      area === 'total' ? '**Total**' : area === 'dom' ? `${mdxCode('dom')} (top-level files)` : mdxCode(area);
+    let label = mdxCode(area);
+    if (area === 'total') label = '**Total**';
+    else if (area === 'dom') label = `${mdxCode('dom')} (top-level files)`;
     lines.push(
       `| ${label} | ${rows[0]?.subtests ?? ''} | ${rows.map((a) => (a ? `${a.passed} | ${pct(a)}` : '- | -')).join(' | ')} |`,
     );
