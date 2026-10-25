@@ -2,6 +2,53 @@
   "description": "What changed in the data, newest first: one entry per update (date, engine versions, featured status changes, Web IDL changes per engine, specs and interfaces added from @webref/idl). Appended by scripts/update.mjs; the site's What changed page is generated from it.",
   "entries": [
     {
+      "date": "2026-10-25",
+      "engines": [
+        {
+          "engine": "warpdom",
+          "from": "0.1.7",
+          "version": "0.1.8"
+        },
+        {
+          "engine": "happy-dom",
+          "version": "21.0.4"
+        },
+        {
+          "engine": "jsdom",
+          "version": "30.1.3"
+        },
+        {
+          "engine": "linkedom",
+          "version": "0.18.14"
+        }
+      ],
+      "packages": [],
+      "featured": [],
+      "apisAdded": [],
+      "apisRemoved": [],
+      "idl": [
+        {
+          "engine": "warpdom",
+          "interfaces": 0,
+          "nowPresent": 1,
+          "nowMissing": 0,
+          "examples": {
+            "interfaces": [],
+            "nowPresent": [
+              "CSSSupportsRule.matches"
+            ],
+            "nowMissing": []
+          }
+        }
+      ],
+      "specsAdded": [],
+      "specsRemoved": [],
+      "interfacesAdded": 0,
+      "interfacesRemoved": 0,
+      "membersAdded": 0,
+      "membersRemoved": 0
+    },
+    {
       "date": "2026-10-21",
       "engines": [
         {
