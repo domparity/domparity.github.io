@@ -30,7 +30,7 @@
     "linkedom": "0.18.14",
     "prettier": "3.9.9",
     "typescript-eslint": "8.71.1",
-    "warpdom": "0.1.7",
+    "warpdom": "0.1.8",
     "webidl2": "24.5.0"
   }
 }
