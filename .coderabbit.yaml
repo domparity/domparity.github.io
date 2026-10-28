@@ -2,8 +2,10 @@
 language: en-US
 reviews:
   profile: chill
-  # Never approve or request changes; comments only.
-  request_changes_workflow: false
+  # Request changes for blocking findings; approve once the required threads
+  # are resolved, the latest commit is reviewed and pre-merge checks pass.
+  auto_approvals:
+    enabled: true
   high_level_summary: true
   poem: false
   sequence_diagrams: false
