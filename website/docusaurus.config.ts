@@ -55,7 +55,7 @@ const config: Config = {
       {
         name: 'keywords',
         content:
-          'jsdom, happy-dom, warpdom, linkedom, DOM, web platform APIs, compatibility, unit testing, Vitest, Jest, test environment, Web Platform Tests',
+          'warpdom, happy-dom, jsdom, linkedom, DOM, web platform APIs, compatibility, unit testing, Vitest, Jest, test environment, Web Platform Tests',
       },
     ],
     colorMode: { defaultMode: 'light', disableSwitch: false, respectPrefersColorScheme: true },
