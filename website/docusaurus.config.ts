@@ -51,6 +51,13 @@ const config: Config = {
 
   themeConfig: {
     image: 'img/social-card.png',
+    metadata: [
+      {
+        name: 'keywords',
+        content:
+          'jsdom, happy-dom, warpdom, linkedom, DOM, web platform APIs, compatibility, unit testing, Vitest, Jest, test environment, Web Platform Tests',
+      },
+    ],
     colorMode: { defaultMode: 'light', disableSwitch: false, respectPrefersColorScheme: true },
     navbar: {
       logo: { alt: 'DOMParity', src: 'img/logo.svg', srcDark: 'img/logo-dark.svg', height: 36 },
