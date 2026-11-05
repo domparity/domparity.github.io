@@ -2,6 +2,233 @@
   "description": "What changed in the data, newest first: one entry per update (date, engine versions, featured status changes, Web IDL changes per engine, specs and interfaces added from @webref/idl). Appended by scripts/update.mjs; the site's What changed page is generated from it.",
   "entries": [
     {
+      "date": "2026-11-05",
+      "engines": [
+        {
+          "engine": "warpdom",
+          "from": "0.1.13",
+          "version": "0.1.14"
+        },
+        {
+          "engine": "happy-dom",
+          "version": "21.0.4"
+        },
+        {
+          "engine": "jsdom",
+          "from": "30.1.3",
+          "version": "31.0.0"
+        },
+        {
+          "engine": "linkedom",
+          "version": "0.18.15"
+        }
+      ],
+      "packages": [],
+      "featured": [
+        {
+          "engine": "jsdom",
+          "api": "css-custom-properties",
+          "title": "CSS custom properties (--*) and var()",
+          "from": "partial",
+          "to": "supported",
+          "nowPass": [
+            "var-substitution"
+          ],
+          "nowFail": []
+        }
+      ],
+      "apisAdded": [],
+      "apisRemoved": [],
+      "idl": [
+        {
+          "engine": "warpdom",
+          "interfaces": 5,
+          "nowPresent": 0,
+          "nowMissing": 22,
+          "examples": {
+            "interfaces": [
+              {
+                "name": "CSSMarginRule",
+                "spec": "cssom",
+                "from": "P",
+                "to": "-"
+              },
+              {
+                "name": "CSSPageDescriptors",
+                "spec": "cssom",
+                "from": "P",
+                "to": "-"
+              },
+              {
+                "name": "FormDataEvent",
+                "spec": "html",
+                "from": "P",
+                "to": "-"
+              },
+              {
+                "name": "TimeRanges",
+                "spec": "html",
+                "from": "P",
+                "to": "-"
+              },
+              {
+                "name": "ToggleEvent",
+                "spec": "html",
+                "from": "P",
+                "to": "-"
+              }
+            ],
+            "nowPresent": [],
+            "nowMissing": [
+              "CSSMarginRule.name",
+              "CSSMarginRule.style",
+              "CSSPageDescriptors.margin",
+              "CSSPageDescriptors.marginTop",
+              "CSSPageDescriptors.marginRight",
+              "CSSPageDescriptors.marginBottom",
+              "CSSPageDescriptors.marginLeft",
+              "CSSPageDescriptors.margin-top",
+              "CSSPageDescriptors.margin-right",
+              "CSSPageDescriptors.margin-bottom",
+              "CSSPageDescriptors.margin-left",
+              "CSSPageDescriptors.size",
+              "CSSPageDescriptors.pageOrientation",
+              "CSSPageDescriptors.page-orientation",
+              "CSSPageDescriptors.marks",
+              "CSSPageDescriptors.bleed",
+              "FormDataEvent.formData",
+              "TimeRanges.length",
+              "TimeRanges.start",
+              "TimeRanges.end"
+            ]
+          }
+        },
+        {
+          "engine": "jsdom",
+          "interfaces": 14,
+          "nowPresent": 164,
+          "nowMissing": 0,
+          "examples": {
+            "interfaces": [
+              {
+                "name": "CSSPositionTryDescriptors",
+                "spec": "css-anchor-position",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSPositionTryRule",
+                "spec": "css-anchor-position",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSFontFeatureValuesRule",
+                "spec": "css-fonts",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSFontPaletteValuesRule",
+                "spec": "css-fonts",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSFontFaceDescriptors",
+                "spec": "css-fonts-5",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSFunctionDeclarations",
+                "spec": "css-mixins",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSFunctionDescriptors",
+                "spec": "css-mixins",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSFunctionRule",
+                "spec": "css-mixins",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSPropertyRule",
+                "spec": "css-properties-values-api",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSPseudoElement",
+                "spec": "css-pseudo",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSStartingStyleRule",
+                "spec": "css-transitions-2",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSViewTransitionRule",
+                "spec": "css-view-transitions",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSMarginRule",
+                "spec": "cssom",
+                "from": "-",
+                "to": "P"
+              },
+              {
+                "name": "CSSPageDescriptors",
+                "spec": "cssom",
+                "from": "-",
+                "to": "P"
+              }
+            ],
+            "nowPresent": [
+              "CSSPositionTryDescriptors.margin",
+              "CSSPositionTryDescriptors.marginTop",
+              "CSSPositionTryDescriptors.marginRight",
+              "CSSPositionTryDescriptors.marginBottom",
+              "CSSPositionTryDescriptors.marginLeft",
+              "CSSPositionTryDescriptors.marginBlock",
+              "CSSPositionTryDescriptors.marginBlockStart",
+              "CSSPositionTryDescriptors.marginBlockEnd",
+              "CSSPositionTryDescriptors.marginInline",
+              "CSSPositionTryDescriptors.marginInlineStart",
+              "CSSPositionTryDescriptors.marginInlineEnd",
+              "CSSPositionTryDescriptors.margin-top",
+              "CSSPositionTryDescriptors.margin-right",
+              "CSSPositionTryDescriptors.margin-bottom",
+              "CSSPositionTryDescriptors.margin-left",
+              "CSSPositionTryDescriptors.margin-block",
+              "CSSPositionTryDescriptors.margin-block-start",
+              "CSSPositionTryDescriptors.margin-block-end",
+              "CSSPositionTryDescriptors.margin-inline",
+              "CSSPositionTryDescriptors.margin-inline-start"
+            ],
+            "nowMissing": []
+          }
+        }
+      ],
+      "specsAdded": [],
+      "specsRemoved": [],
+      "interfacesAdded": 0,
+      "interfacesRemoved": 0,
+      "membersAdded": 0,
+      "membersRemoved": 0
+    },
+    {
       "date": "2026-11-03",
       "engines": [
         {
