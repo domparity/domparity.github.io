@@ -211,14 +211,13 @@ export function diffData({ old, new: cur, groups }) {
     .filter((s) => baseGroup(s) || group(s))
     .sort();
   const staleSet = new Set(stale);
-  // A group this update empties: every spec it has now is removed, and it
-  // had one of them, now or on the base (an empty group is not one; #30
+  // A group left without specs once the stale ones are pruned, which fails
+  // test/spec-groups.test.mjs: reported on every run, a --pending rerun
+  // on a pruned branch too, unless it was empty on the base already (#30
   // review).
   const baseSpecs = new Map((old.groups?.groups ?? []).map((g) => [g.id, g.specs]));
-  const hadStale = (g) =>
-    g.specs.some((s) => staleSet.has(s)) || (baseSpecs.get(g.id) ?? []).some((s) => staleSet.has(s));
   const emptiedGroups = (groups.groups ?? [])
-    .filter((g) => g.specs.every((s) => staleSet.has(s)) && hadStale(g))
+    .filter((g) => g.specs.every((s) => staleSet.has(s)) && baseSpecs.get(g.id)?.length !== 0)
     .map((g) => g.id);
 
   const versionsChanged = engines.some((e) => e.from !== e.to) || packages.length > 0 || !!node;

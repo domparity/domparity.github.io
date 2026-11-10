@@ -288,6 +288,21 @@ test('specs @webref/idl removes are pruned from spec-groups.json and listed in t
       ['empty', []],
     ],
   );
+  // The branch moves gone into other and other's own spec elsewhere: the
+  // first run reports other emptied, and so does a rerun on the pruned
+  // branch, though no stale spec is left in it (#30 review).
+  const moved = {
+    groups: [
+      { id: 'core', title: 'Test DOM core', specs: ['dom'] },
+      { id: 'other', title: 'Other', specs: ['gone'] },
+      { id: 'solo', title: 'Solo', specs: ['lonely', 'gpu'] },
+    ],
+  };
+  const mainGroups = { ...old, groups: g };
+  const first = diffData({ old: mainGroups, new: cur, groups: moved });
+  assert.deepEqual(first.emptiedGroups, ['other']);
+  const rerun = diffData({ old: mainGroups, new: cur, groups: pruneGroups(moved, first.stale) });
+  assert.deepEqual(rerun.emptiedGroups, ['other']);
 });
 
 test('a package bump outside the engines (webidl2) counts as a change, with identical results', () => {
