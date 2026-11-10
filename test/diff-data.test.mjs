@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { diffData, renderSummary, changelogEntry, prTitle } from '../scripts/diff-data.mjs';
+import { diffData, renderSummary, changelogEntry, prTitle, pruneGroups } from '../scripts/diff-data.mjs';
 import { addChangelogEntry, PACKAGES } from '../scripts/update.mjs';
 
 const groups = {
@@ -194,6 +194,59 @@ test('new specs and interfaces from @webref/idl, with their group; unclassified 
   assert.match(body, /### Needs classification[\s\S]*- `new-thing`/);
   assert.match(body, /spec-groups\.test\.mjs` fails until they are added/);
   assert.match(body, /@webref\/idl 1\.0\.0 → 1\.1\.0/);
+});
+
+// A spec @webref/idl drops leaves data/spec-groups.json in the same
+// update, so checkGroups and test/spec-groups.test.mjs keep passing (#23:
+// device-memory and longtasks on #22).
+test('specs @webref/idl removes are pruned from spec-groups.json and listed in the body (#23)', () => {
+  const old = snapshot({
+    versions: { warpdom: '1.0.0', jsdom: '30.0.0' },
+    statuses: { warpdom: sup, jsdom: sup },
+    specs: {
+      dom: domSpec('PP', '11'),
+      gone: { title: 'Gone', interfaces: {} },
+      lonely: { title: 'Lonely', interfaces: {} },
+    },
+  });
+  const cur = snapshot({
+    versions: { warpdom: '1.0.0', jsdom: '30.0.0' },
+    statuses: { warpdom: sup, jsdom: sup },
+    specs: { dom: domSpec('PP', '11') },
+    webref: '1.1.0',
+  });
+  const g = {
+    groups: [
+      { id: 'core', title: 'Test DOM core', specs: ['dom', 'gone'] },
+      { id: 'other', title: 'Other', specs: ['gpu'] },
+      { id: 'solo', title: 'Solo', specs: ['lonely'] },
+    ],
+  };
+  const d = diffData({ old, new: cur, groups: g });
+  // (gpu was never in the data: not this update's to remove)
+  assert.deepEqual(d.stale, ['gone', 'lonely']);
+  assert.deepEqual(d.emptiedGroups, ['solo']);
+  assert.equal(d.autoMerge, false);
+  const pruned = pruneGroups(g, d.stale);
+  assert.deepEqual(
+    pruned.groups.map((x) => [x.id, x.specs]),
+    [
+      ['core', ['dom']],
+      ['other', ['gpu']],
+      ['solo', []],
+    ],
+  );
+  assert.deepEqual(g.groups[0].specs, ['dom', 'gone'], 'the input is not changed');
+  const body = renderSummary(d, { date: 'x' });
+  assert.match(
+    body,
+    /### Removed from `data\/spec-groups\.json`[\s\S]*- `gone` \(Test DOM core\)[\s\S]*- `lonely` \(Solo\)/,
+  );
+  assert.match(body, /`solo` has no specs left/);
+  // Nothing removed: no section, nothing pruned.
+  const same = diffData({ old: base, new: structuredClone(base), groups });
+  assert.deepEqual(same.stale, []);
+  assert.doesNotMatch(renderSummary(same, { date: 'x' }), /Removed from spec-groups/);
 });
 
 test('a package bump outside the engines (webidl2) counts as a change, with identical results', () => {
