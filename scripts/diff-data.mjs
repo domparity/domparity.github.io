@@ -201,16 +201,25 @@ export function diffData({ old, new: cur, groups }) {
   // Grouped specs this update removes (@webref/idl dropped them): the
   // update takes them out of data/spec-groups.json (pruneGroups), and a
   // group left without specs fails test/spec-groups.test.mjs (#23). Grouped
-  // as on the base (old.groups): a --pending run carries the branch's
-  // spec-groups.json, already pruned, and the removals still count against
-  // the base (#30 review).
+  // as on the base (old.groups) or on the current groups: a --pending run
+  // carries the branch's spec-groups.json, already pruned, and the removals
+  // still count against the base, and a spec grouped on the branch only is
+  // pruned too (#30 review).
   const baseGroup = old.groups ? groupOf(old.groups) : group;
   const stale = specsRemoved
     .map((s) => s.id)
-    .filter((s) => baseGroup(s))
+    .filter((s) => baseGroup(s) || group(s))
     .sort();
   const staleSet = new Set(stale);
-  const emptiedGroups = (groups.groups ?? []).filter((g) => g.specs.every((s) => staleSet.has(s))).map((g) => g.id);
+  // A group this update empties: every spec it has now is removed, and it
+  // had one of them, now or on the base (an empty group is not one; #30
+  // review).
+  const baseSpecs = new Map((old.groups?.groups ?? []).map((g) => [g.id, g.specs]));
+  const hadStale = (g) =>
+    g.specs.some((s) => staleSet.has(s)) || (baseSpecs.get(g.id) ?? []).some((s) => staleSet.has(s));
+  const emptiedGroups = (groups.groups ?? [])
+    .filter((g) => g.specs.every((s) => staleSet.has(s)) && hadStale(g))
+    .map((g) => g.id);
 
   const versionsChanged = engines.some((e) => e.from !== e.to) || packages.length > 0 || !!node;
   const resultsChanged =
@@ -228,7 +237,7 @@ export function diffData({ old, new: cur, groups }) {
     idl: { perEngine, specsAdded, specsRemoved, interfacesAdded, interfacesRemoved, membersAdded, membersRemoved },
     unclassified,
     stale,
-    staleGroups: Object.fromEntries(stale.map((s) => [s, baseGroup(s)?.title ?? null])),
+    staleGroups: Object.fromEntries(stale.map((s) => [s, (baseGroup(s) ?? group(s))?.title ?? null])),
     emptiedGroups,
     versionsChanged,
     resultsChanged,

@@ -257,6 +257,37 @@ test('specs @webref/idl removes are pruned from spec-groups.json and listed in t
   assert.match(body2, /- `gone` \(Test DOM core\)[\s\S]*- `lonely` \(Solo\)/);
   assert.match(body2, /`solo` has no specs left/);
   assert.deepEqual(pruneGroups(pruned, again.stale), pruned, 'pruning again changes nothing');
+  // A spec grouped on the pending branch only is pruned too, and listed
+  // with that group; a group that was empty already is not one this update
+  // emptied (#30 review).
+  const branch = {
+    groups: [
+      { id: 'core', title: 'Test DOM core', specs: ['dom', 'gone'] },
+      { id: 'solo', title: 'Solo', specs: ['lonely'] },
+      { id: 'late', title: 'Late', specs: ['dom'] },
+      { id: 'empty', title: 'Empty', specs: [] },
+    ],
+  };
+  const baseGroups = {
+    groups: [
+      { id: 'core', title: 'Test DOM core', specs: ['dom'] },
+      { id: 'solo', title: 'Solo', specs: ['lonely'] },
+      { id: 'empty', title: 'Empty', specs: [] },
+    ],
+  };
+  const third = diffData({ old: { ...old, groups: baseGroups }, new: cur, groups: branch });
+  assert.deepEqual(third.stale, ['gone', 'lonely']);
+  assert.equal(third.staleGroups.gone, 'Test DOM core');
+  assert.deepEqual(third.emptiedGroups, ['solo']);
+  assert.deepEqual(
+    pruneGroups(branch, third.stale).groups.map((x) => [x.id, x.specs]),
+    [
+      ['core', ['dom']],
+      ['solo', []],
+      ['late', ['dom']],
+      ['empty', []],
+    ],
+  );
 });
 
 test('a package bump outside the engines (webidl2) counts as a change, with identical results', () => {
