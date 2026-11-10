@@ -246,7 +246,17 @@ test('specs @webref/idl removes are pruned from spec-groups.json and listed in t
   // Nothing removed: no section, nothing pruned.
   const same = diffData({ old: base, new: structuredClone(base), groups });
   assert.deepEqual(same.stale, []);
-  assert.doesNotMatch(renderSummary(same, { date: 'x' }), /Removed from spec-groups/);
+  assert.doesNotMatch(renderSummary(same, { date: 'x' }), /### Removed from `data\/spec-groups\.json`/);
+  // A --pending run carries the branch's spec-groups.json, already pruned:
+  // the removals and the empty group are still reported against the base's
+  // groups (#30 review).
+  const again = diffData({ old: { ...old, groups: g }, new: cur, groups: pruned });
+  assert.deepEqual(again.stale, ['gone', 'lonely']);
+  assert.deepEqual(again.emptiedGroups, ['solo']);
+  const body2 = renderSummary(again, { date: 'x' });
+  assert.match(body2, /- `gone` \(Test DOM core\)[\s\S]*- `lonely` \(Solo\)/);
+  assert.match(body2, /`solo` has no specs left/);
+  assert.deepEqual(pruneGroups(pruned, again.stale), pruned, 'pruning again changes nothing');
 });
 
 test('a package bump outside the engines (webidl2) counts as a change, with identical results', () => {
