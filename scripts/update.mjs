@@ -31,7 +31,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { appendFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { diffData, renderSummary, changelogEntry, prTitle, readData } from './diff-data.mjs';
+import { diffData, renderSummary, changelogEntry, prTitle, readData, pruneGroups } from './diff-data.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 
@@ -223,9 +223,16 @@ function update(args, opt, flag) {
     const file = join(root, 'data/changelog.json');
     const changelog = JSON.parse(saved['data/changelog.json'] ?? '{"entries":[]}');
     writeFileSync(file, JSON.stringify(addChangelogEntry(changelog, changelogEntry(diff, { date })), null, 2) + '\n');
+    // Specs @webref/idl dropped leave data/spec-groups.json in the same
+    // commit (#23); the body lists them.
+    if (diff.stale.length)
+      writeFileSync(
+        join(root, 'data/spec-groups.json'),
+        JSON.stringify(pruneGroups(groups, diff.stale), null, 2) + '\n',
+      );
   }
   console.log(
-    `${title}\nresults changed: ${diff.resultsChanged}; unclassified specs: ${diff.unclassified.length}; auto-merge: ${diff.autoMerge}`,
+    `${title}\nresults changed: ${diff.resultsChanged}; unclassified specs: ${diff.unclassified.length}; removed from spec-groups.json: ${diff.stale.length}; auto-merge: ${diff.autoMerge}`,
   );
   out('changed', 'true');
   out('auto_merge', String(diff.autoMerge));

@@ -198,6 +198,27 @@ export function diffData({ old, new: cur, groups }) {
   const unclassified = Object.keys(newSpecs)
     .filter((s) => !group(s))
     .sort();
+  // Grouped specs this update removes (@webref/idl dropped them): the
+  // update takes them out of data/spec-groups.json (pruneGroups), and a
+  // group left without specs fails test/spec-groups.test.mjs (#23). Grouped
+  // as on the base (old.groups) or on the current groups: a --pending run
+  // carries the branch's spec-groups.json, already pruned, and the removals
+  // still count against the base, and a spec grouped on the branch only is
+  // pruned too (#30 review).
+  const baseGroup = old.groups ? groupOf(old.groups) : group;
+  const stale = specsRemoved
+    .map((s) => s.id)
+    .filter((s) => baseGroup(s) || group(s))
+    .sort();
+  const staleSet = new Set(stale);
+  // A group left without specs once the stale ones are pruned, which fails
+  // test/spec-groups.test.mjs: reported on every run, a --pending rerun
+  // on a pruned branch too, unless it was empty on the base already (#30
+  // review).
+  const baseSpecs = new Map((old.groups?.groups ?? []).map((g) => [g.id, g.specs]));
+  const emptiedGroups = (groups.groups ?? [])
+    .filter((g) => g.specs.every((s) => staleSet.has(s)) && baseSpecs.get(g.id)?.length !== 0)
+    .map((g) => g.id);
 
   const versionsChanged = engines.some((e) => e.from !== e.to) || packages.length > 0 || !!node;
   const resultsChanged =
@@ -214,6 +235,9 @@ export function diffData({ old, new: cur, groups }) {
     featured: { apisAdded, apisRemoved, checksChanged, changes: featured },
     idl: { perEngine, specsAdded, specsRemoved, interfacesAdded, interfacesRemoved, membersAdded, membersRemoved },
     unclassified,
+    stale,
+    staleGroups: Object.fromEntries(stale.map((s) => [s, (baseGroup(s) ?? group(s))?.title ?? null])),
+    emptiedGroups,
     versionsChanged,
     resultsChanged,
     // Anything worth a commit: dates and timings alone are not.
@@ -221,6 +245,12 @@ export function diffData({ old, new: cur, groups }) {
     // Pure version bumps with identical results and every spec classified.
     autoMerge: !resultsChanged && unclassified.length === 0,
   };
+}
+
+// data/spec-groups.json without the given specs (a copy; #23).
+export function pruneGroups(groups, specs) {
+  const drop = new Set(specs);
+  return { ...groups, groups: groups.groups.map((g) => ({ ...g, specs: g.specs.filter((s) => !drop.has(s)) })) };
 }
 
 // ---------------------------------------------------------------- rendering
@@ -398,6 +428,22 @@ export function renderSummary(diff, { date, max = 40, maxChars = 60000 } = {}) {
     );
   }
 
+  if (diff.stale?.length) {
+    L.push(
+      `### Removed from ${code('data/spec-groups.json')}`,
+      '',
+      `@webref/idl no longer has these specs, so this update removed them from ${code('data/spec-groups.json')}:`,
+      '',
+      ...diff.stale.map((s) => `- ${code(s)} (${diff.staleGroups[s] ?? 'no group'})`),
+      '',
+    );
+    for (const id of diff.emptiedGroups)
+      L.push(
+        `The group ${code(id)} has no specs left: remove it or add a spec on this branch before merging; ${code('test/spec-groups.test.mjs')} fails until then.`,
+        '',
+      );
+  }
+
   L.push('### Review', '');
   if (diff.autoMerge)
     L.push('Pure version bumps with identical results and every spec classified: eligible for auto-merge.', '');
@@ -484,6 +530,7 @@ export function readData({ ref = null, dir = root } = {}) {
     results: read('data/results.json'),
     idl: read('data/idl.json'),
     devDependencies: read('package.json')?.devDependencies ?? {},
+    groups: read('data/spec-groups.json'),
   };
 }
 
