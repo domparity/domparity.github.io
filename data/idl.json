@@ -1,7 +1,7 @@
 {
  "schema": 1,
  "license": "CC BY 4.0",
- "date": "2026-11-05T13:29:33.349Z",
+ "date": "2026-11-13T13:26:50.957Z",
  "node": "v22.23.3",
  "webref": {
   "package": "@webref/idl",
@@ -23,9 +23,9 @@
    "version": "21.0.4"
   },
   {
-   "key": "jsdom@31.0.0",
+   "key": "jsdom@31.0.1",
    "engine": "jsdom",
-   "version": "31.0.0"
+   "version": "31.0.1"
   },
   {
    "key": "linkedom@0.18.15",
@@ -6935,7 +6935,7 @@
      "ctor": {
       "warpdom@0.1.14": "TypeError: Illegal constructor",
       "happy-dom@21.0.4": "TypeError: Illegal constructor",
-      "jsdom@31.0.0": "TypeError: Illegal constructor"
+      "jsdom@31.0.1": "TypeError: Illegal constructor"
      },
      "members": [
       ["define", "o", "1110"],

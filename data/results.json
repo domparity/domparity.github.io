@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "date": "2026-11-05T13:29:31.729Z",
+  "date": "2026-11-13T13:26:49.023Z",
   "node": "v22.23.3",
   "engines": [
     {
@@ -18,10 +18,10 @@
       "setup": "new Window({ url: 'http://localhost/' })"
     },
     {
-      "key": "jsdom@31.0.0",
+      "key": "jsdom@31.0.1",
       "engine": "jsdom",
       "package": "jsdom",
-      "version": "31.0.0",
+      "version": "31.0.1",
       "setup": "new JSDOM(html, { url: 'http://localhost/', pretendToBeVisual: true })"
     },
     {
@@ -642,7 +642,7 @@
         "failed": [],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -696,7 +696,7 @@
         ],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -746,7 +746,7 @@
         ],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -789,7 +789,7 @@
         "failed": [],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -845,7 +845,7 @@
         ],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -898,7 +898,7 @@
         "failed": [],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -944,7 +944,7 @@
         "failed": [],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -990,7 +990,7 @@
         ],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1030,7 +1030,7 @@
         ],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1085,7 +1085,7 @@
         ],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1135,7 +1135,7 @@
         ],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1168,7 +1168,7 @@
         "failed": [],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1206,7 +1206,7 @@
         "failed": [],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1258,7 +1258,7 @@
         ],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1299,7 +1299,7 @@
         "failed": [],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1340,7 +1340,7 @@
         ],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1372,7 +1372,7 @@
         "failed": [],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1421,7 +1421,7 @@
         ],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1476,7 +1476,7 @@
         "failed": [],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1517,7 +1517,7 @@
         "failed": [],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "supported",
         "exists": true,
         "passed": [
@@ -1557,7 +1557,7 @@
         "failed": [],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "missing",
         "exists": false,
         "passed": [],
@@ -1611,7 +1611,7 @@
         ],
         "error": null
       },
-      "jsdom@31.0.0": {
+      "jsdom@31.0.1": {
         "status": "stub",
         "exists": true,
         "passed": [],
