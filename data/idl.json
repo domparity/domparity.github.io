@@ -1,11 +1,11 @@
 {
  "schema": 1,
  "license": "CC BY 4.0",
- "date": "2026-11-13T13:26:50.957Z",
+ "date": "2026-11-16T16:03:52.358Z",
  "node": "v22.23.3",
  "webref": {
   "package": "@webref/idl",
-  "version": "3.86.0"
+  "version": "3.87.0"
  },
  "browserSpecs": {
   "package": "browser-specs",
@@ -2467,6 +2467,14 @@
    "url": "https://drafts.csswg.org/css-conditional-5/",
    "org": "W3C",
    "interfaces": {
+    "ContainerQueryList": {
+     "kind": "interface",
+     "status": "----",
+     "members": [
+      ["query", "a", "0000"],
+      ["matches", "a", "0000"]
+     ]
+    },
     "CSSContainerRule": {
      "kind": "interface",
      "inherits": "CSSConditionRule",
@@ -2483,6 +2491,11 @@
      "status": "----",
      "members": [
       ["name", "a", "0000"]
+     ]
+    },
+    "Element": {
+     "members": [
+      ["matchContainer", "o", "0000"]
      ]
     }
    }
@@ -2549,14 +2562,16 @@
       ["family", "a", "0000"],
       ["style", "a", "0000"],
       ["weight", "a", "0000"],
-      ["stretch", "a", "0000"],
+      ["width", "a", "0000"],
       ["unicodeRange", "a", "0000"],
+      ["variant", "a", "0000"],
       ["featureSettings", "a", "0000"],
       ["variationSettings", "a", "0000"],
       ["display", "a", "0000"],
       ["ascentOverride", "a", "0000"],
       ["descentOverride", "a", "0000"],
       ["lineGapOverride", "a", "0000"],
+      ["sizeAdjust", "a", "0000"],
       ["status", "a", "0000"],
       ["load", "o", "0000"],
       ["loaded", "a", "0000"],
@@ -4313,6 +4328,18 @@
     }
    }
   },
+  "device-memory": {
+   "title": "Device Memory API",
+   "url": "https://www.w3.org/TR/device-memory/",
+   "org": "W3C",
+   "interfaces": {
+    "Navigator": {
+     "members": [
+      ["deviceMemory", "a", "0000"]
+     ]
+    }
+   }
+  },
   "device-posture": {
    "title": "Device Posture API",
    "url": "https://w3c.github.io/device-posture/",
@@ -4435,9 +4462,7 @@
      "kind": "interface",
      "status": "P-P-",
      "members": [
-      ["startContainer", "a", "1010"],
       ["startOffset", "a", "1010"],
-      ["endContainer", "a", "1010"],
       ["endOffset", "a", "1010"],
       ["collapsed", "a", "1010"]
      ]
@@ -4865,6 +4890,15 @@
       ["@@iterator", "i", "1111"]
      ]
     },
+    "NodeRange": {
+     "kind": "interface",
+     "inherits": "AbstractRange",
+     "status": "----",
+     "members": [
+      ["startContainer", "a", "0000"],
+      ["endContainer", "a", "0000"]
+     ]
+    },
     "ProcessingInstruction": {
      "kind": "interface",
      "inherits": "CharacterData",
@@ -4882,7 +4916,7 @@
     },
     "Range": {
      "kind": "interface",
-     "inherits": "AbstractRange",
+     "inherits": "NodeRange",
      "status": "PPP-",
      "members": [
       ["commonAncestorContainer", "a", "1110"],
@@ -4930,7 +4964,7 @@
     },
     "StaticRange": {
      "kind": "interface",
-     "inherits": "AbstractRange",
+     "inherits": "NodeRange",
      "status": "P-P-"
     },
     "Text": {
@@ -6265,39 +6299,6 @@
     }
    }
   },
-  "gamepad-extensions": {
-   "title": "Gamepad Extensions",
-   "url": "https://w3c.github.io/gamepad/extensions.html",
-   "org": "W3C",
-   "interfaces": {
-    "Gamepad": {
-     "members": [
-      ["hand", "a", "0000"],
-      ["hapticActuators", "a", "0000"],
-      ["pose", "a", "0000"]
-     ]
-    },
-    "GamepadHapticActuator": {
-     "members": [
-      ["pulse", "o", "0000"]
-     ]
-    },
-    "GamepadPose": {
-     "kind": "interface",
-     "status": "----",
-     "members": [
-      ["hasOrientation", "a", "0000"],
-      ["hasPosition", "a", "0000"],
-      ["position", "a", "0000"],
-      ["linearVelocity", "a", "0000"],
-      ["linearAcceleration", "a", "0000"],
-      ["orientation", "a", "0000"],
-      ["angularVelocity", "a", "0000"],
-      ["angularAcceleration", "a", "0000"]
-     ]
-    }
-   }
-  },
   "generic-sensor": {
    "title": "Generic Sensor API",
    "url": "https://w3c.github.io/sensors/",
@@ -6903,9 +6904,15 @@
       ["beforeHTML", "o", "0000"],
       ["afterHTML", "o", "0000"],
       ["replaceWithHTML", "o", "0000"],
+      ["streamBeforeHTML", "o", "0000"],
+      ["streamAfterHTML", "o", "0000"],
+      ["streamReplaceWithHTML", "o", "0000"],
       ["beforeHTMLUnsafe", "o", "0000"],
       ["afterHTMLUnsafe", "o", "0000"],
-      ["replaceWithHTMLUnsafe", "o", "0000"]
+      ["replaceWithHTMLUnsafe", "o", "0000"],
+      ["streamBeforeHTMLUnsafe", "o", "0000"],
+      ["streamAfterHTMLUnsafe", "o", "0000"],
+      ["streamReplaceWithHTMLUnsafe", "o", "0000"]
      ]
     },
     "CloseWatcher": {
@@ -7159,9 +7166,15 @@
       ["setHTML", "o", "0000"],
       ["appendHTML", "o", "0000"],
       ["prependHTML", "o", "0000"],
+      ["streamHTML", "o", "0000"],
+      ["streamAppendHTML", "o", "0000"],
+      ["streamPrependHTML", "o", "0000"],
       ["setHTMLUnsafe", "o", "0000"],
       ["appendHTMLUnsafe", "o", "0000"],
       ["prependHTMLUnsafe", "o", "0000"],
+      ["streamHTMLUnsafe", "o", "0000"],
+      ["streamAppendHTMLUnsafe", "o", "0000"],
+      ["streamPrependHTMLUnsafe", "o", "0000"],
       ["getHTML", "o", "0100"],
       ["innerHTML", "a", "1111"],
       ["outerHTML", "a", "1111"],
@@ -7169,9 +7182,15 @@
       ["beforeHTML", "o", "0000"],
       ["afterHTML", "o", "0000"],
       ["replaceWithHTML", "o", "0000"],
+      ["streamBeforeHTML", "o", "0000"],
+      ["streamAfterHTML", "o", "0000"],
+      ["streamReplaceWithHTML", "o", "0000"],
       ["beforeHTMLUnsafe", "o", "0000"],
       ["afterHTMLUnsafe", "o", "0000"],
-      ["replaceWithHTMLUnsafe", "o", "0000"]
+      ["replaceWithHTMLUnsafe", "o", "0000"],
+      ["streamBeforeHTMLUnsafe", "o", "0000"],
+      ["streamAfterHTMLUnsafe", "o", "0000"],
+      ["streamReplaceWithHTMLUnsafe", "o", "0000"]
      ]
     },
     "ElementInternals": {
@@ -7616,7 +7635,9 @@
       ["height", "a", "1110"],
       ["getSVGDocument", "o", "0000"],
       ["align", "a", "1010"],
-      ["name", "a", "1010"]
+      ["name", "a", "1010"],
+      ["hspace", "a", "0000"],
+      ["vspace", "a", "0000"]
      ]
     },
     "HTMLFieldSetElement": {
@@ -9125,9 +9146,15 @@
       ["setHTML", "o", "0000"],
       ["appendHTML", "o", "0000"],
       ["prependHTML", "o", "0000"],
+      ["streamHTML", "o", "0000"],
+      ["streamAppendHTML", "o", "0000"],
+      ["streamPrependHTML", "o", "0000"],
       ["setHTMLUnsafe", "o", "1100"],
       ["appendHTMLUnsafe", "o", "0000"],
       ["prependHTMLUnsafe", "o", "0000"],
+      ["streamHTMLUnsafe", "o", "0000"],
+      ["streamAppendHTMLUnsafe", "o", "0000"],
+      ["streamPrependHTMLUnsafe", "o", "0000"],
       ["getHTML", "o", "1000"],
       ["innerHTML", "a", "1111"],
       ["activeElement", "a", "1110"]
@@ -10082,6 +10109,42 @@
     }
    }
   },
+  "longtasks": {
+   "title": "Long Tasks API",
+   "url": "https://w3c.github.io/longtasks/",
+   "org": "W3C",
+   "interfaces": {
+    "PerformanceLongTaskTiming": {
+     "kind": "interface",
+     "inherits": "PerformanceEntry",
+     "status": "----",
+     "members": [
+      ["startTime", "a", "0000"],
+      ["duration", "a", "0000"],
+      ["name", "a", "0000"],
+      ["entryType", "a", "0000"],
+      ["attribution", "a", "0000"],
+      ["toJSON", "o", "0000"]
+     ]
+    },
+    "TaskAttributionTiming": {
+     "kind": "interface",
+     "inherits": "PerformanceEntry",
+     "status": "----",
+     "members": [
+      ["startTime", "a", "0000"],
+      ["duration", "a", "0000"],
+      ["name", "a", "0000"],
+      ["entryType", "a", "0000"],
+      ["containerType", "a", "0000"],
+      ["containerSrc", "a", "0000"],
+      ["containerId", "a", "0000"],
+      ["containerName", "a", "0000"],
+      ["toJSON", "o", "0000"]
+     ]
+    }
+   }
+  },
   "magnetometer": {
    "title": "Magnetometer",
    "url": "https://w3c.github.io/magnetometer/",
@@ -10770,6 +10833,13 @@
      "inherits": "HTMLElement",
      "status": "----",
      "members": [
+      ["width", "a", "0000"],
+      ["height", "a", "0000"],
+      ["src", "a", "0000"],
+      ["autoplay", "a", "0000"],
+      ["loop", "a", "0000"],
+      ["crossOrigin", "a", "0000"],
+      ["poster", "a", "0000"],
       ["ready", "a", "0000"],
       ["boundingBoxCenter", "a", "0000"],
       ["boundingBoxExtents", "a", "0000"],
@@ -14637,7 +14707,8 @@
       ["ratio", "a", "0000"],
       ["reduction", "a", "0000"],
       ["attack", "a", "0000"],
-      ["release", "a", "0000"]
+      ["release", "a", "0000"],
+      ["makeupGain", "a", "0000"]
      ]
     },
     "GainNode": {
@@ -15079,6 +15150,55 @@
     "Navigator": {
      "members": [
       ["webdriver", "a", "1100"]
+     ]
+    }
+   }
+  },
+  "webextensions": {
+   "title": "Web Extensions",
+   "url": "https://w3c.github.io/webextensions/specification/",
+   "org": "W3C",
+   "interfaces": {
+    "Alarms": {
+     "kind": "interface",
+     "status": "----",
+     "members": [
+      ["create", "o", "0000"],
+      ["get", "o", "0000"],
+      ["getAll", "o", "0000"],
+      ["clear", "o", "0000"],
+      ["clearAll", "o", "0000"],
+      ["onAlarm", "a", "0000"]
+     ]
+    },
+    "Browser": {
+     "members": [
+      ["alarms", "a", "0000"]
+     ]
+    },
+    "OnAlarmEvent": {
+     "kind": "interface",
+     "status": "----",
+     "members": [
+      ["addListener", "o", "0000"],
+      ["removeListener", "o", "0000"],
+      ["hasListener", "o", "0000"]
+     ]
+    }
+   }
+  },
+  "webextensions-browser-global": {
+   "title": "webextensions-browser-global",
+   "url": null,
+   "org": null,
+   "interfaces": {
+    "Browser": {
+     "kind": "interface",
+     "status": "----"
+    },
+    "Window": {
+     "members": [
+      ["browser", "a", "0000"]
      ]
     }
    }
@@ -17591,20 +17711,6 @@
     }
    }
   },
-  "webrtc-diagnostic-logging": {
-   "title": "webrtc-diagnostic-logging",
-   "url": null,
-   "org": null,
-   "interfaces": {
-    "RTCPeerConnection": {
-     "members": [
-      ["startDiagnosticLogging", "so", "0000"],
-      ["stopDiagnosticLogging", "so", "0000"],
-      ["cancelDiagnosticLogging", "so", "0000"]
-     ]
-    }
-   }
-  },
   "webrtc-encoded-transform": {
    "title": "WebRTC Encoded Transform",
    "url": "https://w3c.github.io/webrtc-encoded-transform/",
@@ -17683,6 +17789,56 @@
       ["errorType", "a", "0000"],
       ["keyID", "a", "0000"],
       ["frame", "a", "0000"]
+     ]
+    }
+   }
+  },
+  "webrtc-extensions": {
+   "title": "webrtc-extensions",
+   "url": null,
+   "org": null,
+   "interfaces": {
+    "RTCIceCandidatePairEvent": {
+     "kind": "interface",
+     "inherits": "Event",
+     "status": "----",
+     "members": [
+      ["candidatePair", "a", "0000"]
+     ]
+    },
+    "RTCIceTransport": {
+     "members": [
+      ["onicecandidatepairadd", "a", "0000"],
+      ["onicecandidatepairremove", "a", "0000"],
+      ["onicecandidatepairnominate", "a", "0000"],
+      ["selectCandidatePair", "o", "0000"],
+      ["removeCandidatePair", "o", "0000"]
+     ]
+    },
+    "RTCPeerConnection": {
+     "members": [
+      ["startDiagnosticLogging", "so", "0000"],
+      ["stopDiagnosticLogging", "so", "0000"],
+      ["cancelDiagnosticLogging", "so", "0000"]
+     ]
+    },
+    "RTCRtpReceiver": {
+     "members": [
+      ["onssrcchange", "a", "0000"],
+      ["oncsrcchange", "a", "0000"],
+      ["disableHardwareDecoding", "so", "0000"]
+     ]
+    },
+    "RTCRtpSender": {
+     "members": [
+      ["disableHardwareEncoding", "so", "0000"]
+     ]
+    },
+    "RTCRtpTransceiver": {
+     "members": [
+      ["getHeaderExtensionsToNegotiate", "o", "0000"],
+      ["setHeaderExtensionsToNegotiate", "o", "0000"],
+      ["getNegotiatedHeaderExtensions", "o", "0000"]
      ]
     }
    }
