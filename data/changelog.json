@@ -2,6 +2,73 @@
   "description": "What changed in the data, newest first: one entry per update (date, engine versions, featured status changes, Web IDL changes per engine, specs and interfaces added from @webref/idl). Appended by scripts/update.mjs; the site's What changed page is generated from it.",
   "entries": [
     {
+      "date": "2026-11-23",
+      "engines": [
+        {
+          "engine": "warpdom",
+          "version": "0.1.14"
+        },
+        {
+          "engine": "happy-dom",
+          "version": "21.0.4"
+        },
+        {
+          "engine": "jsdom",
+          "version": "31.0.1"
+        },
+        {
+          "engine": "linkedom",
+          "version": "0.18.15"
+        }
+      ],
+      "packages": [
+        {
+          "package": "@webref/idl",
+          "from": "3.86.0",
+          "to": "3.87.1"
+        }
+      ],
+      "featured": [],
+      "apisAdded": [],
+      "apisRemoved": [],
+      "idl": [],
+      "specsAdded": [
+        {
+          "id": "device-memory",
+          "title": "Device Memory API",
+          "group": null
+        },
+        {
+          "id": "longtasks",
+          "title": "Long Tasks API",
+          "group": null
+        },
+        {
+          "id": "webextensions",
+          "title": "Web Extensions",
+          "group": null
+        },
+        {
+          "id": "webextensions-browser-global",
+          "title": "webextensions-browser-global",
+          "group": null
+        },
+        {
+          "id": "webrtc-extensions",
+          "title": "webrtc-extensions",
+          "group": null
+        }
+      ],
+      "specsRemoved": [
+        "gamepad-extensions",
+        "webrtc-diagnostic-logging"
+      ],
+      "interfacesAdded": 9,
+      "interfacesRemoved": 1,
+      "membersAdded": 94,
+      "membersRemoved": 18
+    },
+    {
       "date": "2026-11-13",
       "engines": [
         {
